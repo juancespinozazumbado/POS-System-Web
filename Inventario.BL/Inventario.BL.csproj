@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Funcionalidades\Cajas\" />
+    <Folder Include="Funcionalidades\Inventario\" />
+    <Folder Include="Funcionalidades\Items\" />
+    <Folder Include="Funcionalidades\Login\" />
+    <Folder Include="Funcionalidades\Usuarios\" />
+    <Folder Include="Funcionalidades\Ventas\" />
+  </ItemGroup>
+
+</Project>
