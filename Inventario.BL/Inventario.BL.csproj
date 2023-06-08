@@ -7,12 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Funcionalidades\Cajas\" />
-    <Folder Include="Funcionalidades\Inventario\" />
-    <Folder Include="Funcionalidades\Items\" />
     <Folder Include="Funcionalidades\Login\" />
     <Folder Include="Funcionalidades\Usuarios\" />
     <Folder Include="Funcionalidades\Ventas\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Inventario.DA\Inventario.DA.csproj" />
+    <ProjectReference Include="..\Inventario.Models\Inventario.Models.csproj" />
   </ItemGroup>
 
 </Project>

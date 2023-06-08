@@ -1,0 +1,87 @@
+﻿@model Inventario.Models.Dominio.Productos.Inventarios
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Inventarios</h4>
+    <hr />
+    <dl class="row">
+     
+     
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Nombre)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Nombre)
+        </dd>
+
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Cantidad)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Cantidad)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Precio)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Precio)
+        </dd>
+    </dl>
+</div>
+<p>Lista de Ajustes</p>
+<div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Cantidad Actual
+                </th>
+                <th>
+                   Tipo
+                </th>
+                <th>
+                   Ajuste
+                </th>
+                <th>
+                   Fecha
+                </th>
+                <th></th>
+              
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Ajustes)
+            {
+                <tr>
+                   
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CantidadActual)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Tipo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Ajuste)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Fecha)
+                    </td>
+                  
+                    <td>
+                        @Html.ActionLink("Detalles", "DetalleAjuste", new { id=item.Id  }) |
+                        
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+    <a asp-action="Index">Back to List</a>
+</div>

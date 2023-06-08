@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -7,12 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Dominio\Cajas\" />
-    <Folder Include="Dominio\Inventario\" />
-    <Folder Include="Dominio\Items\" />
-    <Folder Include="Dominio\Login\" />
     <Folder Include="Dominio\Usuarios\" />
-    <Folder Include="Dominio\Ventas\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="7.0.5" />
   </ItemGroup>
 
 </Project>
