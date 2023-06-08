@@ -20,16 +20,22 @@ namespace Inventario.BL.Funcionalidades.Inventario
             if (ajuste.Tipo == TipoAjuste.Aumento)
             {
                 inventario.Cantidad += ajuste.Ajuste;
+                inventario.Ajustes.Add(ajuste);
+                _dbContext.Inventarios.Update(inventario);
+                _dbContext.SaveChanges();
+
+            }
+            if (inventario.Cantidad >= ajuste.Ajuste && ajuste.Tipo == TipoAjuste.Disminucion) 
+            {
+
+                inventario.Cantidad += -(ajuste.Ajuste);
+                inventario.Ajustes.Add(ajuste);
+                _dbContext.Inventarios.Update(inventario);
+                _dbContext.SaveChanges();
+
             }
 
-            if (ajuste.Tipo == TipoAjuste.Disminucion)
-            {
-                if(inventario.Cantidad >= ajuste.Ajuste)
-                inventario.Cantidad += -(ajuste.Ajuste);
-            }
-            inventario.Ajustes.Add(ajuste);
-            _dbContext.Inventarios.Update(inventario);  
-            _dbContext.SaveChanges();   
+            
         }
 
         public IEnumerable<AjusteDeInventario> ListarAjustesPorId(int id)

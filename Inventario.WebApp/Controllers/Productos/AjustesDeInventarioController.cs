@@ -2,11 +2,13 @@
 using Inventario.DA.Database;
 using Inventario.Models.Dominio.Productos;
 using Inventario.WebApp.Models.Products;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Inventario.WebApp.Controllers.Productos
 {
+    [Authorize]
     public class AjustesDeInventarioController : Controller
     {
         private readonly RepositorioDeAjusteDeInventario _Repo;

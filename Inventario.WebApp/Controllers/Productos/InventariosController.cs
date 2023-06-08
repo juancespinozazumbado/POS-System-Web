@@ -1,11 +1,14 @@
 ﻿using Inventario.BL.Funcionalidades.Inventario;
 using Inventario.DA.Database;
 using Inventario.Models.Dominio.Productos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Inventario.WebApp.Controllers.Productos
 {
+
+    [Authorize]
     public class InventariosController : Controller
     {
         private readonly ReporitorioDeInventarios _Repo;
