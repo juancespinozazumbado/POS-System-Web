@@ -19,8 +19,10 @@ namespace Inventario.Models.Dominio.Ventas
 
        public int UserId { get; set; }  
       
-       public int AperturaDeCajaId { get; set; } 
+       public int IdAperturaDeCaja { get; set; } 
        public AperturaDeCaja AperturaDeCaja { get; set; }
+
+       public List<VentaDetalle> VentaDetalles { get; set; }      
 
     }
 }

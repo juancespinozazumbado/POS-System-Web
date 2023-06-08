@@ -1,4 +1,5 @@
-﻿using Inventario.DA.Database;
+﻿using Inventario.BL.Funcionalidades.Inventario.Interfaces;
+using Inventario.DA.Database;
 using Inventario.Models.Dominio.Productos;
 using Microsoft.EntityFrameworkCore;
 

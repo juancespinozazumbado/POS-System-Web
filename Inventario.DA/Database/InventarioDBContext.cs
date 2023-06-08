@@ -35,6 +35,20 @@ namespace Inventario.DA.Database
               .WithOne(e => e.Inventarios)
               .HasForeignKey(e => e.Id_Inventario);
 
+            builder.Entity<Venta>()
+                .HasMany(v => v.VentaDetalles)
+                .WithOne(v => v.Venta)
+                .HasForeignKey(v => v.Id_venta);
+
+            builder.Entity<VentaDetalle>()
+                .HasOne(v => v.Inventarios)
+                .WithMany(i=> i.VentasItems)
+                .HasForeignKey(i=> i.Id_inventario);
+
+            builder.Entity<AperturaDeCaja>()
+                .HasMany(a => a.Ventas)
+                .WithOne(v => v.AperturaDeCaja)
+                .HasForeignKey(v => v.IdAperturaDeCaja);          
 
         }
     }

@@ -7,9 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Funcionalidades\Login\" />
     <Folder Include="Funcionalidades\Usuarios\" />
-    <Folder Include="Funcionalidades\Ventas\" />
   </ItemGroup>
 
   <ItemGroup>

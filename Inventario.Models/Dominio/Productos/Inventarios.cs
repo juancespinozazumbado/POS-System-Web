@@ -1,4 +1,5 @@
 ﻿
+using Inventario.Models.Dominio.Ventas;
 using System.ComponentModel.DataAnnotations;
 
 namespace Inventario.Models.Dominio.Productos
@@ -16,6 +17,8 @@ namespace Inventario.Models.Dominio.Productos
         public decimal Precio { get; set; }
 
         public List<AjusteDeInventario> Ajustes { get; set; }
+
+        public List<VentaDetalle> VentasItems { get; set; } 
 
         public Inventarios()
         {

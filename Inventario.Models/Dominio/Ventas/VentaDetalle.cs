@@ -6,11 +6,11 @@ namespace Inventario.Models.Dominio.Ventas
     public class VentaDetalle
     {
         public int Id { get; set; }
-        public int VentaId { get; set; } 
+        public int Id_venta { get; set; } 
         
         public Venta Venta { get; set; }
 
-        public int InventariosId { get; set; } 
+        public int Id_inventario { get; set; } 
         
         public Inventarios Inventarios { get; set; } 
 

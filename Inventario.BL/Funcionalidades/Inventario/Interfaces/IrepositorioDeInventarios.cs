@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Inventario.BL.Funcionalidades.Inventario
+namespace Inventario.BL.Funcionalidades.Inventario.Interfaces
 {
     public interface IrepositorioDeInventarios
     {
