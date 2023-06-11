@@ -1,11 +1,10 @@
 ﻿
 
 using Inventario.Models.Dominio.Productos;
+using Inventario.Models.Dominio.Ventas;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Inventario.Models.Dominio.Ventas;
-using System.Reflection.Emit;
 
 namespace Inventario.DA.Database
 {
@@ -16,11 +15,9 @@ namespace Inventario.DA.Database
             : base(options)
         {
         }
-
-       
         public DbSet<AjusteDeInventario> AjusteDeInventarios { get; set; }
         public DbSet<Inventarios> Inventarios { get; set; }
-        public DbSet<VentaDetalle> Ventas { get; set; }
+        public DbSet<Venta> Ventas { get; set; }
         public DbSet<VentaDetalle> VentaDetalles { get; set; }
         public DbSet<AperturaDeCaja> AperturasDeCajas { get; set; }
 
@@ -42,13 +39,13 @@ namespace Inventario.DA.Database
 
             builder.Entity<VentaDetalle>()
                 .HasOne(v => v.Inventarios)
-                .WithMany(i=> i.VentasItems)
-                .HasForeignKey(i=> i.Id_inventario);
+                .WithMany(i => i.VentasItems)
+                .HasForeignKey(i => i.Id_inventario);
 
-            builder.Entity<AperturaDeCaja>()
-                .HasMany(a => a.Ventas)
-                .WithOne(v => v.AperturaDeCaja)
-                .HasForeignKey(v => v.IdAperturaDeCaja);          
+            /* builder.Entity<AperturaDeCaja>()
+                 .HasMany(a => a.Ventas)
+                 .WithOne(v => v.AperturaDeCaja)
+                 .HasForeignKey(v => v.IdAperturaDeCaja);*/
 
         }
     }

@@ -1,51 +1,61 @@
 ﻿using Inventario.BL.Funcionalidades.Ventas.Interfaces;
+using Inventario.DA.Database;
 using Inventario.Models.Dominio.Ventas;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Inventario.BL.Funcionalidades.Ventas
 {
+
     public class RepositorioDeVentas : IRepositorioDeVentas
     {
-        public void AplicarUnDescuento()
+        private readonly InventarioDBContext _dbContext;
+        public RepositorioDeVentas(InventarioDBContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+        public void ApliqueUnDescuento()
         {
             throw new NotImplementedException();
         }
 
-        public void AñadirDetalleDeVenta(VentaDetalle item)
+        public void AñadaUnDetalleAlaVenta(VentaDetalle item)
         {
             throw new NotImplementedException();
         }
 
-        public void CrearUnaVenta(Venta venta)
+        public void RegistreElInicioDeLaVenta(Venta venta)
+        {
+            _dbContext.Ventas.Add(venta);
+            _dbContext.SaveChanges();
+
+        }
+        public void CreeUnaVenta(Venta venta)
+        {
+
+
+
+        }
+
+        public void ElimineUnDetalleDeLaVenta(VentaDetalle item)
         {
             throw new NotImplementedException();
         }
 
-        public void EliminarUnDetalleDeVenta(VentaDetalle item)
+        public IEnumerable<Venta> ListeLasVentas()
+        {
+            return _dbContext.Ventas.ToList();
+        }
+
+        public IEnumerable<Venta> ListeLasVentasPorId(int id)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Venta> ListarVentas()
+        public IEnumerable<Venta> ListeLasVentasPorUsuario()
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Venta> ListarVentasPorId(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<Venta> ListarVentasPorusUario()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void TerminarUnaVenta()
+        public void TermineLaVenta()
         {
             throw new NotImplementedException();
         }

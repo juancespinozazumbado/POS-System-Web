@@ -7,7 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Funcionalidades\Usuarios\" />
+    <Compile Remove="Funcionalidades\Usuarios\**" />
+    <EmbeddedResource Remove="Funcionalidades\Usuarios\**" />
+    <None Remove="Funcionalidades\Usuarios\**" />
   </ItemGroup>
 
   <ItemGroup>

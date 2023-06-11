@@ -1,16 +1,11 @@
 ﻿using Inventario.Models.Dominio.Productos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Inventario.BL.Funcionalidades.Inventario.Interfaces
 {
     public interface IrepositorioDeInventarios
     {
         public void AgregarInventario(Inventarios inventario);
-        public IEnumerable<Inventarios> listarInventarios();
+        public IEnumerable<Inventarios> listeElInventarios();
 
         public void EliminarInventario(Inventarios inventario);
 

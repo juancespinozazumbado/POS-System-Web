@@ -2,7 +2,6 @@
 using Inventario.DA.Database;
 using Inventario.Models.Dominio.Productos;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Inventario.WebApp.Controllers.Productos
@@ -12,16 +11,16 @@ namespace Inventario.WebApp.Controllers.Productos
     public class InventariosController : Controller
     {
         private readonly ReporitorioDeInventarios _Repo;
-        public InventariosController( InventarioDBContext contexto) 
+        public InventariosController(InventarioDBContext contexto)
         {
-            _Repo = new ReporitorioDeInventarios(contexto);    
-        }  
+            _Repo = new ReporitorioDeInventarios(contexto);
+        }
 
 
         // GET: InventariosController
         public ActionResult Index()
         {
-            List<Inventarios> lista = (List<Inventarios>)_Repo.listarInventarios();
+            List<Inventarios> lista = (List<Inventarios>)_Repo.listeElInventarios();
             return View(lista);
         }
 
@@ -35,7 +34,7 @@ namespace Inventario.WebApp.Controllers.Productos
         // GET: InventariosController/Create
         public ActionResult Create()
         {
-            
+
             return View();
         }
 
@@ -66,7 +65,7 @@ namespace Inventario.WebApp.Controllers.Productos
         // POST: InventariosController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit( Inventarios inventario)
+        public ActionResult Edit(Inventarios inventario)
         {
             try
             {
@@ -89,7 +88,7 @@ namespace Inventario.WebApp.Controllers.Productos
         // POST: InventariosController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete( Inventarios inventario  )
+        public ActionResult Delete(Inventarios inventario)
         {
             try
             {

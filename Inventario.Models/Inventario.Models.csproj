@@ -7,10 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Dominio\Usuarios\" />
+    <Compile Remove="Dominio\Usuarios\**" />
+    <EmbeddedResource Remove="Dominio\Usuarios\**" />
+    <None Remove="Dominio\Usuarios\**" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.DataAnnotations" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="7.0.5" />
   </ItemGroup>
 

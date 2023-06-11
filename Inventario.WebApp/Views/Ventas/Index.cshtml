@@ -1,0 +1,18 @@
+﻿@model IEnumerable<Inventario.Models.Dominio.Ventas.MostrarVentasInventarios>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<h2>Inventario</h2>
+@Html.Partial("InventarioParcial", Model)
+
+<h2>Ventas</h2>
+@Html.Partial("VentaParcial", Model)
+
