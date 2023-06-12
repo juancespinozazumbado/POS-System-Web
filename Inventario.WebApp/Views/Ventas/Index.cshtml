@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Inventario.Models.Dominio.Ventas.MostrarVentasInventarios>
+﻿@model Inventario.Models.Dominio.Ventas.MostrarVentasInventarios
 
 @{
     ViewData["Title"] = "Index";
@@ -11,8 +11,8 @@
 </p>
 
 <h2>Inventario</h2>
-@Html.Partial("InventarioParcial", Model)
+@Html.Partial("InventarioParcial", Model.Inventario)
 
 <h2>Ventas</h2>
-@Html.Partial("VentaParcial", Model)
+@Html.Partial("VentaParcial", Model.Ventas)
 

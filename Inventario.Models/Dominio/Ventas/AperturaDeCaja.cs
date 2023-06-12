@@ -14,7 +14,7 @@ namespace Inventario.Models.Dominio.Ventas
 
         public int UserId { get; set; } 
     
-        public List<Venta> Ventas { get; set; } 
+      
 
 
     }

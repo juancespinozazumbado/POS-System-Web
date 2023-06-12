@@ -38,7 +38,8 @@ namespace Inventario.BL.Funcionalidades.Ventas
 
         public IEnumerable<AperturaDeCaja> ListarAperturasDeCaja()
         {
-            return context.AperturasDeCajas.Include(a => a.Ventas).ToList();   
+            //return context.AperturasDeCajas.Include(a => a.Ventas).ToList();
+            throw new NotImplementedException();
         }
     }
 }

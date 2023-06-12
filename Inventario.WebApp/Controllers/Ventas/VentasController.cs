@@ -2,11 +2,14 @@
 using Inventario.BL.Funcionalidades.Ventas;
 using Inventario.DA.Database;
 using Inventario.Models.Dominio.Ventas;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace Inventario.WebApp.Controllers.Ventas
 {
+
+    [Authorize]
     public class VentasController : Controller
     {
         RepositorioDeVentas RepositorioDeVentas;
@@ -33,7 +36,7 @@ namespace Inventario.WebApp.Controllers.Ventas
                 MontoDescuento = 10,
                 UserId = IdDelUsuario,
                 Estado = EstadoVenta.EnProceso,
-                IdAperturaDeCaja = 10,
+                IdAperturaDeCaja = 10
 
 
             };
@@ -46,7 +49,6 @@ namespace Inventario.WebApp.Controllers.Ventas
                 Inventario = inventario,
                 Ventas = ventas
             };
-
             return View(viewModel);
         }
 

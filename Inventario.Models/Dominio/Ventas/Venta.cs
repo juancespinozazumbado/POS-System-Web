@@ -1,11 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Inventario.Models.Dominio.Ventas
 {
-    [Table("Ventas")]
+   
     public class Venta
     {
-        [Column("Id")]
+        [Key]
         public int Id { get; set; }
 
         [Column("NombreCliente")]
@@ -35,7 +36,7 @@ namespace Inventario.Models.Dominio.Ventas
         [Column("Estado")]
         public EstadoVenta Estado { get; set; }
 
-        [Column("IdAperturaDeCaja")]
+        //[Column("IdAperturaDeCaja")]
         public int IdAperturaDeCaja { get; set; }
 
         public virtual ICollection<VentaDetalle> VentaDetalles { get; set; } = new List<VentaDetalle>();
