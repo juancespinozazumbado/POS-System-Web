@@ -1,28 +1,44 @@
-﻿
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Inventario.Models.Dominio.Ventas
 {
-    public class Venta {
+   
+    public class Venta
+    {
+        [Key]
+        public int Id { get; set; }
 
-        public int Id { get; set; } 
-        public string NombreCliente { get; set; }
-        public DateTime Fecha { get; set; } 
-        public TipoDePago TipoDePago { get; set; }
+        [Column("NombreCliente")]
+        public string NombreCliente { get; set; } = null!;
 
-        public decimal Total { get; set; } 
-        public decimal Subtotal { get; set; }    
-        public int PorcentajeDeDescuento { get; set; }  
+        [Column("Fecha")]
+        public DateTime Fecha { get; set; }
 
-        public decimal MontoDescuento { set; get; }
+        [Column("TipoDePago")]
+        public int TipoDePago { get; set; }
 
-        public EstadoVenta Estado { set; get; }
+        [Column("Total")]
+        public decimal Total { get; set; }
 
-       public int UserId { get; set; }  
-      
-       public int IdAperturaDeCaja { get; set; } 
-       public AperturaDeCaja AperturaDeCaja { get; set; }
+        [Column("SubTotal")]
+        public decimal SubTotal { get; set; }
 
-       public List<VentaDetalle> VentaDetalles { get; set; }      
+        [Column("PorcentajeDesCuento")]
+        public int PorcentajeDesCuento { get; set; }
 
+        [Column("MontoDescuento")]
+        public decimal MontoDescuento { get; set; }
+
+        [Column("UserId")]
+        public string UserId { get; set; } = null!;
+
+        [Column("Estado")]
+        public EstadoVenta Estado { get; set; }
+
+        //[Column("IdAperturaDeCaja")]
+        public int IdAperturaDeCaja { get; set; }
+
+        public virtual ICollection<VentaDetalle> VentaDetalles { get; set; } = new List<VentaDetalle>();
     }
 }

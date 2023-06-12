@@ -4,19 +4,19 @@ namespace Inventario.BL.Funcionalidades.Ventas.Interfaces
 {
     public interface IRepositorioDeVentas
     {
-        public void CrearUnaVenta(Venta venta);
+        public void CreeUnaVenta(Venta venta);
 
-        public void AñadirDetalleDeVenta(VentaDetalle item);
+        public void AñadaUnDetalleAlaVenta(VentaDetalle item);
 
-        public void EliminarUnDetalleDeVenta(VentaDetalle item);
+        public void ElimineUnDetalleDeLaVenta(VentaDetalle item);
 
-        public void AplicarUnDescuento();
+        public void ApliqueUnDescuento();
 
-        public void TerminarUnaVenta();
+        public void TermineLaVenta();
 
-        public IEnumerable<Venta> ListarVentas();
-        public IEnumerable<Venta> ListarVentasPorId(int id);
-        public IEnumerable<Venta> ListarVentasPorusUario();
+        public IEnumerable<Venta> ListeLasVentas();
+        public IEnumerable<Venta> ListeLasVentasPorId(int id);
+        public IEnumerable<Venta> ListeLasVentasPorUsuario();
 
 
     }

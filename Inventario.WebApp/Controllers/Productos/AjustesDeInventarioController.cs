@@ -3,7 +3,6 @@ using Inventario.DA.Database;
 using Inventario.Models.Dominio.Productos;
 using Inventario.WebApp.Models.Products;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Inventario.WebApp.Controllers.Productos
@@ -14,14 +13,14 @@ namespace Inventario.WebApp.Controllers.Productos
         private readonly RepositorioDeAjusteDeInventario _Repo;
         private readonly ReporitorioDeInventarios _RepoInventarios;
 
-        public AjustesDeInventarioController(InventarioDBContext context) 
+        public AjustesDeInventarioController(InventarioDBContext context)
         {
             _Repo = new(context);
             _RepoInventarios = new(context);
         }
         public ActionResult Index()
         {
-            List<Inventarios> inventarios  = (List<Inventarios>)_RepoInventarios.listarInventarios();
+            List<Inventarios> inventarios = (List<Inventarios>)_RepoInventarios.listeElInventarios();
             return View(inventarios);
         }
 
@@ -34,15 +33,15 @@ namespace Inventario.WebApp.Controllers.Productos
         }
 
         // GET: AjustestDeInventarioController/Create
-        
+
         public ActionResult Create(int id)
         {
             Inventarios inventario = _RepoInventarios.ObetenerInevtarioPorId(id);
 
-            CrearAjuste ajuste = new ();
+            CrearAjuste ajuste = new();
             ajuste.Inventario = inventario;
-            
-             
+
+
             return View(ajuste);
         }
 
