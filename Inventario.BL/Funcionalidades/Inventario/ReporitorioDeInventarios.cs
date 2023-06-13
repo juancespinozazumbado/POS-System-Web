@@ -34,7 +34,7 @@ namespace Inventario.BL.Funcionalidades.Inventario
 
         public IEnumerable<Inventarios> listeElInventarios()
         {
-            return _dbContext.Inventarios.ToList();
+            return _dbContext.Inventarios.Include(a=> a.Ajustes).ToList();
         }
 
         public Inventarios ObetenerInevtarioPorId(int id)

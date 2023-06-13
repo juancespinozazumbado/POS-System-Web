@@ -1,11 +1,11 @@
 ﻿using Inventario.Models.Dominio.Productos;
 
-namespace Inventario.WebApp.Models.Products
+namespace Inventario.WebApp.Areas.Productos.Models.Products
 {
     public class CrearInventario
     {
 
-        
+
         public string Nombre { get; set; }
 
         public Categoria Categoria { get; set; }
@@ -14,6 +14,6 @@ namespace Inventario.WebApp.Models.Products
 
         public decimal Precio { get; set; }
 
-        public List<AjusteDeInventario> ? Ajustes { get; set; }
+        public List<AjusteDeInventario>? Ajustes { get; set; }
     }
 }

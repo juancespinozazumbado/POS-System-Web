@@ -2,11 +2,6 @@
 using Inventario.DA.Database;
 using Inventario.Models.Dominio.Ventas;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Inventario.BL.Funcionalidades.Ventas
 {
@@ -20,26 +15,59 @@ namespace Inventario.BL.Funcionalidades.Ventas
         }
 
 
-        public IEnumerable<AperturaDeCaja> AperturasDeCajaPorCliente()
+        public IEnumerable<AperturaDeCaja> AperturasDeCajaPorUsuario(int idUsuario)
         {
-            throw new NotImplementedException();
+            List<AperturaDeCaja> AperturasDeCajaRegistradas = (List<AperturaDeCaja>)ListarAperturasDeCaja();
+
+            var CajasPorUsuario =  from caja in AperturasDeCajaRegistradas 
+                                   where caja.UserId.Equals(idUsuario)
+                                   select caja;
+
+            return CajasPorUsuario;
         }
 
         public void CerrarUnaAperturaDeCaja(int id)
         {
-            throw new NotImplementedException();
+           AperturaDeCaja caja = context.AperturasDeCaja.ToList().Find(ap => ap.Id == id);
+            if(caja != null) 
+            {
+                var ventas = from venta in caja.Ventas
+                             where venta.Estado == EstadoVenta.EnProceso
+                              select venta;
+
+                if(ventas.Count() == 0)
+                {
+                    caja.estado = EstadoCaja.Cerrada;
+                    context.AperturasDeCaja.Update(caja);
+                    context.SaveChanges();
+                } 
+            }
+
+
+
         }
 
         public void CrearUnaAperturaDeCaja(AperturaDeCaja aperturaDeCaja)
         {
-           context.AperturasDeCajas.Add(aperturaDeCaja);    
-           context.SaveChanges();
+            var Cajas = ListarAperturasDeCaja();
+
+            var CajasAbiertas = from caja in Cajas
+                                where caja.estado == EstadoCaja.Abierta 
+                                 && caja.UserId == aperturaDeCaja.UserId
+                                select caja;
+
+            if (CajasAbiertas.Count() != 0 )
+            {
+                context.AperturasDeCaja.Add(aperturaDeCaja);
+                context.SaveChanges();
+
+            }
         }
 
         public IEnumerable<AperturaDeCaja> ListarAperturasDeCaja()
         {
-            //return context.AperturasDeCajas.Include(a => a.Ventas).ToList();
-            throw new NotImplementedException();
+            return context.AperturasDeCaja.Include(a=> a.Ventas).ToList();
+            
         }
     }
 }

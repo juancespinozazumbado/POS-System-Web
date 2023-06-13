@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Inventario.Models.Dominio.Productos
 {
+
     public class Inventarios
     {
         public int Id { get; set; }
@@ -17,8 +18,6 @@ namespace Inventario.Models.Dominio.Productos
         public decimal Precio { get; set; }
 
         public List<AjusteDeInventario> Ajustes { get; set; }
-
-        public List<VentaDetalle> VentasItems { get; set; } 
 
         public Inventarios()
         {

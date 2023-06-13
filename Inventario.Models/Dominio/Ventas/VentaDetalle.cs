@@ -1,5 +1,6 @@
 ﻿
 using Inventario.Models.Dominio.Productos;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Inventario.Models.Dominio.Ventas
 {
@@ -12,6 +13,7 @@ namespace Inventario.Models.Dominio.Ventas
 
         public int Id_inventario { get; set; }
 
+        
         public Inventarios Inventarios { get; set; }
 
         public int Cantidad { get; set; }

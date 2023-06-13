@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace Inventario.BL.Funcionalidades.Ventas.Interfaces
 {
-    internal interface IrepositorioDeAperturaDeCaja
+    public interface IrepositorioDeAperturaDeCaja
     {
         public void CrearUnaAperturaDeCaja(AperturaDeCaja aperturaDeCaja);
 
         public IEnumerable<AperturaDeCaja> ListarAperturasDeCaja();
 
-        //public IEnumerable<AperturaDeCaja> AperturasDeCajaPorUsuario();
+        public IEnumerable<AperturaDeCaja> AperturasDeCajaPorUsuario(int idUsuario);
 
 
         public void CerrarUnaAperturaDeCaja(int id);

@@ -6,17 +6,18 @@ namespace Inventario.BL.Funcionalidades.Ventas.Interfaces
     {
         public void CreeUnaVenta(Venta venta);
 
-        public void AñadaUnDetalleAlaVenta(VentaDetalle item);
+        public void AñadaUnDetalleAlaVenta(int id, VentaDetalle item);
+        public void ElimineUnDetalleDeLaVenta(int id, VentaDetalle item);
 
-        public void ElimineUnDetalleDeLaVenta(VentaDetalle item);
+        public void ApliqueUnDescuento(int id, int decuento);
 
-        public void ApliqueUnDescuento();
-
-        public void TermineLaVenta();
+        public void TermineLaVenta(int id);
 
         public IEnumerable<Venta> ListeLasVentas();
-        public IEnumerable<Venta> ListeLasVentasPorId(int id);
-        public IEnumerable<Venta> ListeLasVentasPorUsuario();
+        public Venta ObtengaUnaVentaPorId(int id);
+
+        public IEnumerable<Venta> ListeLasVentasPorFecha(DateTime fecha_inicial, DateTime fecha_final);
+        public IEnumerable<Venta> ListeLasVentasPorUsuario(string userId);
 
 
     }

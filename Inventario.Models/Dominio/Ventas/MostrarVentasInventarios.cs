@@ -3,8 +3,8 @@
     public class MostrarVentasInventarios
     {
 
-        public IEnumerable<Productos.Inventarios> Inventario { get; set; }
-        public IEnumerable<Venta> Ventas { get; set; }
+        public List<Productos.Inventarios> Inventario { get; set; }
+        public List<Venta> Ventas { get; set; }
 
     }
 }

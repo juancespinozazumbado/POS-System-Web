@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Inventario.BL.Funcionalidades.Inventario
 {
-    public class RepositorioDeAjusteDeInventario : IRepositorioDeAjusteDeInventarios
+    public class RepositorioDeAjusteDeInventario : RepositorioDeInventarios
     {
         private readonly InventarioDBContext _dbContext;
         public RepositorioDeAjusteDeInventario(InventarioDBContext dbContext)

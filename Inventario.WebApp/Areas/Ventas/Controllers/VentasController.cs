@@ -3,10 +3,11 @@ using Inventario.BL.Funcionalidades.Ventas;
 using Inventario.DA.Database;
 using Inventario.Models.Dominio.Ventas;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-namespace Inventario.WebApp.Controllers.Ventas
+namespace Inventario.WebApp.Areas.Ventas.Controllers
 {
 
     [Authorize]
@@ -23,33 +24,43 @@ namespace Inventario.WebApp.Controllers.Ventas
         public ActionResult Index()
         {
             string IdDelUsuario = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+          
+
+
             /* int IdDelUsuario = !string.IsNullOrEmpty(ValorDelIdDelUsuario) ? int.Parse(ValorDelIdDelUsuario) : 0;*/
 
-            var venta = new Venta
-            {
-                NombreCliente = "NombreCliente1",
-                Fecha = DateTime.Now,
-                TipoDePago = 1,
-                Total = 100,
-                SubTotal = 90,
-                PorcentajeDesCuento = 10,
-                MontoDescuento = 10,
-                UserId = IdDelUsuario,
-                Estado = EstadoVenta.EnProceso,
-                IdAperturaDeCaja = 10
+
+            //    var venta = new Venta
+            //    {
+            //        NombreCliente = "NombreCliente1",
+            //        Fecha = DateTime.Now,
+            //        TipoDePago = 1,
+            //        Total = 100,
+            //        SubTotal = 90,
+            //        PorcentajeDesCuento = 10,
+            //        MontoDescuento = 10,
+            //        UserId = IdDelUsuario,
+            //        Estado = EstadoVenta.EnProceso,
+            //        IdAperturaDeCaja = 10
 
 
-            };
-            RepositorioDeVentas.RegistreElInicioDeLaVenta(venta);
-            var inventario = ReporitorioDeInventarios.listeElInventarios();
-            var ventas = RepositorioDeVentas.ListeLasVentas();
+            //    };
+            //    RepositorioDeVentas.CreeUnaVenta(venta);
+            //    var inventario = ReporitorioDeInventarios.listeElInventarios();
+            //    var ventas = RepositorioDeVentas.ListeLasVentas();
 
-            var viewModel = new MostrarVentasInventarios
-            {
-                Inventario = inventario,
-                Ventas = ventas
-            };
-            return View(viewModel);
+            //    var viewModel = new MostrarVentasInventarios
+            //    {
+            //        Inventario = inventario,
+            //        Ventas = ventas
+            //    };
+
+            //return View(viewModel);
+            return null;
+          
+
+
         }
 
         // GET: VentasController/Details/5

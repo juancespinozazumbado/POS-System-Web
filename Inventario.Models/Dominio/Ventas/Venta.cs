@@ -39,6 +39,8 @@ namespace Inventario.Models.Dominio.Ventas
         //[Column("IdAperturaDeCaja")]
         public int IdAperturaDeCaja { get; set; }
 
-        public virtual ICollection<VentaDetalle> VentaDetalles { get; set; } = new List<VentaDetalle>();
+        public AperturaDeCaja AperturaDeCaja { get; set; }
+
+        public virtual List<VentaDetalle> VentaDetalles { get; set; } = new List<VentaDetalle>();
     }
 }
