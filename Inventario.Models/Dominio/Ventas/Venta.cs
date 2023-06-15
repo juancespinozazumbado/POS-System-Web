@@ -16,7 +16,7 @@ namespace Inventario.Models.Dominio.Ventas
         public DateTime Fecha { get; set; }
 
         [Column("TipoDePago")]
-        public int TipoDePago { get; set; }
+        public TipoDePago TipoDePago { get; set; }
 
         [Column("Total")]
         public decimal Total { get; set; }

@@ -29,7 +29,8 @@ namespace Inventario.BL.Funcionalidades.Ventas
         public void CerrarUnaAperturaDeCaja(int id)
         {
            AperturaDeCaja caja = context.AperturasDeCaja.ToList().Find(ap => ap.Id == id);
-            if(caja != null) 
+            
+            if(caja != null && caja.estado == EstadoCaja.Abierta) 
             {
                 var ventas = from venta in caja.Ventas
                              where venta.Estado == EstadoVenta.EnProceso
@@ -56,7 +57,7 @@ namespace Inventario.BL.Funcionalidades.Ventas
                                  && caja.UserId == aperturaDeCaja.UserId
                                 select caja;
 
-            if (CajasAbiertas.Count() != 0 )
+            if (CajasAbiertas.Count() == 0 )
             {
                 context.AperturasDeCaja.Add(aperturaDeCaja);
                 context.SaveChanges();

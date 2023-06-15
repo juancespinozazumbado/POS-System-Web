@@ -48,10 +48,5 @@ namespace Inventario.BL.Funcionalidades.Inventario
         {
             return _dbContext.AjusteDeInventarios.ToList().Find(Aj => Aj.Id == id);  
         }
-
-        private void AjusteDeInventario()
-        {
-
-        }
     }
 }

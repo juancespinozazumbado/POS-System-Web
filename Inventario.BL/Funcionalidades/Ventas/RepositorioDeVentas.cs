@@ -86,14 +86,14 @@ namespace Inventario.BL.Funcionalidades.Ventas
 
                 foreach (VentaDetalle v in venta.VentaDetalles)
                 {
-                    venta.SubTotal += v.Cantidad * v.Inventarios.Precio;
+                    venta.SubTotal += v.Monto;
                     Inventarios inventario = v.Inventarios;
                     inventario.Cantidad -= v.Cantidad;
                     _dbContext.Inventarios.Update(inventario);
                     _dbContext.SaveChanges();
                 }
-                venta.MontoDescuento = venta.SubTotal * venta.PorcentajeDesCuento;
-                venta.Total = venta.SubTotal - venta.PorcentajeDesCuento;
+                venta.MontoDescuento = venta.SubTotal * venta.PorcentajeDesCuento/100;
+                venta.Total = venta.SubTotal - venta.MontoDescuento;
                 venta.Estado = EstadoVenta.Terminada;
                 _dbContext.Update(venta);
                 _dbContext.SaveChanges();

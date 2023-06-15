@@ -23,12 +23,20 @@ namespace Inventario.BL.Funcionalidades.Usuarios
 
         public void AñadirUnAccesoFallido(string id)
         {
-            throw new NotImplementedException();
+            AplicationUser usuario = dbContext.Usuarios.
+               Where(u => u.Id.Equals(id)).FirstOrDefault();
+            usuario.AccessFailedCount += 1;
+            dbContext.Update(usuario);
+            dbContext.SaveChanges();
         }
 
         public void BloquearUnUsuario(string id)
         {
-            throw new NotImplementedException();
+            AplicationUser usuario = dbContext.Usuarios.
+                Where(u=> u.Id.Equals(id)).FirstOrDefault();
+            usuario.LockoutEnd = DateTime.Now.AddMinutes(15);
+            dbContext.Update(usuario);
+            dbContext.SaveChanges();
         }
 
         public void ElimineUnUsuario(AplicationUser usuario)
@@ -41,6 +49,7 @@ namespace Inventario.BL.Funcionalidades.Usuarios
             return dbContext.Usuarios.ToList();
         }
 
+        // se necesita servicio STPM
         public void NotificarUnusuarioBloqueado(string id)
         {
             throw new NotImplementedException();
