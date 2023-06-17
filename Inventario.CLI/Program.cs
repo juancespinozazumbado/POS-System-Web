@@ -3,6 +3,7 @@ using Inventario.BL.Funcionalidades.Inventario;
 using Inventario.BL.Funcionalidades.Inventario.Interfaces;
 using Inventario.BL.Funcionalidades.Usuarios;
 using Inventario.BL.Funcionalidades.Ventas;
+using Inventario.BL.ServicioEmail;
 using Inventario.DA.Database;
 using Inventario.Models.Dominio.Productos;
 using Inventario.Models.Dominio.Usuarios;
@@ -25,6 +26,8 @@ Inventarios InventarioDePrueba;
 Venta VentaDePrueba;
 AperturaDeCaja AperturaDeCajaPrueba;
 
+ServicioDeEmail emailService;
+
 
 
 
@@ -35,6 +38,7 @@ using (var context = new InventarioDBContext(contextOPtions))
     RepoInventarios = new(context);
     RepoUsuarios = new(context);
     RepoAjusteDeInventario = new(context);
+    emailService = new();    
 
     CrearUnUsuario();
     UsuarioDePrueba = RepoUsuarios.ListeLosUsuarios()[0];
@@ -82,6 +86,16 @@ using (var context = new InventarioDBContext(contextOPtions))
     MuestreLosUsuarios();
 
     BloquearUnusaruo(UsuarioDePrueba);
+
+    string mensaje = "Estimado Usuario: " + UsuarioDePrueba.UserName
+        + "\n    Su cuenta ha sido bloqueada devido a que se intento " +
+        "ingresar a su cuenta por mas de tres veces."
+        + "\n\n Por favor ingrese nuevamente sus credenciales en "
+        + UsuarioDePrueba.LockoutEnd.GetValueOrDefault().Subtract(DateTime.Now) + "Minutos.";
+
+
+    emailService.SendEmailAsync("juan_4002@hotmail.com", "OdiN.7072",
+        "Usuario Bloqueado" , mensaje, "espinozajuanki@gmail.com");
     MuestreLosUsuarios();
 
 

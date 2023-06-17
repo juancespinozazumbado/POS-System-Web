@@ -1,12 +1,9 @@
-﻿
-
-using Inventario.Models.Dominio.Productos;
+﻿using Inventario.Models.Dominio.Productos;
 using Inventario.Models.Dominio.Usuarios;
 using Inventario.Models.Dominio.Ventas;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
 
 
 namespace Inventario.DA.Database
