@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Inventario.WebApp.Areas.Productos.Models.Products
+namespace Inventario.WebApp.Models.Products
 {
     public enum TipoAjuste
     {

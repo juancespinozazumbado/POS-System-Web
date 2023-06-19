@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Inventario.DA.Database
 {
-    public class InventarioDBContext : IdentityDbContext<IdentityUser>
+    public class InventarioDBContext : IdentityDbContext<AplicationUser>
     {
 
         public InventarioDBContext(DbContextOptions<InventarioDBContext> options)
@@ -29,7 +29,9 @@ namespace Inventario.DA.Database
 
             base.OnModelCreating(builder);
 
-           builder.Ignore<IdentityUser>();
+
+
+           builder.Ignore<AplicationUser>();
 
             builder.Entity<AplicationUser>().ToTable("AspNetUsers");
 

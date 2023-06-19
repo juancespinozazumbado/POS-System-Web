@@ -1,6 +1,6 @@
 ﻿using Inventario.Models.Dominio.Productos;
 
-namespace Inventario.WebApp.Areas.Productos.Models.Products
+namespace Inventario.WebApp.Models.Products
 {
     public class CrearAjuste
     {

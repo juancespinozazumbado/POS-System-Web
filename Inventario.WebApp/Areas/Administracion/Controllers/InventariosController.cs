@@ -4,9 +4,10 @@ using Inventario.Models.Dominio.Productos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Inventario.WebApp.Areas.Productos.Controllers
+namespace Inventario.WebApp.Areas.Administracion.Controllers
 {
 
+    [Area("Administracion")]
     [Authorize]
     public class InventariosController : Controller
     {
