@@ -48,14 +48,14 @@
 
 ## Tecnologias 
 
-- [ ] [Micosoft dotNet 7.][https://learn.microsoft.com/en-us/aspnet/core/getting-started/?view=aspnetcore-7.0&tabs=windows]
-- [ ] [asp.net MVC.] [https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-mvc-app/start-mvc?view=aspnetcore-7.0&tabs=visual-studio]
-- [ ][Entity Framework core v.7][https://learn.microsoft.com/en-us/ef/core/get-started/overview/first-app?tabs=netcore-cli]
-- [ ][ASP.NET Core Identity][https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-7.0&tabs=visual-studio]
-- [ ][Microsoft SQLServer][https://learn.microsoft.com/en-us/sql/sql-server/what-s-new-in-sql-server-2022?view=sql-server-ver16]
+- [ ] [Micosoft dotNet 7.](https://learn.microsoft.com/en-us/aspnet/core/getting-started/?view=aspnetcore-7.0&tabs=windows)
+- [ ] [asp.net MVC.](https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-mvc-app/start-mvc?view=aspnetcore-7.0&tabs=visual-studio)
+- [ ] [Entity Framework core v.7](https://learn.microsoft.com/en-us/ef/core/get-started/overview/first-app?tabs=netcore-cli)
+- [ ][ASP.NET Core Identity](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-7.0&tabs=visual-studio)
+- [ ][Microsoft SQLServer](https://learn.microsoft.com/en-us/sql/sql-server/what-s-new-in-sql-server-2022?view=sql-server-ver16)
 
 ### Architectura
-- [][N-layered architecture][https://learn.microsoft.com/en-us/dotnet/architecture/modern-web-apps-azure/common-web-application-architectures]
+- [][N-layered architecture](https://learn.microsoft.com/en-us/dotnet/architecture/modern-web-apps-azure/common-web-application-architectures)
 Capa de modelos (Dominio)
 Capa de Bussines logic(aplicacion)
 capa de Acceso a datos (EF core)
