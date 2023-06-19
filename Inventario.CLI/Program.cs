@@ -94,8 +94,8 @@ using (var context = new InventarioDBContext(contextOPtions))
         + UsuarioDePrueba.LockoutEnd.GetValueOrDefault().Subtract(DateTime.Now) + "Minutos.";
 
 
-    emailService.SendEmailAsync("juan_4002@hotmail.com", "OdiN.7072",
-        "Usuario Bloqueado" , mensaje, "espinozajuanki@gmail.com");
+    Task task = emailService.SendEmailAsync("juan_4002@hotmail.com", "OdiN.7072",
+        "Usuario Bloqueado" , mensaje, "geneshii3007@gmail.com");
     MuestreLosUsuarios();
 
 

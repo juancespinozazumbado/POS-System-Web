@@ -1,12 +1,13 @@
 ﻿using Inventario.BL.Funcionalidades.Inventario;
 using Inventario.DA.Database;
 using Inventario.Models.Dominio.Productos;
-using Inventario.WebApp.Areas.Productos.Models.Products;
+using Inventario.WebApp.Models.Products;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Inventario.WebApp.Areas.Productos.Controllers
+namespace Inventario.WebApp.Areas.Administracion.Controllers
 {
+    [Area("Administracion")]
     [Authorize]
     public class AjustesDeInventarioController : Controller
     {
