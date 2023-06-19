@@ -7,9 +7,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-namespace Inventario.WebApp.Areas.Ventas.Controllers
+namespace Inventario.WebApp.Controllers
 {
 
+   
     [Authorize]
     public class VentasController : Controller
     {
@@ -25,7 +26,7 @@ namespace Inventario.WebApp.Areas.Ventas.Controllers
         {
             string IdDelUsuario = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
-          
+
 
 
             /* int IdDelUsuario = !string.IsNullOrEmpty(ValorDelIdDelUsuario) ? int.Parse(ValorDelIdDelUsuario) : 0;*/
@@ -58,7 +59,7 @@ namespace Inventario.WebApp.Areas.Ventas.Controllers
 
             //return View(viewModel);
             return null;
-          
+
 
 
         }

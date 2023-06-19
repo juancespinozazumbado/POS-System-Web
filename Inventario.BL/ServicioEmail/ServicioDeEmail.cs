@@ -6,7 +6,7 @@ using System.Net.Mail;
 
 namespace Inventario.BL.ServicioEmail
 {
-    public class ServicioDeEmail : IservicioDeEmail
+    public class ServicioDeEmail : IServicioDeEmail
     {
         public Task SendEmailAsync(string emisor,string password, string titulo, string cuerpo, string destinatario)
         {
