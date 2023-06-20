@@ -1,14 +1,9 @@
 ﻿@model IEnumerable<Inventario.Models.Dominio.Productos.Inventarios>
 
 @{
-    ViewData["Title"] = "IndexInventario";
+    ViewData["Title"] = "Articulos";
 }
 
-<h1>IndexInventario</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -49,9 +44,9 @@
                 @Html.DisplayFor(modelItem => item.Precio)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    <input type="number" id="cantidad" min="1" max="100" step="1" placeholder="Ingrese la cantidad">
+                    <button type="submit" class="btn btn-primary" onclick="obtenerCantidad('@item.Id')">Agregar</button>
+
             </td>
         </tr>
 }
