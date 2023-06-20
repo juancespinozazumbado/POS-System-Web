@@ -188,7 +188,7 @@ namespace Inventario.WebApp.Controllers
 
                 
                 
-                    RepositorioDeVentas.AñadaUnDetalleAlaVenta(id_venta, item);
+                    
                     inventario.Cantidad += item.Cantidad;
                     ReporitorioDeInventarios.EditarInventario(inventario);
 

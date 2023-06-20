@@ -54,6 +54,10 @@
                     <form asp-controller="Venta" asp-action="EliminarItem" >
                         <input type="hidden" class="form-control" asp-for="Detalles.Id_venta" value=@Model.venta.Id />
                         <input type="hidden" class="form-control" asp-for="Detalles.Id" value=@item.Id />
+                        <input type="hidden" class="form-control" asp-for="Detalles.Id_inventario" value=@item.Id_inventario />
+
+
+                        <input type="hidden" class="form-control" asp-for="venta" value=@Model.venta />
 
                         <button type="submit"  class="btn btn-sm">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
