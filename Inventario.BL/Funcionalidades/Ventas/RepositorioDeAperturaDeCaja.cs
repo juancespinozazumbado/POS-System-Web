@@ -14,7 +14,7 @@ namespace Inventario.BL.Funcionalidades.Ventas
             this.context = context;
         }
 
-        public IEnumerable<AperturaDeCaja> AperturasDeCajaPorUsuario(int idUsuario)
+        public IEnumerable<AperturaDeCaja> AperturasDeCajaPorUsuario(string idUsuario)
         {
             List<AperturaDeCaja> AperturasDeCajaRegistradas = (List<AperturaDeCaja>)ListarAperturasDeCaja();
 

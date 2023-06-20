@@ -1,0 +1,61 @@
+﻿@using Inventario.BL.Funcionalidades.Inventario
+@using Inventario.Models.Dominio.Productos
+@using Inventario.WebApp.Areas.Ventas.Models
+@model VentaParaCrear
+
+
+@{
+    ViewData["Title"] = "IndexVenta";
+   
+}
+
+<form asp-controller ="Venta" asp-action="AgregarItem" method="post">
+
+<div class="row g-4">
+    <div class="col-auto">
+        <div class="row g-4">
+            <div class="col-auto">
+
+                    <input type="hidden" class="form-control"  asp-for="Detalles" value =@Model.Detalles />
+                    <input type="hidden" class="form-control"  asp-for="venta" value=@Model.venta />
+                    <input type="hidden" class="form-control"  asp-for="Detalles.Inventarios" value=@Model.Inventarios />
+                    <input type="hidden" class="form-control" asp-for="Detalles.Id_venta" value=@Model.venta.Id />
+
+
+                <label asp-for="Detalles.Id_inventario" class="control-label"></label>
+                <select type="text" readonly="readonly " class="form-select" asp-for="Detalles.Id_inventario" />
+                @foreach (var item in Model.Inventarios)
+                {
+                    <option value="@item.Id">
+                        @item.Nombre
+                    </option>
+                }
+
+
+            </div>
+        </div>
+       </div>
+  
+    <div class="col-auto">
+        <div class="row g-4">
+            <div class="col-auto">
+                <label asp-for="Detalles.Cantidad" class="control-label"></label>
+                <input type="text" class="form-control"  asp-for="Detalles.Cantidad" />
+
+            </div>
+        </div>
+     </div>
+   
+   
+    <div class="col-auto">
+        <button type="submit" value="Filtro" class="btn btn-outline-dark">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z" />
+            </svg>
+
+            Agregar Item
+        </button>
+    </div>
+    </div>
+</form> 
+

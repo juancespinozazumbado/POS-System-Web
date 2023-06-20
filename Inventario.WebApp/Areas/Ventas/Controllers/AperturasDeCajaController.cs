@@ -1,7 +1,10 @@
 ﻿using Inventario.BL.Funcionalidades.Inventario;
+using Inventario.BL.Funcionalidades.Usuarios;
 using Inventario.BL.Funcionalidades.Ventas;
 using Inventario.DA.Database;
+using Inventario.Models.Dominio.Usuarios;
 using Inventario.Models.Dominio.Ventas;
+using Inventario.WebApp.Areas.Ventas.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -10,79 +13,72 @@ using System.Security.Claims;
 namespace Inventario.WebApp.Controllers
 {
 
-   
+
+    [Area("Ventas")]
     [Authorize]
-    public class VentasController : Controller
+    public class AperturasDeCajaController : Controller
     {
         RepositorioDeVentas RepositorioDeVentas;
         ReporitorioDeInventarios ReporitorioDeInventarios;
-        public VentasController(InventarioDBContext context)
+        RepositorioDeUsuarios RepositorioDeUsuarios;
+        RepositorioDeAperturaDeCaja RepositorioDeAperturaDeCAja;
+        public AperturasDeCajaController (InventarioDBContext context)
         {
             RepositorioDeVentas = new(context);
             ReporitorioDeInventarios = new(context);
+            RepositorioDeUsuarios = new(context);
+            RepositorioDeAperturaDeCAja = new(context);
         }
         // GET: VentasController
         public ActionResult Index()
         {
-            string IdDelUsuario = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+           string id = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+           AplicationUser usaurioActual  = RepositorioDeUsuarios.ObtengaUnUsuarioPorId(id);
+            AperturaDeCaja? cajaActual = RepositorioDeAperturaDeCAja.AperturasDeCajaPorUsuario(id)
+                .Where(c=> c.estado== EstadoCaja.Abierta).FirstOrDefault();  
+            UsuarioParaCerar modelo = new() { 
+                Usuario = usaurioActual,
+                TieneUnaCajaAbierta = cajaActual!= null
+            };
 
-
-
-
-            /* int IdDelUsuario = !string.IsNullOrEmpty(ValorDelIdDelUsuario) ? int.Parse(ValorDelIdDelUsuario) : 0;*/
-
-
-            //    var venta = new Venta
-            //    {
-            //        NombreCliente = "NombreCliente1",
-            //        Fecha = DateTime.Now,
-            //        TipoDePago = 1,
-            //        Total = 100,
-            //        SubTotal = 90,
-            //        PorcentajeDesCuento = 10,
-            //        MontoDescuento = 10,
-            //        UserId = IdDelUsuario,
-            //        Estado = EstadoVenta.EnProceso,
-            //        IdAperturaDeCaja = 10
-
-
-            //    };
-            //    RepositorioDeVentas.CreeUnaVenta(venta);
-            //    var inventario = ReporitorioDeInventarios.listeElInventarios();
-            //    var ventas = RepositorioDeVentas.ListeLasVentas();
-
-            //    var viewModel = new MostrarVentasInventarios
-            //    {
-            //        Inventario = inventario,
-            //        Ventas = ventas
-            //    };
-
-            //return View(viewModel);
-            return null;
-
-
+           
+            return View(modelo);
 
         }
 
         // GET: VentasController/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            AperturaDeCaja caja = RepositorioDeAperturaDeCAja.ObtenerUnaAperturaDeCajaPorId(id);
+            
+            return View(caja);
         }
 
         // GET: VentasController/Create
-        public ActionResult Create()
+        public ActionResult AbrirCaja()
         {
-            return View();
+            string id = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            AperturaDeCaja aperturaCaja = new() 
+            {
+                UserId = id,
+                FechaDeInicio = DateTime.Now,
+                FechaDeCierre = null,
+                Observaciones = null,
+                estado = EstadoCaja.Abierta,
+                Ventas = new()
+            };
+
+            return View(aperturaCaja);
         }
 
         // POST: VentasController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Venta venta)
+        public ActionResult Create(AperturaDeCaja caja)
         {
             try
             {
+                RepositorioDeAperturaDeCAja.CrearUnaAperturaDeCaja(caja);
 
                 return RedirectToAction(nameof(Index));
             }

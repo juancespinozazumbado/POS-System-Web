@@ -14,7 +14,7 @@ namespace Inventario.BL.Funcionalidades.Ventas.Interfaces
 
         public IEnumerable<AperturaDeCaja> ListarAperturasDeCaja();
 
-        public IEnumerable<AperturaDeCaja> AperturasDeCajaPorUsuario(int idUsuario);
+        public IEnumerable<AperturaDeCaja> AperturasDeCajaPorUsuario(string idUsuario);
 
         public AperturaDeCaja ObtenerUnaAperturaDeCajaPorId(int id);
 
