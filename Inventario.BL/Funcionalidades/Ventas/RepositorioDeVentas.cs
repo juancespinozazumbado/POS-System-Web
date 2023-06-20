@@ -82,8 +82,8 @@ namespace Inventario.BL.Funcionalidades.Ventas
                 {
                     venta.SubTotal += v.Monto;
                     Inventarios inventario = v.Inventarios;
-                    inventario.Cantidad -= v.Cantidad;
-                    _dbContext.Inventarios.Update(inventario);
+                    //inventario.Cantidad -= v.Cantidad;
+                    //_dbContext.Inventarios.Update(inventario);
                     _dbContext.SaveChanges();
                 }
                 venta.MontoDescuento = venta.SubTotal * venta.PorcentajeDesCuento/100;

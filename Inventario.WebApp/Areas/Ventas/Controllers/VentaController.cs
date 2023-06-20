@@ -10,6 +10,7 @@ using Inventario.WebApp.Areas.Ventas.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Immutable;
 using System.Security.Claims;
 
 namespace Inventario.WebApp.Controllers
@@ -139,13 +140,18 @@ namespace Inventario.WebApp.Controllers
                 item.Precio = inventario.Precio;
                 item.Monto = item.Precio * item.Cantidad;
 
-
-
-
-
-
                 List<Inventarios> inventarios = (List<Inventarios>)ReporitorioDeInventarios.listeElInventarios();
-                RepositorioDeVentas.AñadaUnDetalleAlaVenta(id_venta, item);
+                
+                
+                if (inventario.Cantidad >= item.Cantidad)
+                {
+                    RepositorioDeVentas.AñadaUnDetalleAlaVenta(id_venta, item);
+                    inventario.Cantidad -= item.Cantidad;
+                    ReporitorioDeInventarios.EditarInventario(inventario);
+
+
+
+                }
 
                 venta = RepositorioDeVentas.ObtengaUnaVentaPorId(id_venta);
                 VentaParaCrear VentaParaCrear = new()
@@ -172,12 +178,23 @@ namespace Inventario.WebApp.Controllers
         {
             try
             {
-
+                int id_Inventario = modelo.Detalles.Id_inventario;
+                Inventarios inventario = ReporitorioDeInventarios.ObetenerInevtarioPorId(id_Inventario);
                 int id_venta = modelo.Detalles.Id_venta;
                 int id = modelo.Detalles.Id;
 
                 Venta venta = RepositorioDeVentas.ObtengaUnaVentaPorId(id_venta);
                 VentaDetalle item = venta.VentaDetalles.Find(d => d.Id == id);
+
+                
+                
+                    RepositorioDeVentas.AñadaUnDetalleAlaVenta(id_venta, item);
+                    inventario.Cantidad += item.Cantidad;
+                    ReporitorioDeInventarios.EditarInventario(inventario);
+
+
+
+             
 
                 RepositorioDeVentas.ElimineUnDetalleDeLaVenta(id_venta, item);
 
@@ -195,13 +212,13 @@ namespace Inventario.WebApp.Controllers
                 return RedirectToAction(nameof(CrearVenta), VentaParaCrear);
             }
             catch (Exception e)
+
             {
                 e = null;
                 return View();
             }
         }
     
-
 
 
 
