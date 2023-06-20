@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Inventario.WebApp.Areas.Administracion.Controllers
 {
 
-    [Area("Administracion")]
+    [Area("Productos")]
     [Authorize]
     public class InventariosController : Controller
     {

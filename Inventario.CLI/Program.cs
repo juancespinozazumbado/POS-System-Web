@@ -189,6 +189,7 @@ void AñadaItemVenta(int cant)
             Precio = InventarioDePrueba.Precio,
             Monto = InventarioDePrueba.Precio * cant,
             MontoDescuento = VentaDePrueba.PorcentajeDesCuento
+            
 
         });
 }

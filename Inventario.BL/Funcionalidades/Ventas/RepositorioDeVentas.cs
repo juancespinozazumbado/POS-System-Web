@@ -30,12 +30,6 @@ namespace Inventario.BL.Funcionalidades.Ventas
             
         }
 
-        //public void RegistreElInicioDeLaVenta(Venta venta)
-        //{
-            
-
-        //}
-
         public void CreeUnaVenta(Venta venta)
         {
             _dbContext.Ventas.Add(venta);
