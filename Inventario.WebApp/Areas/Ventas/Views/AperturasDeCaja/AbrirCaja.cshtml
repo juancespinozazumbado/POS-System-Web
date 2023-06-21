@@ -1,0 +1,69 @@
+﻿@using Inventario.WebApp.Models.Products;
+@using Inventario.Models.Dominio.Ventas;
+@model  AperturaDeCaja;
+
+@{
+    ViewData["Title"] = "Create";
+   
+}
+
+<h1>Create</h1>
+
+<h4>Inventarios</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group ">
+                
+                <input type ="hidden" readonly="readonly" asp-for="Id" class="form-control" />
+                <span asp-validation-for="Id" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="FechaDeInicio" class="control-label"></label>
+                <input readonly="readonly" asp-for="FechaDeInicio" class="form-control" />
+                <span asp-validation-for="FechaDeInicio" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+               
+                <input type="hidden" readonly="readonly"  asp-for="FechaDeCierre" readonly="readonly" class="form-control" value="@null" />
+                <span asp-validation-for="FechaDeCierre" class="text-danger"></span>
+            </div>
+           
+
+            <div class="form-group">
+                <label asp-for="UserId" class="control-label"></label>
+                <input readonly="readonly" asp-for="UserId" class="form-control" value ="@Model.UserId"/>
+                <span asp-validation-for="UserId" class="text-danger"></span>
+            </div>
+           
+            <div class="form-group">
+                
+                <input type="hidden" readonly="readonly" asp-for="estado" class="form-control" value ="@Model.estado"/>
+                <span asp-validation-for="estado" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Observaciones" class="control-label " ></label>
+                <input asp-for="Observaciones" class="form-contrl" />
+                
+                <span asp-validation-for="Observaciones" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

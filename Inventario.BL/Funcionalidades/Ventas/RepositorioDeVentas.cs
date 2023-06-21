@@ -30,12 +30,6 @@ namespace Inventario.BL.Funcionalidades.Ventas
             
         }
 
-        //public void RegistreElInicioDeLaVenta(Venta venta)
-        //{
-            
-
-        //}
-
         public void CreeUnaVenta(Venta venta)
         {
             _dbContext.Ventas.Add(venta);
@@ -88,8 +82,8 @@ namespace Inventario.BL.Funcionalidades.Ventas
                 {
                     venta.SubTotal += v.Monto;
                     Inventarios inventario = v.Inventarios;
-                    inventario.Cantidad -= v.Cantidad;
-                    _dbContext.Inventarios.Update(inventario);
+                    //inventario.Cantidad -= v.Cantidad;
+                    //_dbContext.Inventarios.Update(inventario);
                     _dbContext.SaveChanges();
                 }
                 venta.MontoDescuento = venta.SubTotal * venta.PorcentajeDesCuento/100;

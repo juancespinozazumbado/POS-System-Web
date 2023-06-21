@@ -1,0 +1,25 @@
+﻿@using Inventario.WebApp.Areas.Ventas.Models
+@model UsuarioParaCerar
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+
+<div class="container">
+    <a class="alert-info">@Model.Usuario.UserName</a>
+</div>
+
+@if (!Model.TieneUnaCajaAbierta)
+{
+    <p>
+        <a asp-action="AbrirCaja">Nueva venta</a>
+    </p>
+
+}
+
+
+
+   
