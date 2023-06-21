@@ -1,4 +1,6 @@
-﻿@model IEnumerable<Inventario.Models.Dominio.Productos.Inventarios>
+﻿@using Inventario.WebApp.Areas.Ventas.Models;
+@using Inventario.Models.Dominio.Ventas;
+@model VentaParaCrear
 
 @{
     ViewData["Title"] = "Articulos";
@@ -8,25 +10,25 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Id)
+                @Html.DisplayNameFor(model => model.Inventarios[0].Id)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Nombre)
+                @Html.DisplayNameFor(model => model.Inventarios[0].Nombre)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Categoria)
+                @Html.DisplayNameFor(model => model.Inventarios[0].Categoria)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Cantidad)
+                @Html.DisplayNameFor(model => model.Inventarios[0].Cantidad)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Precio)
+                @Html.DisplayNameFor(model => model.Inventarios[0].Precio)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.Inventarios) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Id)
@@ -44,9 +46,21 @@
                 @Html.DisplayFor(modelItem => item.Precio)
             </td>
             <td>
-                    <input type="number" id="cantidad" min="1" max="100" step="1" placeholder="Ingrese la cantidad">
-                    <button type="submit" class="btn btn-primary" onclick="obtenerCantidad('@item.Id')">Agregar</button>
+                    <form asp-controller="Ventas" asp-action="AgregarItem" method="post">
 
+                        <input type="number" asp-for="Detalles.Cantidad" min="1" max="100" step="1" placeholder="Ingrese la cantidad">
+                       
+                        <input type="hidden" asp-for="Detalles.Id_venta" value="@Model.venta.Id" />
+                        <input type="hidden"  asp-for="Detalles.Id_inventario" value="@item.Id" />
+                        <input type="hidden"  asp-for="Detalles.Precio" value="@item.Precio" />
+                   @*     @{
+                            decimal monto = @item.Precio * Model.Detalles.Cantidad;
+                        }
+                        <input type="hidden" asp-for="Detalles.Monto" value="@monto" />*@
+                                                                    
+                        <button type="submit" class="btn btn-primary">Agregar</button>
+
+                    </form>
             </td>
         </tr>
 }

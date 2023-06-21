@@ -4,6 +4,7 @@ using Inventario.Models.Dominio.Productos;
 using Inventario.Models.Dominio.Ventas;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Inventario.BL.Funcionalidades.Ventas
 {
@@ -13,10 +14,13 @@ namespace Inventario.BL.Funcionalidades.Ventas
         private readonly IMemoryCache ElCache;
 
         List<ProductosAVender> ListaProductosAVenders;
+
         private readonly InventarioDBContext _dbContext;
+
         public RepositorioDeVentas(InventarioDBContext dbContext, IMemoryCache elCache)
         {
             _dbContext = dbContext;
+            ListaProductosAVenders = new List<ProductosAVender>();
 
             ElCache = elCache;
             if (ElCacheEstaVacio())
@@ -34,6 +38,10 @@ namespace Inventario.BL.Funcionalidades.Ventas
 
         }
 
+        public RepositorioDeVentas(InventarioDBContext context)
+        {
+            _dbContext = context;
+        }
 
         public void AñadaUnDetalleAlaVenta(int idVenta, VentaDetalle item)
         {
@@ -59,14 +67,33 @@ namespace Inventario.BL.Funcionalidades.Ventas
 
         public void AgregueUnItemAlCarrito(ProductosAVender productosAVender)
         {
-            ListaProductosAVenders.Add(productosAVender);
+            if (ListaProductosAVenders.IsNullOrEmpty())
+            {
+                ObtengaLosValoresDelCache();
+                ListaProductosAVenders.Add(productosAVender);
+            }
+            else
+            {
+
+                ListaProductosAVenders.Add(productosAVender);
+            }
 
         }
 
         public IEnumerable<ProductosAVender> ObtengaLaListaDeItems()
         {
 
-            return ListaProductosAVenders;
+            if (ListaProductosAVenders.IsNullOrEmpty())
+            {
+                ListaProductosAVenders = new List<ProductosAVender>();
+                return ListaProductosAVenders;
+
+            }
+            else
+            {
+                return ListaProductosAVenders;
+
+            }
 
 
         }

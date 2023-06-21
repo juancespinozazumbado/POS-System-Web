@@ -1,8 +1,11 @@
 ﻿using Inventario.BL.Funcionalidades.Inventario;
+using Inventario.BL.Funcionalidades.Usuarios;
 using Inventario.BL.Funcionalidades.Ventas;
 using Inventario.DA.Database;
+using Inventario.Models.Dominio.Productos;
+using Inventario.Models.Dominio.Usuarios;
 using Inventario.Models.Dominio.Ventas;
-using Inventario.WebApp.Models.Ventas;
+using Inventario.WebApp.Areas.Ventas.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
@@ -10,66 +13,108 @@ using System.Security.Claims;
 
 namespace Inventario.WebApp.Controllers
 {
-
-
     [Authorize]
     public class VentasController : Controller
     {
         RepositorioDeVentas RepositorioDeVentas;
         ReporitorioDeInventarios ReporitorioDeInventarios;
-        IEnumerable<ProductosAVender> ListaDeProductosAVenders;
+        RepositorioDeUsuarios RepositorioDeUsuarios;
+        RepositorioDeAperturaDeCaja RepositorioDeAperturaDeCaja;
+        List<ProductosAVender> ListaDeProductosAVenders;
         public VentasController(InventarioDBContext context, IMemoryCache elCache)
         {
             RepositorioDeVentas = new(context, elCache);
+            RepositorioDeVentas = new(context);
             ReporitorioDeInventarios = new(context);
+            RepositorioDeUsuarios = new(context);
+            RepositorioDeAperturaDeCaja = new(context);
             ListaDeProductosAVenders = new List<ProductosAVender>();
         }
         // GET: VentasController
         public ActionResult Index()
         {
 
-            var inventario = ReporitorioDeInventarios.listeElInventarios();
-            var productosAVender = RepositorioDeVentas.ObtengaLaListaDeItems();
+            string id = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            AplicationUser usaurioActual = RepositorioDeUsuarios.ObtengaUnUsuarioPorId(id);
+            UsuarioParaCerar modelo = new() { Usuario = usaurioActual };
 
-            var viewModel = new Models.Ventas.MostrarVentasInventarios
+            AperturaDeCaja? caja = RepositorioDeAperturaDeCaja.AperturasDeCajaPorUsuario(id)
+               .Where(c => c.estado == EstadoCaja.Abierta).FirstOrDefault();
+            if (caja != null)
+                modelo.TieneUnaCajaAbierta = true;
+
+
+            return View(modelo);
+        }
+
+        // GET: VentasController/Create
+        public ActionResult CrearVenta()
+        {
+
+            string IdUsuario = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            AplicationUser usaurioActual = RepositorioDeUsuarios.ObtengaUnUsuarioPorId(IdUsuario);
+            AperturaDeCaja? caja = RepositorioDeAperturaDeCaja.AperturasDeCajaPorUsuario(IdUsuario)
+              .Where(c => c.estado == EstadoCaja.Abierta).FirstOrDefault();
+
+            Venta? ventaAbierta = RepositorioDeVentas.ListeLasVentasPorUsuario(IdUsuario)
+               .Where(v => v.Estado == EstadoVenta.EnProceso).FirstOrDefault();
+
+            List<Inventarios> inventarios = (List<Inventarios>)ReporitorioDeInventarios.listeElInventarios();
+
+
+            VentaParaCrear modelo = new() { Inventarios = inventarios, Detalles = new(), productosAVender = ListaDeProductosAVenders };
+
+            if (ventaAbierta == null)
             {
-                Inventario = inventario,
-                ProductosAVender = productosAVender
-            };
+                Venta venta = new()
+                {
+                    AperturaDeCaja = caja,
+                    IdAperturaDeCaja = caja.Id,
+                    UserId = IdUsuario
+
+                };
 
 
-            return View(viewModel);
+                modelo.venta = venta;
+
+            }
+            else
+                modelo.venta = ventaAbierta;
+
+            return View(modelo);
+
         }
 
         [HttpPost]
-        public ActionResult AgregarItem(int id, int cantidad)
+        public ActionResult AgregarItem(VentaParaCrear ventaParaCrear)
         {
-            MostrarVentasInventarios estaVenta;
 
             // Obtener el item seleccionado del inventario
-            var itemDelInventario = ReporitorioDeInventarios.ObetenerInevtarioPorId(id);
+            var itemDelInventario = ReporitorioDeInventarios.ObetenerInevtarioPorId(ventaParaCrear.Detalles.Id_inventario);
 
             // Verificar si hay suficiente cantidad disponible en el inventario
-            if (itemDelInventario.Cantidad >= cantidad)
+            if (itemDelInventario.Cantidad >= ventaParaCrear.Detalles.Cantidad && ventaParaCrear.Detalles.Cantidad > 0)
             {
-                // Agregar el item al carrito de compras
-                ProductosAVender productos = new ProductosAVender
-                {
-                    NombreDelProducto = itemDelInventario.Nombre,
-                    Cantidad = cantidad,
-                    Precio = itemDelInventario.Precio,
-                    Total = itemDelInventario.Precio * cantidad
-                };
-                RepositorioDeVentas.AgregueUnItemAlCarrito(productos);
+
+                VentaDetalle ventaDetalle = ventaParaCrear.Detalles;
+
+                ventaDetalle.Monto = ventaDetalle.Cantidad * ventaDetalle.Precio;
 
                 // Actualizar la cantidad en el inventario
-                itemDelInventario.Cantidad -= cantidad;
+                itemDelInventario.Cantidad -= ventaDetalle.Cantidad;
                 ReporitorioDeInventarios.EditarInventario(itemDelInventario);
+                RepositorioDeVentas.AñadaUnDetalleAlaVenta(ventaDetalle.Id_venta, ventaDetalle);
 
-                // Después de actualizar la cantidad en el inventario
-                var ListaDeProductosAVender = RepositorioDeVentas.ObtengaLaListaDeItems();
-                return PartialView("ProductosParcial", ListaDeProductosAVender);
+                List<Inventarios> inventarios = (List<Inventarios>)ReporitorioDeInventarios.listeElInventarios();
+                Venta venta = RepositorioDeVentas.ObtengaUnaVentaPorId(ventaDetalle.Id_venta);
+                VentaParaCrear VentaParaCrear = new()
+                {
+                    Inventarios = inventarios,
+                    Detalles = new(),
+                    venta = venta
+                };
 
+                return RedirectToAction(nameof(CrearVenta), ventaParaCrear);
             }
             else
             {
@@ -77,32 +122,41 @@ namespace Inventario.WebApp.Controllers
             }
 
             // En caso de error, volver a la vista Index
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(CrearVenta));
         }
 
-        // Post: VentasController/NuevaVenta
-        public ActionResult NuevaVenta()
+        // POST: VentasController/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EliminarItem(VentaParaCrear modelo)
         {
-            string IdDelUsuario = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-
-
-            var venta = new Venta
+            try
             {
-                NombreCliente = "NombreCliente2",
-                Fecha = DateTime.Now,
-                TipoDePago = 0,
-                Total = 0,
-                SubTotal = 0,
-                PorcentajeDesCuento = 0,
-                MontoDescuento = 0,
-                UserId = IdDelUsuario,
-                Estado = EstadoVenta.EnProceso,
-                IdAperturaDeCaja = 11
+                Inventarios inventario = ReporitorioDeInventarios.ObetenerInevtarioPorId(modelo.Detalles.Id_inventario);
+                inventario.Cantidad += modelo.Detalles.Cantidad;
+                ReporitorioDeInventarios.EditarInventario(inventario);
 
+                Venta venta = RepositorioDeVentas.ObtengaUnaVentaPorId(modelo.Detalles.Id_venta);
+                VentaDetalle item = venta.VentaDetalles.Find(d => d.Id == modelo.Detalles.Id);
 
-            };
-            RepositorioDeVentas.CreeUnaVenta(venta);
-            return RedirectToAction("Index");
+                RepositorioDeVentas.ElimineUnDetalleDeLaVenta(venta.Id, item);
+                List<Inventarios> inventarios = (List<Inventarios>)ReporitorioDeInventarios.listeElInventarios();
+
+                VentaParaCrear VentaParaCrear = new()
+                {
+                    Inventarios = inventarios,
+                    Detalles = new(),
+                    venta = venta
+                };
+
+                return RedirectToAction(nameof(CrearVenta), VentaParaCrear);
+            }
+            catch (Exception e)
+
+            {
+                e = null;
+                return View();
+            }
         }
 
         // GET: VentasController/Details/5

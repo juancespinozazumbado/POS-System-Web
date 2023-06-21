@@ -1,60 +1,21 @@
-﻿@using Inventario.WebApp.Models.Ventas;
-@model MostrarVentasInventarios
+﻿@using Inventario.Models.Dominio.Usuarios
+@using Inventario.WebApp.Areas.Ventas.Models
+@model UsuarioParaCerar
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Ventas</h1>
+<h1>Iniciando....</h1>
 
-<div class="card mb-2">
-    <div class="card-body">
-        <div class="row">
-            <div class="col-sm-12 text-end">
-                <button class="btn btn-primary me-2" id="btnTerminarVenta"><i class="bi bi-currency-dollar"></i> Terminar Venta</button>
-                <button class="btn btn-danger" id="btnLimpiarLista"><i class="bi bi-x-circle-fill"></i> Limpiar Lista</button>
-            </div>
-        </div>
-    </div>
+
+<div class="container">
+  <a class="alert-info">@Model.Usuario.UserName</a>
 </div>
-<div class="card" style="flex-direction: row; display: flex; justify-content:space-around;">
+@if(Model.TieneUnaCajaAbierta){
+    <p>
+        <a class="btn btn-pill btn-primary" asp-action="CrearVenta">Iniciar un nueva venta</a>
+    </p>
 
-    <div class="card" style="margin: 1%">
-        <h2>Carrito de compras</h2>
-        @Html.Partial("ProductosParcial", Model.ProductosAVender )
+}
 
-    </div>
-
-    <div class="card" style="margin: 1%">
-        <h2>Inventario</h2>
-        @Html.Partial("InventarioParcial", Model.Inventario)
-    </div>
-</div>
-
- <script>
-    function obtenerCantidad(itemId) {
-        var cantidad = document.getElementById('cantidad').value;
-        if (cantidad !== "") {
-            agregarItem(itemId, cantidad);
-        }
-    }
-
-    function agregarItem(itemId, cantidad) {
-        $.ajax({
-            url: '@Url.Action("AgregarItem", "Ventas")',
-            type: 'POST',
-            data: { id: itemId, cantidad: cantidad },
-            success: function (result) {
-                if (result) {
-                    $("#productos").html(result);
-                } else {
-                    alert("Error al agregar el item a la venta.");
-                }
-            },
-            error: function () {
-                alert("Ha ocurrido un error al agregar el item a la venta.");
-            }
-        });
-
-    }
-</script>

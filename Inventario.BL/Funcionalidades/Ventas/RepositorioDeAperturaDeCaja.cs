@@ -13,8 +13,7 @@ namespace Inventario.BL.Funcionalidades.Ventas
         {
             this.context = context;
         }
-
-        public IEnumerable<AperturaDeCaja> AperturasDeCajaPorUsuario(int idUsuario)
+        public IEnumerable<AperturaDeCaja> AperturasDeCajaPorUsuario(string idUsuario)
         {
             List<AperturaDeCaja> AperturasDeCajaRegistradas = (List<AperturaDeCaja>)ListarAperturasDeCaja();
 
@@ -82,7 +81,7 @@ namespace Inventario.BL.Funcionalidades.Ventas
         public Dictionary<string, List<Venta>> OtenerTotalesPorCaja(int id)
         {
             AperturaDeCaja Caja = ObtenerUnaAperturaDeCajaPorId(id);
-            Dictionary<string, List<Venta>>  DiccionarioDeventas = new Dictionary<string, List<Venta>>();
+            Dictionary<string, List<Venta>> DiccionarioDeventas = new Dictionary<string, List<Venta>>();
 
             if (LaCajaEstaCerrada(id))
             {
@@ -99,7 +98,7 @@ namespace Inventario.BL.Funcionalidades.Ventas
 
         private List<Venta>? ObtenerElTotalDeVentasPorEfectivo(AperturaDeCaja caja)
         {
-            return (List<Venta>?)caja.Ventas.Where(a => a.TipoDePago== TipoDePago.Efectivo);
+            return (List<Venta>?)caja.Ventas.Where(a => a.TipoDePago == TipoDePago.Efectivo);
         }
 
         private List<Venta>? ObtenerElTotalDeVentasPorTarjeta(AperturaDeCaja caja)
