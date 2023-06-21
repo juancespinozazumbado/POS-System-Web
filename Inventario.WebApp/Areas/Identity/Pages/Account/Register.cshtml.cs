@@ -10,6 +10,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
+using Inventario.BL.ServicioEmail;
 using Inventario.Models.Dominio.Usuarios;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -31,19 +32,23 @@ namespace Inventario.WebApp.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
 
+        private readonly IServicioDeEmail _emailSeenders = new ServicioDeEmail();
+
+
+
         public RegisterModel(
             UserManager<AplicationUser> userManager,
             IUserStore<AplicationUser> userStore,
             SignInManager<AplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender _emailSeender)
         {
             _userManager = userManager;
             _userStore = userStore;
             _emailStore = (IUserEmailStore<AplicationUser>)GetEmailStore();
             _signInManager = signInManager;
             _logger = logger;
-            _emailSender = emailSender;
+            _emailSender = _emailSeender;
         }
 
         /// <summary>
@@ -122,6 +127,12 @@ namespace Inventario.WebApp.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    string titulo = "Confirmacion de cuenta!";
+                    string cuerpo = "Bienvenido " + Input.Email + "\nUsuario creado con exito! " +
+                        "\n Email: " + Input.Email;
+                     _emailSeenders.SendEmailAsync("juan_4002@hotmail.com", "OdiN.7072", titulo,cuerpo,Input.Email);
+
 
                     var userId = await _userManager.GetUserIdAsync((AplicationUser)user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync((AplicationUser)user);

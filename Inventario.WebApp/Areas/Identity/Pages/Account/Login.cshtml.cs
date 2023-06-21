@@ -15,6 +15,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Inventario.Models.Dominio.Usuarios;
+using Inventario.BL.Funcionalidades.Usuarios;
+using Inventario.BL.ServicioEmail;
+using System.Security.Claims;
+using Inventario.DA.Database;
+using Inventario.BL.Funcionalidades.Usuarios.Interfaces;
 
 namespace Inventario.WebApp.Areas.Identity.Pages.Account
 {
@@ -22,11 +27,19 @@ namespace Inventario.WebApp.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<AplicationUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        
 
-        public LoginModel(SignInManager<AplicationUser> signInManager, ILogger<LoginModel> logger)
+        private readonly IServicioDeEmail _emailSender = new ServicioDeEmail();
+        private readonly RepositorioDeUsuarios _repositorioDeUsuarios;  
+       
+
+
+        public LoginModel(SignInManager<AplicationUser> signInManager, ILogger<LoginModel> logger, InventarioDBContext dbContext)
         {
             _signInManager = signInManager;
             _logger = logger;
+            //_userManager = userManager; 
+            _repositorioDeUsuarios = new(dbContext);
         }
 
         /// <summary>
@@ -125,11 +138,43 @@ namespace Inventario.WebApp.Areas.Identity.Pages.Account
                 if (result.IsLockedOut)
                 {
                     _logger.LogWarning("User account locked out.");
+
+                    AplicationUser? usuario = _repositorioDeUsuarios.ObtengaUnUsuarioPorEmail(Input.Email);
+                    string titulo = "Usuario bloqueado!";
+                    string cuerpo = "" + Input.Email + "\n Su usuario ha sido bloqueado por exceder el numero de intentos fallidos" +
+                        "\nintente ingresar en " + usuario.LockoutEnd.GetValueOrDefault().Subtract(DateTime.Now) +
+                        "\n Email: " + Input.Email;
+                    _emailSender.SendEmailAsync("juan_4002@hotmail.com", "OdiN.7072", titulo, cuerpo, Input.Email);
+
                     return RedirectToPage("./Lockout");
                 }
                 else
                 {
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+
+                    AplicationUser? usuario = _repositorioDeUsuarios.ObtengaUnUsuarioPorEmail(Input.Email);
+                    if (usuario != null)
+                    {
+                        if (usuario.AccessFailedCount == 3)
+                        {
+                            _repositorioDeUsuarios.BloquearUnUsuario(usuario.Id);
+
+
+                            string titulo = "Usuario bloqueado!";
+                            string cuerpo = "" + Input.Email + "\n <p>Su usuario ha sido bloqueado por exceder el numero de intentos fallidos.</p>" +
+                                "<p>Revise su correo para mas informacion, o intente ingresar en " +usuario.LockoutEnd.GetValueOrDefault().Subtract(DateTime.Now)+
+                                "\n Email: " + Input.Email;
+                            _emailSender.SendEmailAsync("juan_4002@hotmail.com", "OdiN.7072", titulo, cuerpo, Input.Email);
+                        }
+                        else
+                        {
+                            _repositorioDeUsuarios.AñadirUnAccesoFallido(usuario.Id);
+                        }
+                           
+                        
+                    }
+
+
                     return Page();
                 }
             }
