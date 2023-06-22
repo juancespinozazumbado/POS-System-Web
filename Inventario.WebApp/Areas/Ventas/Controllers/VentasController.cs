@@ -5,14 +5,15 @@ using Inventario.DA.Database;
 using Inventario.Models.Dominio.Productos;
 using Inventario.Models.Dominio.Usuarios;
 using Inventario.Models.Dominio.Ventas;
-using Inventario.WebApp.Areas.Ventas.Models;
+using Inventario.WebApp.Areas.Ventas.Modelos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using System.Security.Claims;
 
-namespace Inventario.WebApp.Controllers
+namespace Inventario.WebApp.Areas.Ventas.Controllers
 {
+    [Area("Ventas")]
     [Authorize]
     public class VentasController : Controller
     {

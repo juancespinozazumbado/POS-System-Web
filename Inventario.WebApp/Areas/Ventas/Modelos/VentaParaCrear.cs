@@ -1,7 +1,7 @@
 ﻿using Inventario.Models.Dominio.Productos;
 using Inventario.Models.Dominio.Ventas;
 
-namespace Inventario.WebApp.Areas.Ventas.Models
+namespace Inventario.WebApp.Areas.Ventas.Modelos
 {
     public class VentaParaCrear
     {

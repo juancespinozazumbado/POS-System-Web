@@ -1,6 +1,6 @@
 ﻿using Inventario.Models.Dominio.Usuarios;
 
-namespace Inventario.WebApp.Areas.Ventas.Models
+namespace Inventario.WebApp.Areas.Ventas.Modelos
 {
     public class UsuarioConCajaAbierta
     {

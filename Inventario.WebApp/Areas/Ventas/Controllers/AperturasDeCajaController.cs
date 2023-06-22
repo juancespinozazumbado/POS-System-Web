@@ -4,14 +4,14 @@ using Inventario.BL.Funcionalidades.Ventas;
 using Inventario.DA.Database;
 using Inventario.Models.Dominio.Usuarios;
 using Inventario.Models.Dominio.Ventas;
-using Inventario.WebApp.Areas.Ventas.Models;
+using Inventario.WebApp.Areas.Ventas.Modelos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-namespace Inventario.WebApp.Controllers
+namespace Inventario.WebApp.Areas.Ventas.Controllers
 {
-
+    [Area("Ventas")]
     [Authorize]
     public class AperturasDeCajaController : Controller
     {

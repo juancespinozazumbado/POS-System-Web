@@ -1,6 +1,6 @@
 ﻿using Inventario.Models.Dominio.Productos;
 
-namespace Inventario.WebApp.Models.Products
+namespace Inventario.WebApp.Areas.Productos.Models
 {
     public class CrearInventario
     {

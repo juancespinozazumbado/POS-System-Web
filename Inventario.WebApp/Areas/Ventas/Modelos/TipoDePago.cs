@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Inventario.WebApp.Models.Ventas
+namespace Inventario.WebApp.Areas.Ventas.Modelos
 {
 
     public enum TipoDePago

@@ -1,5 +1,5 @@
-﻿@using Inventario.WebApp.Areas.Ventas.Models;
-@using Inventario.Models.Dominio.Ventas;
+﻿@using Inventario.Models.Dominio.Ventas;
+@using Inventario.WebApp.Areas.Ventas.Modelos;
 @model VentaParaCrear
 
 @{
@@ -92,7 +92,7 @@
                    <div>
                         <form asp-controller="Ventas" asp-action="TerminarVenta" method="post">
                             <input type="hidden" asp-for="venta.Id" value="@Model.venta.Id" />
-                            <select class="form-control" type="text" asp-for="venta.TipoDePago" asp-items="Html.GetEnumSelectList<TipoDePago>()"></select>
+                            <select class="form-control" type="text" asp-for="venta.TipoDePago" asp-items="Html.GetEnumSelectList<Inventario.WebApp.Areas.Ventas.Modelos.TipoDePago>()"></select>
                            <button type="submit" class="btn btn-primary me-2" id="TerminarVenta"><i class="bi bi-currency-dollar"></i> Terminar Venta</button>
                         </form>
                    </div>
