@@ -30,7 +30,7 @@ namespace Inventario.WebApp.Controllers
             RepositorioDeVentas = new(context);
             ReporitorioDeInventarios = new(context);
             RepositorioDeUsuarios = new(context);
-            RepositorioDeAperturaDeCaja = new(context);
+            RepositorioDeAperturaDeCaja = new(context); 
         }
         // GET: VentasController
         public ActionResult Index()
@@ -230,26 +230,8 @@ namespace Inventario.WebApp.Controllers
         try
         {
 
-
-                //Venta venta = RepositorioDeVentas.ObtengaUnaVentaPorId(id_venta);
-                //VentaDetalle item = venta.VentaDetalles.Find(d => d.Id == id);
-
-                //RepositorioDeVentas.ElimineUnDetalleDeLaVenta(id_venta, item);
-
-                //List<Inventarios> inventarios = (List<Inventarios>)ReporitorioDeInventarios.listeElInventarios();
-
-
-                //venta = RepositorioDeVentas.ObtengaUnaVentaPorId(id_venta);
-                //VentaParaCrear VentaParaCrear = new()
-                //{
-                //    Inventarios = inventarios,
-                //    Detalles = new(),
-                //    venta = venta
-                //};
-
-                RepositorioDeVentas.TermineLaVenta(id);
-
-            return RedirectToAction(nameof(Index));
+           RepositorioDeVentas.TermineLaVenta(id);
+           return RedirectToAction(nameof(Index));
         }
         catch (Exception e)
         {
