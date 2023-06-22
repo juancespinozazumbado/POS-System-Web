@@ -36,7 +36,7 @@ namespace Inventario.WebApp.Controllers
 
             string id = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             AplicationUser usaurioActual = RepositorioDeUsuarios.ObtengaUnUsuarioPorId(id);
-            UsuarioParaCerar modelo = new() { Usuario = usaurioActual };
+            UsuarioConCajaAbierta modelo = new() { Usuario = usaurioActual };
 
             AperturaDeCaja? caja = RepositorioDeAperturaDeCaja.AperturasDeCajaPorUsuario(id)
                .Where(c => c.estado == EstadoCaja.Abierta).FirstOrDefault();
@@ -48,7 +48,7 @@ namespace Inventario.WebApp.Controllers
         }
 
         // GET: VentasController/Create
-        public ActionResult CrearVenta()
+        public ActionResult VentaEnProceso()
         {
 
             string IdUsuario = User.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -114,7 +114,7 @@ namespace Inventario.WebApp.Controllers
                     venta = venta
                 };
 
-                return RedirectToAction(nameof(CrearVenta), ventaParaCrear);
+                return RedirectToAction(nameof(VentaEnProceso), ventaParaCrear);
             }
             else
             {
@@ -122,7 +122,7 @@ namespace Inventario.WebApp.Controllers
             }
 
             // En caso de error, volver a la vista Index
-            return RedirectToAction(nameof(CrearVenta));
+            return RedirectToAction(nameof(VentaEnProceso));
         }
 
         // POST: VentasController/Edit/5
@@ -149,7 +149,7 @@ namespace Inventario.WebApp.Controllers
                     venta = venta
                 };
 
-                return RedirectToAction(nameof(CrearVenta), VentaParaCrear);
+                return RedirectToAction(nameof(VentaEnProceso), VentaParaCrear);
             }
             catch (Exception e)
 
@@ -158,6 +158,81 @@ namespace Inventario.WebApp.Controllers
                 return View();
             }
         }
+
+
+        // POST: VentasController/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CrearVenta(Venta venta)
+        {
+            try
+            {
+
+                string IdUsuario = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                AplicationUser usaurioActual = RepositorioDeUsuarios.ObtengaUnUsuarioPorId(IdUsuario);
+                AperturaDeCaja? caja = RepositorioDeAperturaDeCaja.AperturasDeCajaPorUsuario(IdUsuario)
+                  .Where(c => c.estado == EstadoCaja.Abierta).FirstOrDefault();
+
+                Venta LaVenta = new()
+                {
+                    AperturaDeCaja = caja,
+                    IdAperturaDeCaja = caja.Id,
+                    UserId = IdUsuario,
+                    NombreCliente = venta.NombreCliente,
+                    Fecha = DateTime.Now,
+                    Estado = EstadoVenta.EnProceso,
+                    VentaDetalles = new()
+                };
+                RepositorioDeVentas.CreeUnaVenta(LaVenta);
+                LaVenta = RepositorioDeVentas.ListeLasVentasPorUsuario(IdUsuario).Where(v => v.Estado != EstadoVenta.Terminada).FirstOrDefault();
+
+                return RedirectToAction(nameof(VentaEnProceso), LaVenta);
+            }
+            catch (Exception e)
+            {
+                e = null;
+                return View();
+            }
+        }
+        // POST: VentasController/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult TerminarVenta(VentaParaCrear modelo)
+        {
+            try
+            {
+                Venta venta = RepositorioDeVentas.ObtengaUnaVentaPorId(modelo.venta.Id);
+                venta.TipoDePago = modelo.venta.TipoDePago;
+                RepositorioDeVentas.EstablescaElTipoDePago(venta.Id, modelo.venta.TipoDePago);
+                RepositorioDeVentas.TermineLaVenta(venta.Id);
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+        // POST: VentasController/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AplicarUnDescuento(VentaParaCrear modelo)
+        {
+            try
+            {
+                Venta venta = RepositorioDeVentas.ObtengaUnaVentaPorId(modelo.venta.Id);
+                RepositorioDeVentas.ApliqueUnDescuento(venta.Id, modelo.venta.PorcentajeDesCuento);
+
+                modelo.venta = venta;
+
+                return RedirectToAction(nameof(VentaEnProceso));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
 
         // GET: VentasController/Details/5
         public ActionResult Details(int id)

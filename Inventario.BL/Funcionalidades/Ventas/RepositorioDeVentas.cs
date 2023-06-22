@@ -156,12 +156,11 @@ namespace Inventario.BL.Funcionalidades.Ventas
 
 
 
-                foreach (VentaDetalle v in venta.VentaDetalles)
+                foreach (VentaDetalle item in venta.VentaDetalles)
                 {
-                    venta.SubTotal += v.Monto;
-                    Inventarios inventario = v.Inventarios;
-                    inventario.Cantidad -= v.Cantidad;
-                    _dbContext.Inventarios.Update(inventario);
+                    venta.SubTotal += item.Monto;
+                    Inventarios inventario = item.Inventarios;
+                    item.MontoDescuento = item.Monto * venta.PorcentajeDesCuento / 100;
                     _dbContext.SaveChanges();
                 }
                 venta.MontoDescuento = venta.SubTotal * venta.PorcentajeDesCuento / 100;
@@ -194,6 +193,18 @@ namespace Inventario.BL.Funcionalidades.Ventas
                 _dbContext.SaveChanges();
             }
 
+
+        }
+
+        public void EstablescaElTipoDePago(int id, TipoDePago tipoDePago)
+        {
+            Venta venta = ObtengaUnaVentaPorId(id);
+            if (!LaVentaEstaTerminada(venta))
+            {
+                venta.TipoDePago = tipoDePago;
+                _dbContext.Update(venta);
+                _dbContext.SaveChanges();
+            }
 
         }
 

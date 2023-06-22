@@ -53,11 +53,7 @@
                         <input type="hidden" asp-for="Detalles.Id_venta" value="@Model.venta.Id" />
                         <input type="hidden"  asp-for="Detalles.Id_inventario" value="@item.Id" />
                         <input type="hidden"  asp-for="Detalles.Precio" value="@item.Precio" />
-                   @*     @{
-                            decimal monto = @item.Precio * Model.Detalles.Cantidad;
-                        }
-                        <input type="hidden" asp-for="Detalles.Monto" value="@monto" />*@
-                                                                    
+                                                                                   
                         <button type="submit" class="btn btn-primary">Agregar</button>
 
                     </form>

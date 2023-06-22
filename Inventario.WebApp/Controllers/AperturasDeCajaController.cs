@@ -33,7 +33,7 @@ namespace Inventario.WebApp.Controllers
             AplicationUser usaurioActual = RepositorioDeUsuarios.ObtengaUnUsuarioPorId(id);
             AperturaDeCaja? cajaActual = RepositorioDeAperturaDeCAja.AperturasDeCajaPorUsuario(id)
                 .Where(c => c.estado == EstadoCaja.Abierta).FirstOrDefault();
-            UsuarioParaCerar modelo = new()
+            UsuarioConCajaAbierta modelo = new()
             {
                 Usuario = usaurioActual,
                 TieneUnaCajaAbierta = cajaActual != null
