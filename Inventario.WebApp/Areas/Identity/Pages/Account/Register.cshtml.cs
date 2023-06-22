@@ -10,6 +10,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
+using Inventario.BL.ServicioEmail;
 using Inventario.Models.Dominio.Usuarios;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -31,19 +32,23 @@ namespace Inventario.WebApp.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
 
+        private readonly IServicioDeEmail _emailSeenders = new ServicioDeEmail();
+
+
+
         public RegisterModel(
             UserManager<AplicationUser> userManager,
             IUserStore<AplicationUser> userStore,
             SignInManager<AplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender _emailSeender)
         {
             _userManager = userManager;
             _userStore = userStore;
             _emailStore = (IUserEmailStore<AplicationUser>)GetEmailStore();
             _signInManager = signInManager;
             _logger = logger;
-            _emailSender = emailSender;
+            _emailSender = _emailSeender;
         }
 
         /// <summary>
@@ -77,17 +82,23 @@ namespace Inventario.WebApp.Areas.Identity.Pages.Account
             /// </summary>
             [Required]
             [EmailAddress]
-            [Display(Name = "Email")]
+            [Display(Name = "Correo")]
             public string Email { get; set; }
+
+
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "Nombre")]
+            public string UserName { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(100, ErrorMessage = "La {0} Debe ser al menos {2} y maximo {1} caracteres de largo.", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "Password")]
+            [Display(Name = "Contraseña")]
             public string Password { get; set; }
 
             /// <summary>
@@ -95,8 +106,8 @@ namespace Inventario.WebApp.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Display(Name = "Confirme la contraseña")]
+            [Compare("Password", ErrorMessage = "Las contraseñas no coinsiden!.")]
             public string ConfirmPassword { get; set; }
         }
 
@@ -115,13 +126,19 @@ namespace Inventario.WebApp.Areas.Identity.Pages.Account
             {
                 var user = CreateUser();
 
-                await _userStore.SetUserNameAsync((AplicationUser)user, Input.Email, CancellationToken.None);
+                await _userStore.SetUserNameAsync((AplicationUser)user, Input.UserName, CancellationToken.None);
                 await _emailStore.SetEmailAsync((AplicationUser)user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync((AplicationUser)user, Input.Password);
 
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    string titulo = "Confirmacion de cuenta!";
+                    string cuerpo = "Bienvenido " + Input.UserName + "\nUsuario creado con exito! " +
+                        "\n Email: " + Input.Email;
+                     _emailSeenders.SendEmailAsync("juan_4002@hotmail.com", "OdiN.7072", titulo,cuerpo,Input.Email);
+
 
                     var userId = await _userManager.GetUserIdAsync((AplicationUser)user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync((AplicationUser)user);
