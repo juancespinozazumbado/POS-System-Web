@@ -1,7 +1,7 @@
 ﻿using Inventario.BL.Funcionalidades.Inventario;
 using Inventario.DA.Database;
 using Inventario.Models.Dominio.Productos;
-using Inventario.WebApp.Models.Products;
+using Inventario.WebApp.Areas.Productos.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

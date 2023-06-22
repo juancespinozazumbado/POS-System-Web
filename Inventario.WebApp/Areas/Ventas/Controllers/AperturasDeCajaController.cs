@@ -4,16 +4,13 @@ using Inventario.BL.Funcionalidades.Ventas;
 using Inventario.DA.Database;
 using Inventario.Models.Dominio.Usuarios;
 using Inventario.Models.Dominio.Ventas;
-using Inventario.WebApp.Areas.Ventas.Models;
+using Inventario.WebApp.Areas.Ventas.Modelos;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-namespace Inventario.WebApp.Controllers
+namespace Inventario.WebApp.Areas.Ventas.Controllers
 {
-
-
     [Area("Ventas")]
     [Authorize]
     public class AperturasDeCajaController : Controller
@@ -22,7 +19,7 @@ namespace Inventario.WebApp.Controllers
         ReporitorioDeInventarios ReporitorioDeInventarios;
         RepositorioDeUsuarios RepositorioDeUsuarios;
         RepositorioDeAperturaDeCaja RepositorioDeAperturaDeCAja;
-        public AperturasDeCajaController (InventarioDBContext context)
+        public AperturasDeCajaController(InventarioDBContext context)
         {
             RepositorioDeVentas = new(context);
             ReporitorioDeInventarios = new(context);
@@ -32,16 +29,17 @@ namespace Inventario.WebApp.Controllers
         // GET: VentasController
         public ActionResult Index()
         {
-           string id = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-           AplicationUser usaurioActual  = RepositorioDeUsuarios.ObtengaUnUsuarioPorId(id);
+            string id = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            AplicationUser usaurioActual = RepositorioDeUsuarios.ObtengaUnUsuarioPorId(id);
             AperturaDeCaja? cajaActual = RepositorioDeAperturaDeCAja.AperturasDeCajaPorUsuario(id)
-                .Where(c=> c.estado== EstadoCaja.Abierta).FirstOrDefault();  
-            UsuarioParaCerar modelo = new() { 
+                .Where(c => c.estado == EstadoCaja.Abierta).FirstOrDefault();
+            UsuarioConCajaAbierta modelo = new()
+            {
                 Usuario = usaurioActual,
-                TieneUnaCajaAbierta = cajaActual!= null
+                TieneUnaCajaAbierta = cajaActual != null
             };
 
-           
+
             return View(modelo);
 
         }
@@ -50,7 +48,7 @@ namespace Inventario.WebApp.Controllers
         public ActionResult Details(int id)
         {
             AperturaDeCaja caja = RepositorioDeAperturaDeCAja.ObtenerUnaAperturaDeCajaPorId(id);
-            
+
             return View(caja);
         }
 
@@ -58,7 +56,7 @@ namespace Inventario.WebApp.Controllers
         public ActionResult AbrirCaja()
         {
             string id = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            AperturaDeCaja aperturaCaja = new() 
+            AperturaDeCaja aperturaCaja = new()
             {
                 UserId = id,
                 FechaDeInicio = DateTime.Now,

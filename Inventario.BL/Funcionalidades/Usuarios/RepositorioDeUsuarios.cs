@@ -23,7 +23,7 @@ namespace Inventario.BL.Funcionalidades.Usuarios
 
         public void AñadirUnAccesoFallido(string id)
         {
-            AplicationUser usuario = dbContext.Usuarios.
+            AplicationUser? usuario = dbContext.Usuarios.
                Where(u => u.Id.Equals(id)).FirstOrDefault();
             usuario.AccessFailedCount += 1;
             dbContext.Update(usuario);
@@ -32,9 +32,10 @@ namespace Inventario.BL.Funcionalidades.Usuarios
 
         public void BloquearUnUsuario(string id)
         {
-            AplicationUser usuario = dbContext.Usuarios.
+            AplicationUser? usuario = dbContext.Usuarios.
                 Where(u=> u.Id.Equals(id)).FirstOrDefault();
             usuario.LockoutEnd = DateTime.Now.AddMinutes(15);
+            usuario.AccessFailedCount = 0;
             dbContext.Update(usuario);
             dbContext.SaveChanges();
         }
@@ -58,6 +59,11 @@ namespace Inventario.BL.Funcionalidades.Usuarios
         public AplicationUser ObtengaUnUsuarioPorId(string id)
         {
             return ListeLosUsuarios().Find(u => u.Id.Equals(id));
+        }
+
+        public AplicationUser ObtengaUnUsuarioPorEmail(string email)
+        {
+            return ListeLosUsuarios().Find(u => u.Email.Equals(email));
         }
     }
 }

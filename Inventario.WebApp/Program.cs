@@ -1,6 +1,5 @@
 using Inventario.DA.Database;
 using Inventario.Models.Dominio.Usuarios;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +14,8 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<AplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<InventarioDBContext>();
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddMemoryCache();
 
 var app = builder.Build();
 
@@ -35,7 +36,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthentication();    
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

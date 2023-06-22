@@ -16,7 +16,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Inventario.WebApp</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Sistema de ventas</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -26,36 +26,36 @@
                         @if (SignInManager.IsSignedIn(User))
                         {
 
-                           @* <div class="collapse navbar-collapse" id="navbarNavDropdown">*@
-                                <ul class="navbar-nav">
-                                    <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            Inventario
-                                        </a>
-                                        <ul class="dropdown-menu dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                            <li><a class="dropdown-item list-group-item-action" asp-area="Productos" asp-controller="Inventarios" asp-action="Index">Catalogo de Inventarios</a></li>
-                                            <li><a class="dropdown-item list-group-item-action" asp-area="Productos" asp-controller="AjustesDeInventario" asp-action="index">Catalogo de ajustes</a></li>
-                                            <li><a class="dropdown-item list-group-item-action" href="#">Ver</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                           @* </div>*@
+                            @* <div class="collapse navbar-collapse" id="navbarNavDropdown">*@
+                            <ul class="navbar-nav">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Inventario
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                        <li><a class="dropdown-item list-group-item-action" asp-area="Productos" asp-controller="Inventarios" asp-action="Index">Catalogo de Inventarios</a></li>
+                                        <li><a class="dropdown-item list-group-item-action" asp-area="Productos" asp-controller="AjustesDeInventario" asp-action="index">Catalogo de ajustes</a></li>
+                                        <li><a class="dropdown-item list-group-item-action" href="#">Ver</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            @* </div>*@
 
-                       
-                          @*  <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">*@
-                                <ul class="navbar-nav">
-                                    <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            Ventas
-                                        </a>
-                                        <ul class="dropdown-menu dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                        <li><a class="dropdown-item" asp-area="ventas" asp-controller="AperturasDeCaja" asp-action="index"> Aprtura de Caja</a></li>
-                                        <li><a class="dropdown-item" asp-area="ventas" asp-controller="Venta" asp-action="index"> venta</a></li>
-                                            <li><a class="dropdown-item" href="#">Ver</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                          @*  </div>*@
+
+                            @*  <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">*@
+                            <ul class="navbar-nav">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Ventas
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                        <li><a class="dropdown-item" asp-area="Ventas" asp-controller="AperturasDeCaja" asp-action="index"> Apertura de Caja</a></li>
+                                        <li><a class="dropdown-item" asp-area="Ventas" asp-controller="Ventas" asp-action="index">venta</a></li>
+                                        <li><a class="dropdown-item" href="#">Ver</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            @*  </div>*@
                         }
                     </ul>
 

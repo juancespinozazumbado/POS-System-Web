@@ -2,6 +2,45 @@
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<AplicationUser> SignInManager
 @inject UserManager<AplicationUser> UserManager
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: burlywood;
+        height: 100vh;
+    }
+
+    input {
+        background-color: #f4d8b5 !important;
+        border-color: #f4d8b5 !important;
+    }
+
+    button {
+        background-color: #c93c20 !important;
+        border-color: #c93c20 !important;
+    }
+    a{
+        color: #c93c20 !important;
+    }
+   
+
+    #login .container #login-row #login-column #login-box {
+        margin-top: 120px;
+        max-width: 600px;
+        height: 320px;
+        border: 1px solid #9C9C9C;
+        background-color: burlywood;
+    }
+
+        #login .container #login-row #login-column #login-box #login-form {
+            padding: 20px;
+        }
+
+            #login .container #login-row #login-column #login-box #login-form #register-link {
+                margin-top: -85px;
+            }
+
+</style>
 
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))

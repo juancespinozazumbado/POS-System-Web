@@ -1,0 +1,26 @@
+﻿@using Inventario.Models.Dominio.Usuarios
+@using Inventario.WebApp.Areas.Ventas.Modelos
+@model UsuarioConCajaAbierta
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+    <h1 class="jumbotron-heading">Sistemas de ventas</h1>
+        <a class="alert-info">@Model.Usuario.UserName</a>
+  
+@if(Model.TieneUnaCajaAbierta){
+ 
+    <div class="container">
+        <p class="lead text-muted">¡Bienvenido/a al sistema de ventas!</p>
+        <p>
+                <a asp-action="VentaEnProceso" class="btn btn-pill btn-primary">Iniciar un nueva venta</a>
+                <a href="Home" class="btn btn-secondary my-2">Regresar al home</a>
+
+        </p>
+    </div>
+
+
+}
+</div>
