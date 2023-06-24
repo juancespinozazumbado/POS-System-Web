@@ -5,11 +5,51 @@
 @{
     ViewData["Title"] = "Index";
 }
+<style>
+    h1{
+        color: white
+    }
 
+    .InformacionDeLaVenta{
+        width: 50%;
+        margin-bottom: 20px;
+    }
+
+    .Totales{
+        width: 50%;
+       
+    }
+
+    .FilmDeCompra1{
+        display: flex;
+        flex-direction: row;
+        padding-right: calc(var(--bs-gutter-x) * .5);
+        padding-left: calc(var(--bs-gutter-x) * .5);
+        
+    }
+    .FilmDeCompra2{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+    }
+
+    .select-arrow::after {
+        content: "\f0d7"; /* Código de icono de flecha hacia abajo en Font Awesome */
+        font-family: "Font Awesome 5 Free";
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        pointer-events: none;
+    }
+
+
+</style>
 <h1>Ventas</h1>
 @if(Model.venta.Estado != EstadoVenta.EnProceso)
     {
     <form asp-controller="Ventas" asp-action="CrearVenta" method="post">
+        <div class="InformacionDeLaVenta"> 
             <div class="row g-4">
             <div class="input-group">
                 <span class="input-group-text">Id de usuario</span>
@@ -30,93 +70,114 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z" />
                         </svg>
-                        Agregar Item
+                        Iniciar ventas
                     </button>
                 </div>
              
             </div>
+        </div>
         </form>
 
         
     }else
     {
-        <div class="row g-4">
-        <div class="input-group">
-            <span class="input-group-text">Id de la venta</span>
-                <input type="text" readonly="readonly " class="form-control" name="id" asp-for="venta.Id" />
+        <div id="Contenedor">
+
+            <div class="InformacionDeLaVenta">
+
+                <div class="row g-4">
+                     <div class="input-group">
+                         <span class="input-group-text">Id de la venta</span>
+                             <input type="text" readonly="readonly " class="form-control" name="id" asp-for="venta.Id" />
+                     </div>
+                     <div class="input-group">
+                         <span class="input-group-text">Id de usuario:</span>
+                             <input type="text" readonly="readonly " class="form-control" name="UserId" asp-for="venta.UserId" />
+                     </div>
+                     <div class="input-group">
+                         <span class="input-group-text">Apertura de caja #:</span>
+                             <input type="text" readonly="readonly " class="form-control" name="UserId" asp-for="venta.IdAperturaDeCaja" />
+                      </div>
+
+                     <div class="input-group">
+                         <span class="input-group-text">Cliente:</span>
+                             <input type="text" readonly="readonly" class="form-control" name="Cliente" asp-for="venta.NombreCliente" />
+                     </div>
+                        
+                </div>
             </div>
 
-        <div class="input-group">
-            <span class="input-group-text">Id de usuario:</span>
-                <input type="text" readonly="readonly " class="form-control" name="UserId" asp-for="venta.UserId" />
-            </div>
-        <div class="input-group">
-            <span class="input-group-text">Apertura de caja #:</span>
-                <input type="text" readonly="readonly " class="form-control" name="UserId" asp-for="venta.IdAperturaDeCaja" />
-            </div>
+        
 
-        <div class="input-group">
-            <span class="input-group-text">Cliente:</span>
-                <input type="text" readonly="readonly" class="form-control" name="Cliente" asp-for="venta.NombreCliente" />
-            </div>
+             <div class="FilmDeCompra1" >
+
+               
+                            @Html.Partial("ProductosParcial", Model)
+                  
+                <div>.......</div>
+               
+
+                            @Html.Partial("InventarioParcial", Model)
+                         
+             </div>
+
+        <div class="card mb-2">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-12 text-end">
+             <div class="FilmDeCompra2">
+
+                <div style="width: 45%;" class="row g-4" id="Totales">
             
-            
+                       @{
+                           decimal subTotal = @Model.venta.VentaDetalles.Sum(v => v.Monto);
+                           decimal montoDeDescuento = (Model.venta.PorcentajeDesCuento * subTotal) / 100;
+                           decimal Total = subTotal - montoDeDescuento;
+                       }
+                    <div class="input-group">
 
-        </div>
-    <div class="card" style="flex-direction: row; display: flex; justify-content:space-around;">
-
-        <div class="card" style="margin: 1%">
-            <h2>Carrito de compras</h2>
-            @Html.Partial("ProductosParcial", Model)
-
-        </div>
-
-        <div class="card" style="margin: 1%">
-            <h2>Inventario</h2>
-
-            @Html.Partial("InventarioParcial", Model)
-        </div>
-    </div>
-    <div class="card mb-2">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-sm-12 text-end">
-                    <div>
-                        <form asp-controller="Ventas" asp-action="AplicarUnDescuento" method="post">
-                            <input type="hidden" asp-for="venta.Id" value="@Model.venta.Id" />
-                            <span class="input-group-text">Ingrese el porcentaje de descuento</span>
-                            <input class="form-control" type="text" asp-for="venta.PorcentajeDesCuento" />
-                            <button type="submit" class="btn btn-primary me-2" id="AplicarUnDescuento"><i class="bi bi-currency-dollar"></i>Aplicar un descuento</button>
-                        </form>
+                       <span class="input-group-text">Subtotal</span>
+                    <input class="form-control" type="text" readonly="readonly" value="@subTotal" />
                     </div>
-                   <div>
-                        <form asp-controller="Ventas" asp-action="TerminarVenta" method="post">
-                            <input type="hidden" asp-for="venta.Id" value="@Model.venta.Id" />
-                            <select class="form-control" type="text" asp-for="venta.TipoDePago" asp-items="Html.GetEnumSelectList<Inventario.WebApp.Areas.Ventas.Modelos.TipoDePago>()"></select>
-                           <button type="submit" class="btn btn-primary me-2" id="TerminarVenta"><i class="bi bi-currency-dollar"></i> Terminar Venta</button>
-                        </form>
+                    <div class="input-group">
+                       <span class="input-group-text">Descuento</span>
+                    <input class="form-control" type="text" readonly="readonly" value="@montoDeDescuento" />
+                    </div>
+                    <div class="input-group">
+                       <span class="input-group-text">Total</span>
+                    <input class="form-control" type="text" readonly="readonly" value="@Total" />
+                    </div>
                    </div>
 
-                   <div>
-
-                        @{
-                            decimal subTotal = @Model.venta.VentaDetalles.Sum(v=> v.Monto);
-                            decimal montoDeDescuento = (Model.venta.PorcentajeDesCuento * subTotal)/100;
-                            decimal Total = subTotal - montoDeDescuento;
-
-
-                           }
-                        <span class="input-group-text">Subtotal</span>
-                        <input type="text" readonly="readonly" value="@subTotal" />
-                        <span class="input-group-text">Descuento</span>
-                        <input type="text" readonly="readonly" value="@montoDeDescuento" />
-                        <span class="input-group-text">Total</span>
-                        <input type="text" readonly="readonly" value="@Total" />
+                <div style="width: 25%;" class="row g-4">
+                       <form asp-controller="Ventas" asp-action="AplicarUnDescuento" method="post">
+                           <input type="hidden" asp-for="venta.Id" value="@Model.venta.Id" />
+                        <div class="input-group">
+                        <div class="input-group">
+                           <span class="input-group-text">Descuento</span>
+                                <input class="form-control" type="text" asp-for="venta.PorcentajeDesCuento" />
+                           <button type="submit" class="btn btn-primary me-2" id="AplicarUnDescuento"><i class="bi bi-currency-dollar"></i>Aplicar</button>
+                         </div>
+                         </div>
+                       </form>
                    </div>
+                <div style="width: 30%;" class="row g-4">
+                       <form asp-controller="Ventas" asp-action="TerminarVenta" method="post">
+                           <input type="hidden" asp-for="venta.Id" value="@Model.venta.Id" />
+                    <div class="input-group">
+                        <span class="input-group-text">Tipo de pago</span>
+                        <select class="select-arrow" type="text" asp-for="venta.TipoDePago" asp-items="Html.GetEnumSelectList<Inventario.WebApp.Areas.Ventas.Modelos.TipoDePago>()"></select>
+                           <button type="submit" class="btn btn-primary me-2" id="TerminarVenta"><i class="bi bi-currency-dollar"></i> Terminar</button>
+                   </div>
+                       </form>
+                   </div>
+             </div>
+
                 </div>
             </div>
         </div>
     </div>
+        </div>
     }
 
 

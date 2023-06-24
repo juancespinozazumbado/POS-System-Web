@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 
 var contextOPtions = new DbContextOptionsBuilder<InventarioDBContext>()
-    .UseSqlServer("Data Source=M2280220322\\SQLEXPRESS;Initial Catalog=COMERCIO;Integrated Security=True; TrustServerCertificate=True")
+    .UseSqlServer("Data Source=localhost;Initial Catalog=Comercio;User Id=sa; Password=$OdiN9%5;TrustServerCertificate=True")
     .Options;
 
 RepositorioDeVentas RepoVentas;

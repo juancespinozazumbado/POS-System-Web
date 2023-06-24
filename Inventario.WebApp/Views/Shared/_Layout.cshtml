@@ -11,10 +11,14 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Inventario.WebApp.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.0/css/dataTables.bootstrap5.min.css">
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.0/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.0/js/dataTables.bootstrap5.min.js"></script>
+
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Sistema de ventas</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -26,7 +30,7 @@
                         @if (SignInManager.IsSignedIn(User))
                         {
 
-                            @* <div class="collapse navbar-collapse" id="navbarNavDropdown">*@
+                           
                             <ul class="navbar-nav">
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -34,15 +38,12 @@
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                         <li><a class="dropdown-item list-group-item-action" asp-area="Productos" asp-controller="Inventarios" asp-action="Index">Catalogo de Inventarios</a></li>
-                                        <li><a class="dropdown-item list-group-item-action" asp-area="Productos" asp-controller="AjustesDeInventario" asp-action="index">Catalogo de Ajustes</a></li>
-                   
+                                        <li><a class="dropdown-item list-group-item-action" asp-area="Productos" asp-controller="AjustesDeInventario" asp-action="index">Catalogo de ajustes</a></li>
+                                        
                                     </ul>
                                 </li>
                             </ul>
-                            @* </div>*@
-
-
-                            @*  <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">*@
+                           
                             <ul class="navbar-nav">
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -50,12 +51,12 @@
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                         <li><a class="dropdown-item" asp-area="Ventas" asp-controller="AperturasDeCaja" asp-action="index"> Apertura de Caja</a></li>
-                                        <li><a class="dropdown-item" asp-area="Ventas" asp-controller="Ventas" asp-action="index">Venta</a></li>
-               
+                                        <li><a class="dropdown-item" asp-area="Ventas" asp-controller="Ventas" asp-action="index">venta</a></li>
+                                       
                                     </ul>
                                 </li>
                             </ul>
-                            @*  </div>*@
+                        
                         }
                     </ul>
 
@@ -65,17 +66,28 @@
         </nav>
     </header>
 
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+
+    <div style="margin-block: 12%">
+
+        <div class="container">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2023 - Sistema de Inventario - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacidad</a>
-        </div>
-    </footer>
+    <div class="container">
+        <footer class="py-3 my-4">
+            <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+                <li class="nav-item"><a style="color:aliceblue" href="#" class="nav-link px-2 text-body-secondary">Home</a></li>
+                <li class="nav-item"><a style="color:aliceblue" href="#" class="nav-link px-2 text-body-secondary">Features</a></li>
+                <li class="nav-item"><a style="color:aliceblue" href="#" class="nav-link px-2 text-body-secondary">Pricing</a></li>
+                <li class="nav-item"><a style="color:aliceblue" href="#" class="nav-link px-2 text-body-secondary">FAQs</a></li>
+                <li class="nav-item"><a style="color:aliceblue" href="#" class="nav-link px-2 text-body-secondary">About</a></li>
+            </ul>
+            <p style="color:aliceblue" class="text-center text-body-secondary">© 2023 Company, Inc</p>
+        </footer>
+    </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
