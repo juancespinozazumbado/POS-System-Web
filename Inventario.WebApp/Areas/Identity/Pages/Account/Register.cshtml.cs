@@ -172,7 +172,7 @@ namespace Inventario.WebApp.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private IdentityUser CreateUser()
+        private AplicationUser CreateUser()
         {
             try
             {

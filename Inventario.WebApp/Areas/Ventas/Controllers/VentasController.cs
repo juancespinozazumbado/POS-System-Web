@@ -24,7 +24,6 @@ namespace Inventario.WebApp.Areas.Ventas.Controllers
         List<ProductosAVender> ListaDeProductosAVenders;
         public VentasController(InventarioDBContext context, IMemoryCache elCache)
         {
-            RepositorioDeVentas = new(context, elCache);
             RepositorioDeVentas = new(context);
             ReporitorioDeInventarios = new(context);
             RepositorioDeUsuarios = new(context);

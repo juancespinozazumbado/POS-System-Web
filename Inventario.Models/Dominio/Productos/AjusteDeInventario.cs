@@ -15,12 +15,12 @@ namespace Inventario.Models.Dominio.Productos
   
         public DateTime Fecha { get; set; }
 
-        public string Observaciones { get; set; }
+        public string? Observaciones { get; set; }
 
         public string UserId { get; set; } 
       
         public int Id_Inventario { get; set; }  
-        public Inventarios Inventarios { get; set; } 
+        public Inventarios? Inventarios { get; set; } 
 
     
     }
