@@ -5,25 +5,40 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Apertura de caja</h1>
 
+<div b-xnbhh5729m="" style="margin-block: 12%">
 
-<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);" class="container">
-    <a class="alert-info">@Model.Usuario.UserName</a>
-</div>
+    <div b-xnbhh5729m="" class="container">
+        <main b-xnbhh5729m="" role="main" class="pb-3">
 
-@if (!Model.TieneUnaCajaAbierta)
-{
-    <div class="container">
-        <h1 class="jumbotron-heading">¡Bienvenido/a al sistema de ventas!>
-        <p>
-            <a href="#" class="btn btn-primary my-2">Regresar al inicio</a>
-            <a asp-action="AbrirCaja" class="btn btn-secondary my-2">Nueva venta</a>
-        </p>
+            <div class="text-center">
+                @if (Model.TieneUnaCajaAbierta)
+                {
+
+                    <h2 style="color:aliceblue;" id="toggle-visibility">
+                        El usuario  <code style="color:blueviolet;">@Model.Usuario.UserName</code> ya tiene una caja abierta <a class="anchor-link" href="#toggle-visibility" aria-label="Link to this section: Toggle visibility"></a>
+                        </h2>
+
+                }
+
+                @if (!Model.TieneUnaCajaAbierta)
+                {
+                    <div class="container">
+                        <h1 class="jumbotron-heading">  </h1>
+                            <code style="color:blueviolet;">@Model.Usuario.UserName</code>
+                            <p class="lead text-muted">¡Bienvenido/a al sistema de ventas!</p>
+                            <p>
+                                <a href="#" class="btn btn-primary my-2">Regresar al home</a>
+                                <a asp-action="AbrirCaja" class="btn btn-secondary my-2">Nueva venta</a>
+                            </p>
+                    </div>
+
+                }
+            </div>
+
+        </main>
     </div>
-
-}
-
+</div>
 
 
    
