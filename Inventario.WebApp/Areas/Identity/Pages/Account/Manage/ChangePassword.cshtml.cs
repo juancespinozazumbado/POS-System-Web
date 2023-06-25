@@ -5,6 +5,10 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using Inventario.BL.Funcionalidades.Usuarios;
+using Inventario.BL.ServicioEmail;
+using Inventario.DA.Database;
+using Inventario.Models.Dominio.Usuarios;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -14,18 +18,24 @@ namespace Inventario.WebApp.Areas.Identity.Pages.Account.Manage
 {
     public class ChangePasswordModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<AplicationUser> _userManager;
+        private readonly SignInManager<AplicationUser> _signInManager;
         private readonly ILogger<ChangePasswordModel> _logger;
 
+        private readonly IServicioDeEmail _emailSender = new ServicioDeEmail();
+        private readonly RepositorioDeUsuarios _repositorioDeUsuarios;
+
+
         public ChangePasswordModel(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
-            ILogger<ChangePasswordModel> logger)
+            UserManager<AplicationUser> userManager,
+            SignInManager<AplicationUser> signInManager,
+            ILogger<ChangePasswordModel> logger,
+            InventarioDBContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _repositorioDeUsuarios = new(context);
         }
 
         /// <summary>
@@ -49,7 +59,7 @@ namespace Inventario.WebApp.Areas.Identity.Pages.Account.Manage
         public class InputModel
         {
             /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+            ///     This API supports the ASP.NET; Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
@@ -119,6 +129,11 @@ namespace Inventario.WebApp.Areas.Identity.Pages.Account.Manage
 
             await _signInManager.RefreshSignInAsync(user);
             _logger.LogInformation("User changed their password successfully.");
+            
+            string titulo = "Cambio de clave";
+            string cuerpo = "Le informamos que el cambio de clave de la cuenta del usuario "+ user.UserName +" sejecutó satisfactoriamente." ;
+
+            _emailSender.SendEmailAsync("comerciosistema@outlook.com", "OdiN.7072", titulo, cuerpo, user.Email);
             StatusMessage = "Your password has been changed.";
 
             return RedirectToPage();

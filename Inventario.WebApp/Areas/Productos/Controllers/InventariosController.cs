@@ -19,10 +19,19 @@ namespace Inventario.WebApp.Areas.Administracion.Controllers
 
 
         // GET: InventariosController
-        public ActionResult Index()
+        public ActionResult Index( string nombre)
         {
-            List<Inventarios> lista = (List<Inventarios>)_Repo.listeElInventarios();
-            return View(lista);
+            List<Inventarios> ListaDeItems;
+
+            if (nombre == null)
+            {
+                ListaDeItems = (List<Inventarios>)_Repo.listeElInventarios();
+            }else
+            {
+                ListaDeItems = (List<Inventarios>)_Repo.ListarInventariosPorNombre(nombre);    
+            }
+            
+            return View(ListaDeItems);
         }
 
         // GET: InventariosController/Details/5
@@ -80,26 +89,6 @@ namespace Inventario.WebApp.Areas.Administracion.Controllers
         }
 
         // GET: InventariosController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            Inventarios inventario = _Repo.ObetenerInevtarioPorId(id);
-            return View(inventario);
-        }
-
-        // POST: InventariosController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(Inventarios inventario)
-        {
-            try
-            {
-                _Repo.EliminarInventario(inventario);
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        
     }
 }

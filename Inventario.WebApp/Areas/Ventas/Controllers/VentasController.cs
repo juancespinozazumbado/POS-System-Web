@@ -5,14 +5,15 @@ using Inventario.DA.Database;
 using Inventario.Models.Dominio.Productos;
 using Inventario.Models.Dominio.Usuarios;
 using Inventario.Models.Dominio.Ventas;
-using Inventario.WebApp.Areas.Ventas.Models;
+using Inventario.WebApp.Areas.Ventas.Modelos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using System.Security.Claims;
 
-namespace Inventario.WebApp.Controllers
+namespace Inventario.WebApp.Areas.Ventas.Controllers
 {
+    [Area("Ventas")]
     [Authorize]
     public class VentasController : Controller
     {
@@ -20,15 +21,14 @@ namespace Inventario.WebApp.Controllers
         ReporitorioDeInventarios ReporitorioDeInventarios;
         RepositorioDeUsuarios RepositorioDeUsuarios;
         RepositorioDeAperturaDeCaja RepositorioDeAperturaDeCaja;
-        List<ProductosAVender> ListaDeProductosAVenders;
-        public VentasController(InventarioDBContext context, IMemoryCache elCache)
+        
+        public VentasController(InventarioDBContext context)
         {
-            RepositorioDeVentas = new(context, elCache);
             RepositorioDeVentas = new(context);
             ReporitorioDeInventarios = new(context);
             RepositorioDeUsuarios = new(context);
             RepositorioDeAperturaDeCaja = new(context);
-            ListaDeProductosAVenders = new List<ProductosAVender>();
+            
         }
         // GET: VentasController
         public ActionResult Index()
@@ -36,7 +36,7 @@ namespace Inventario.WebApp.Controllers
 
             string id = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             AplicationUser usaurioActual = RepositorioDeUsuarios.ObtengaUnUsuarioPorId(id);
-            UsuarioConCajaAbierta modelo = new() { Usuario = usaurioActual };
+            AperturaDeCajaViewModel modelo = new() { Usuario = usaurioActual };
 
             AperturaDeCaja? caja = RepositorioDeAperturaDeCaja.AperturasDeCajaPorUsuario(id)
                .Where(c => c.estado == EstadoCaja.Abierta).FirstOrDefault();
@@ -62,7 +62,7 @@ namespace Inventario.WebApp.Controllers
             List<Inventarios> inventarios = (List<Inventarios>)ReporitorioDeInventarios.listeElInventarios();
 
 
-            VentaParaCrear modelo = new() { Inventarios = inventarios, Detalles = new(), productosAVender = ListaDeProductosAVenders };
+            VentaEnProcesoViewModel modelo = new() { Inventarios = inventarios, Detalles = new() };
 
             if (ventaAbierta == null)
             {
@@ -86,17 +86,17 @@ namespace Inventario.WebApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult AgregarItem(VentaParaCrear ventaParaCrear)
+        public ActionResult AgregarItem(VentaEnProcesoViewModel modelo)
         {
 
             // Obtener el item seleccionado del inventario
-            var itemDelInventario = ReporitorioDeInventarios.ObetenerInevtarioPorId(ventaParaCrear.Detalles.Id_inventario);
+            var itemDelInventario = ReporitorioDeInventarios.ObetenerInevtarioPorId(modelo.Detalles.Id_inventario);
 
             // Verificar si hay suficiente cantidad disponible en el inventario
-            if (itemDelInventario.Cantidad >= ventaParaCrear.Detalles.Cantidad && ventaParaCrear.Detalles.Cantidad > 0)
+            if (itemDelInventario.Cantidad >= modelo.Detalles.Cantidad && modelo.Detalles.Cantidad > 0)
             {
 
-                VentaDetalle ventaDetalle = ventaParaCrear.Detalles;
+                VentaDetalle ventaDetalle = modelo.Detalles;
 
                 ventaDetalle.Monto = ventaDetalle.Cantidad * ventaDetalle.Precio;
 
@@ -107,14 +107,14 @@ namespace Inventario.WebApp.Controllers
 
                 List<Inventarios> inventarios = (List<Inventarios>)ReporitorioDeInventarios.listeElInventarios();
                 Venta venta = RepositorioDeVentas.ObtengaUnaVentaPorId(ventaDetalle.Id_venta);
-                VentaParaCrear VentaParaCrear = new()
+                VentaEnProcesoViewModel VentaEnProcesoViewModel = new()
                 {
                     Inventarios = inventarios,
                     Detalles = new(),
                     venta = venta
                 };
 
-                return RedirectToAction(nameof(VentaEnProceso), ventaParaCrear);
+                return RedirectToAction(nameof(VentaEnProceso), VentaEnProcesoViewModel);
             }
             else
             {
@@ -128,7 +128,7 @@ namespace Inventario.WebApp.Controllers
         // POST: VentasController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EliminarItem(VentaParaCrear modelo)
+        public ActionResult EliminarItem(VentaEnProcesoViewModel modelo)
         {
             try
             {
@@ -142,14 +142,14 @@ namespace Inventario.WebApp.Controllers
                 RepositorioDeVentas.ElimineUnDetalleDeLaVenta(venta.Id, item);
                 List<Inventarios> inventarios = (List<Inventarios>)ReporitorioDeInventarios.listeElInventarios();
 
-                VentaParaCrear VentaParaCrear = new()
+                VentaEnProcesoViewModel VentaEnProcesoViewModel = new()
                 {
                     Inventarios = inventarios,
                     Detalles = new(),
                     venta = venta
                 };
 
-                return RedirectToAction(nameof(VentaEnProceso), VentaParaCrear);
+                return RedirectToAction(nameof(VentaEnProceso), VentaEnProcesoViewModel);
             }
             catch (Exception e)
 
@@ -197,7 +197,7 @@ namespace Inventario.WebApp.Controllers
         // POST: VentasController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult TerminarVenta(VentaParaCrear modelo)
+        public ActionResult TerminarVenta(VentaEnProcesoViewModel modelo)
         {
             try
             {
@@ -216,7 +216,7 @@ namespace Inventario.WebApp.Controllers
         // POST: VentasController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AplicarUnDescuento(VentaParaCrear modelo)
+        public ActionResult AplicarUnDescuento(VentaEnProcesoViewModel modelo)
         {
             try
             {
@@ -240,68 +240,6 @@ namespace Inventario.WebApp.Controllers
             return View();
         }
 
-        // GET: VentasController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: VentasController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(Venta venta)
-        {
-            try
-            {
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: VentasController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: VentasController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: VentasController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: VentasController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+  
     }
 }

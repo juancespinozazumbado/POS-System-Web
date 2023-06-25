@@ -1,0 +1,37 @@
+﻿@using Inventario.Models.Dominio.Usuarios
+@using Inventario.WebApp.Areas.Ventas.Modelos
+@model AperturaDeCajaViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<section class="py-5 text-center container">
+
+       <div class="row py-lg-5">
+         <div class="col-lg-6 col-md-8 mx-auto">
+           <h1 style="color:azure" class="fw-light">Sistemas de ventas</h1>
+           <spam class="text-white">Cajero/a:</spam> <code style="color:blueviolet;">@Model.Usuario.UserName</code>
+  
+           @if(Model.TieneUnaCajaAbierta){
+ 
+                   
+                 <p class="lead text-muted">¡Bienvenido/a al sistema de ventas!</p>
+                 <p>
+                     <a asp-action="VentaEnProceso" class="btn btn-primary d-inline-flex align-items-center">Iniciar un nueva venta</a>
+                     <a href="/" class="btn btn-outline-secondary d-inline-flex align-items-center">Regresar al home</a>
+                </p>
+
+            }
+            else
+            {
+                 <p class="lead text-muted"> No tiene cajas abiertas</p>
+                 <p>
+                    <a asp-controller="AperturasDeCaja" asp-action="index" class="btn btn-primary d-inline-flex align-items-center">Abrir caja</a>
+                    <a href="/" class="btn btn-outline-secondary d-inline-flex align-items-center">volver</a>
+                </p>
+                
+            }                  
+        </div>
+       </div>
+</section>

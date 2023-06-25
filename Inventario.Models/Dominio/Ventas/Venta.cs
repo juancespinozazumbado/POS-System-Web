@@ -10,6 +10,7 @@ namespace Inventario.Models.Dominio.Ventas
         public int Id { get; set; }
 
         [Column("NombreCliente")]
+        
         public string NombreCliente { get; set; } = null!;
 
         [Column("Fecha")]

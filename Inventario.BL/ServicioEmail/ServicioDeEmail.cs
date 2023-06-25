@@ -28,7 +28,7 @@ namespace Inventario.BL.ServicioEmail
             try
             {
                 clienteSMTP.Send(Mensaje);
-                Console.WriteLine("El mensaje se envio correctamente!");
+                
             }
             catch(Exception ex) 
             {

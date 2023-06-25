@@ -134,10 +134,10 @@ namespace Inventario.WebApp.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    string titulo = "Confirmacion de cuenta!";
-                    string cuerpo = "Bienvenido " + Input.UserName + "\nUsuario creado con exito! " +
+                    string titulo = "Solicitud de creación de usuario";
+                    string cuerpo = "Cuenta de usuario creada satisfactoriamente para el usuario " + Input.UserName + "\nUsuario creado con exito! " +
                         "\n Email: " + Input.Email;
-                     _emailSeenders.SendEmailAsync("juan_4002@hotmail.com", "OdiN.7072", titulo,cuerpo,Input.Email);
+                     _emailSeenders.SendEmailAsync("comerciosistema@outlook.com", "OdiN.7072", titulo,cuerpo,Input.Email);
 
 
                     var userId = await _userManager.GetUserIdAsync((AplicationUser)user);
@@ -172,7 +172,7 @@ namespace Inventario.WebApp.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private IdentityUser CreateUser()
+        private AplicationUser CreateUser()
         {
             try
             {

@@ -1,0 +1,81 @@
+﻿@using Inventario.WebApp.Areas.Ventas.Modelos
+@model AperturaDeCajaViewModel
+
+@{
+    ViewData["Title"] = "Totales de Caja";
+
+    decimal TotalEfectivo = Model.Totales.GetValueOrDefault(Enum.GetName(typeof(TipoDePago), 1)).Sum(t => t.Total);
+    decimal TotalTarheta = Model.Totales.GetValueOrDefault(Enum.GetName(typeof(TipoDePago), 2)).Sum(t => t.Total);
+    decimal TotalSinpeMovil = Model.Totales.GetValueOrDefault(Enum.GetName(typeof(TipoDePago), 3)).Sum(t => t.Total);
+}
+
+
+<div>
+    <div class="col-lg-6 mb-5">
+        <div class="card">
+            <div class="card-header">
+                <h4>Caja Cerrada</h4>
+                <hr />
+                <dl class="row">
+                    <dt class="col-sm-2">
+                       Usuario
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Usuario.UserName)
+                    </dd>
+                    <dt class="col-sm-2">
+                       Caja
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Caja.Id)
+                    </dd>
+                    <dt class="col-sm-2">
+                       Fecha de Apertura
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Caja.FechaDeInicio)
+                    </dd>
+                    <dt class="col-sm-2">
+                        Fecha de Cierre
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Caja.FechaDeCierre)
+                    </dd>
+
+
+
+                    <dt class="col-sm-2">
+                       Total de Ventas
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Caja.Ventas.Count)
+                    </dd>
+                    <dt class="col-sm-2">
+                       Total de ventas por Efectivo
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => TotalEfectivo )
+                     </dd>
+                    <dt class="col-sm-2">
+                        Total de ventas por Tarjeta
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => TotalTarheta )
+                    </dd>
+                    <dt class="col-sm-2">
+                        Total de ventas por Sinpe Movil
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => TotalSinpeMovil )
+                    </dd>
+
+                </dl>
+            </div>
+            <div>
+               
+                <a style="margin-block:20px;" class="btn btn-primary" asp-action="VentasPorCaja" asp-route-id="@Model.Caja.Id">Ver Ventas</a>
+                <a style="margin-block:20px;" class="btn btn-info" asp-action="Index">Volver</a>
+            </div>
+        </div>
+    </div>
+</div>

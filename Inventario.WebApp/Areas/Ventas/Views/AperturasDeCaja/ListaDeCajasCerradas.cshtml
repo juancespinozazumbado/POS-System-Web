@@ -1,0 +1,54 @@
+﻿@using Inventario.WebApp.Areas.Ventas.Modelos
+@model AperturaDeCajaViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div>
+    <label asp-for="Usuario.UserName" ></label>
+    <input type="tex" readonly="readonly" asp-for="Usuario.UserName" />
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 mb-5">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-heading">Cajas cerradas</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                        <table class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Fecha de Apertura</th>
+                                    <th>Fecha de Cierre</th>
+                                    <th>Ventas</th>
+
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Cajas)
+                                {
+                                    <tr>
+                                        <td>@Html.DisplayFor(modelItem => item.Id)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.FechaDeInicio)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.FechaDeCierre)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.Ventas.Count)</td>
+                                        <td>
+                                            @Html.ActionLink("Ver Detalles", "DetallesCajaCerrada", new { id = item.Id }, new { @class="btn btn-primary" })|
+                                           
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -3,46 +3,22 @@ using Inventario.DA.Database;
 using Inventario.Models.Dominio.Productos;
 using Inventario.Models.Dominio.Ventas;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Inventario.BL.Funcionalidades.Ventas
 {
 
     public class RepositorioDeVentas : IRepositorioDeVentas
     {
-        private readonly IMemoryCache ElCache;
-
-        List<ProductosAVender> ListaProductosAVenders;
-
+   
+      
         private readonly InventarioDBContext _dbContext;
 
-        public RepositorioDeVentas(InventarioDBContext dbContext, IMemoryCache elCache)
+        public RepositorioDeVentas(InventarioDBContext dbContext)
         {
             _dbContext = dbContext;
-            ListaProductosAVenders = new List<ProductosAVender>();
-
-            ElCache = elCache;
-            if (ElCacheEstaVacio())
-            {
-                CreeElCache();
-            }
-            else
-            {
-                ObtengaLosValoresDelCache();
-            }
+           
 
         }
-        public RepositorioDeVentas()
-        {
-
-        }
-
-        public RepositorioDeVentas(InventarioDBContext context)
-        {
-            _dbContext = context;
-        }
-
         public void AñadaUnDetalleAlaVenta(int idVenta, VentaDetalle item)
         {
 
@@ -53,8 +29,6 @@ namespace Inventario.BL.Funcionalidades.Ventas
                 _dbContext.Ventas.Update(venta);
                 _dbContext.SaveChanges();
             }
-
-
         }
 
         public void CreeUnaVenta(Venta venta)
@@ -64,58 +38,6 @@ namespace Inventario.BL.Funcionalidades.Ventas
 
 
         }
-
-        public void AgregueUnItemAlCarrito(ProductosAVender productosAVender)
-        {
-            if (ListaProductosAVenders.IsNullOrEmpty())
-            {
-                ObtengaLosValoresDelCache();
-                ListaProductosAVenders.Add(productosAVender);
-            }
-            else
-            {
-
-                ListaProductosAVenders.Add(productosAVender);
-            }
-
-        }
-
-        public IEnumerable<ProductosAVender> ObtengaLaListaDeItems()
-        {
-
-            if (ListaProductosAVenders.IsNullOrEmpty())
-            {
-                ListaProductosAVenders = new List<ProductosAVender>();
-                return ListaProductosAVenders;
-
-            }
-            else
-            {
-                return ListaProductosAVenders;
-
-            }
-
-
-        }
-
-        void ObtengaLosValoresDelCache()
-        {
-            ListaProductosAVenders = (List<ProductosAVender>)ElCache.Get("ListaProductosAVenders");
-        }
-
-        private void CreeElCache()
-        {
-            ListaProductosAVenders = new List<ProductosAVender>();
-            ElCache.Set("ListaProductosAVenders", ListaProductosAVenders);
-        }
-        private bool ElCacheEstaVacio()
-        {
-            if (ElCache.Get("ListaProductosAVenders") is null)
-                return true;
-            else
-                return false;
-        }
-
         public void ElimineUnDetalleDeLaVenta(int idVenta, VentaDetalle item)
         {
             Venta venta = ObtengaUnaVentaPorId(idVenta);
@@ -135,7 +57,7 @@ namespace Inventario.BL.Funcionalidades.Ventas
             return _dbContext.Ventas.Include(v => v.VentaDetalles).ToList();
         }
 
-        public Venta ObtengaUnaVentaPorId(int id)
+        public Venta? ObtengaUnaVentaPorId(int id)
         {
             return _dbContext.Ventas.Include(v => v.VentaDetalles).ThenInclude(d => d.Inventarios)
                              .ToList().Find(v => v.Id == id);

@@ -1,0 +1,86 @@
+﻿@using Inventario.WebApp.Areas.Productos.Models;
+
+@using Inventario.WebApp.Areas.Productos.Models;
+@model AjusteViweModel;
+
+@{
+    ViewData["Title"] = "Create";
+    double precio = (double)Model.Inventario.Precio;
+
+
+}
+
+
+
+
+
+<form asp-action="Crear">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="col-lg-6 mb-5">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-heading">Ajustar un producto</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+
+                    <div class="form-group ">
+
+                        <input type="hidden" readonly="readonly" asp-for="Inventario.Id" class="form-control" />
+                        <span asp-validation-for="Inventario.Nombre" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Inventario.Nombre" class="control-label"></label>
+                        <input readonly="readonly" asp-for="Inventario.Nombre" class="form-control" />
+                        <span asp-validation-for="Inventario.Nombre" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Inventario.Precio" class="control-label"></label>
+                        <input asp-for="Inventario.Precio" readonly="readonly" class="form-control" value="@precio" />
+                        <span asp-validation-for="Inventario.Precio" class="text-danger"></span>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label asp-for="Ajuste.CantidadActual" class="control-label"></label>
+                        <input readonly="readonly" asp-for="Ajuste.CantidadActual" class="form-control" value="@Model.Inventario.Cantidad" />
+                        <span asp-validation-for="Ajuste.CantidadActual" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Ajuste.Tipo" class="control-label"></label>
+                        <select asp-for="Ajuste.Tipo" class="form-select" asp-items="@Html.GetEnumSelectList<TipoAjuste>()"></select>
+
+                        <span asp-validation-for="Ajuste.Tipo" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Ajuste.Ajuste" class="control-label "></label>
+                        <input asp-for="Ajuste.Ajuste" class="form-control" />
+
+                        <span asp-validation-for="Ajuste" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Ajuste.Observaciones" class="control-label "></label>
+                        <input asp-for="Ajuste.Observaciones" class="form-control" />
+
+                        <span asp-validation-for="Ajuste" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <div style="margin-block:10px;" class="form-group">
+            <button type="submit" class="btn btn-success">Aceptar</button>
+    </div>
+    </div>
+</form>
+<a class="btn btn-info" asp-action="Index">Volver al catálogo</a>
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

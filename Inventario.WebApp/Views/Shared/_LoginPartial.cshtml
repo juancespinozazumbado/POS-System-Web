@@ -6,23 +6,17 @@
     body {
         margin: 0;
         padding: 0;
-        background-color: burlywood;
+        background-color: whitesmoke;
+        background: rgb(205,159,160);
+        background: linear-gradient(56deg, rgba(205,159,160,0.9417016806722689) 0%, rgba(187,138,146,0.9024859943977591) 4%, rgba(103,38,78,0.9417016806722689) 19%, rgba(83,32,71,0.9276960784313726) 25%, rgba(73,29,68,0.9473039215686274) 31%, rgba(61,53,96,0.9585084033613446) 37%, rgba(48,46,88,0.9641106442577031) 40%, rgba(40,35,75,0.9641106442577031) 44%, rgba(23,13,50,0.9865196078431373) 50%);
         height: 100vh;
     }
 
     input {
-        background-color: #f4d8b5 !important;
-        border-color: #f4d8b5 !important;
+        background: rgb(244,244,244);
+        background: linear-gradient(33deg, rgba(244,244,244,1) 0%, rgba(247,247,247,1) 33%, rgba(54,97,181,0.42629551820728295) 56%);
     }
 
-    button {
-        background-color: #c93c20 !important;
-        border-color: #c93c20 !important;
-    }
-    a{
-        color: #c93c20 !important;
-    }
-   
 
     #login .container #login-row #login-column #login-box {
         margin-top: 120px;
@@ -46,21 +40,24 @@
 @if (SignInManager.IsSignedIn(User))
 {
     <li class="nav-item">
-        <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
+            <a style="color:aliceblue" class="nav-link text-white" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hola @User.Identity?.Name!</a>
     </li>
     <li class="nav-item">
         <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+                <button type="submit" class="btn btn-outline-primary me-2">Logout</button>
         </form>
     </li>
 }
 else
 {
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
-    </li>
-}
+        <div class="text-end">
+
+        
+            <a class="btn btn-warning" asp-area="Identity" asp-page="/Account/Register">Register</a>
+       
+            <a class="btn btn-outline-light me-2" asp-area="Identity" asp-page="/Account/Login">Login</a>
+       
+        </div>
+
+      }
 </ul>

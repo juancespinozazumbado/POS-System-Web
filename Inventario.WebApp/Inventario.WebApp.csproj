@@ -29,8 +29,4 @@
     <ProjectReference Include="..\Inventario.Models\Inventario.Models.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Areas\Productos\Models\" />
-  </ItemGroup>
-
 </Project>
