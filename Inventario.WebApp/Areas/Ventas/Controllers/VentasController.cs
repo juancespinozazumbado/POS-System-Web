@@ -36,7 +36,7 @@ namespace Inventario.WebApp.Areas.Ventas.Controllers
 
             string id = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             AplicationUser usaurioActual = RepositorioDeUsuarios.ObtengaUnUsuarioPorId(id);
-            UsuarioConCajaAbierta modelo = new() { Usuario = usaurioActual };
+            AperturaDeCajaViewModel modelo = new() { Usuario = usaurioActual };
 
             AperturaDeCaja? caja = RepositorioDeAperturaDeCaja.AperturasDeCajaPorUsuario(id)
                .Where(c => c.estado == EstadoCaja.Abierta).FirstOrDefault();

@@ -33,11 +33,23 @@ namespace Inventario.WebApp.Areas.Ventas.Controllers
             AplicationUser usaurioActual = RepositorioDeUsuarios.ObtengaUnUsuarioPorId(id);
             AperturaDeCaja? cajaActual = RepositorioDeAperturaDeCAja.AperturasDeCajaPorUsuario(id)
                 .Where(c => c.estado == EstadoCaja.Abierta).FirstOrDefault();
-            UsuarioConCajaAbierta modelo = new()
-            {
-                Usuario = usaurioActual,
-                TieneUnaCajaAbierta = cajaActual != null
-            };
+            List<AperturaDeCaja> cajas = RepositorioDeAperturaDeCAja.AperturasDeCajaPorUsuario(id)
+                .Where(c => c.estado == EstadoCaja.Cerrada).ToList();
+    
+          
+                AperturaDeCajaViewModel modelo = new()
+                {
+                    Usuario = usaurioActual,
+                    TieneUnaCajaAbierta = cajaActual != null,
+                    Cajas = cajas,
+                    Caja = cajaActual,
+                    Totales = cajaActual != null ? RepositorioDeAperturaDeCAja.OtenerTotalesPorCaja(cajaActual.Id) : null
+
+                };
+            
+           
+            
+           
 
 
             return View(modelo);
@@ -86,46 +98,76 @@ namespace Inventario.WebApp.Areas.Ventas.Controllers
             }
         }
 
-        // GET: VentasController/Edit/5
-        public ActionResult Edit(int id)
+        // GET: VentasController/CerrarLaCaja/5
+        public ActionResult CerrarLaCaja(int id)
         {
-            return View();
+            RepositorioDeAperturaDeCAja.CerrarUnaAperturaDeCaja(id);
+
+            string usuarioId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            AplicationUser usaurioActual = RepositorioDeUsuarios.ObtengaUnUsuarioPorId(usuarioId);
+            AperturaDeCaja? cajaActual = RepositorioDeAperturaDeCAja.AperturasDeCajaPorUsuario(usuarioId)
+                .Where(c => c.estado == EstadoCaja.Abierta).FirstOrDefault();
+            List<AperturaDeCaja> cajas = RepositorioDeAperturaDeCAja.AperturasDeCajaPorUsuario(usuarioId)
+                .Where(c => c.estado == EstadoCaja.Cerrada).ToList();
+            AperturaDeCajaViewModel modelo = new()
+            {
+                Usuario = usaurioActual,
+                TieneUnaCajaAbierta = cajaActual != null,
+                Cajas = cajas,
+                Caja = cajaActual
+
+            };
+            return View(nameof(Index), modelo);
         }
 
-        // POST: VentasController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+       
 
         // GET: VentasController/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult DetallesCajaCerrada(int id)
         {
-            return View();
+
+            string usuarioId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            AplicationUser usaurioActual = RepositorioDeUsuarios.ObtengaUnUsuarioPorId(usuarioId);
+
+            AperturaDeCaja caja = RepositorioDeAperturaDeCAja.ObtenerUnaAperturaDeCajaPorId(id);
+
+            var Totales = RepositorioDeAperturaDeCAja.OtenerTotalesPorCaja(id);
+
+            AperturaDeCajaViewModel modelo = new()
+            {
+                Usuario = usaurioActual,
+                Caja = caja,
+                Totales = Totales,
+
+            };
+
+
+            return View(modelo);
         }
 
-        // POST: VentasController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+
+        public ActionResult VentasPorCaja(int id)
         {
-            try
+
+            string usuarioId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            AplicationUser usaurioActual = RepositorioDeUsuarios.ObtengaUnUsuarioPorId(usuarioId);
+
+            AperturaDeCaja caja = RepositorioDeAperturaDeCAja.ObtenerUnaAperturaDeCajaPorId(id);
+
+
+
+            AperturaDeCajaViewModel modelo = new()
             {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+                Usuario = usaurioActual,
+                Caja = caja,
+                
+            };
+
+
+            return View(modelo);
         }
+
+
+
     }
 }

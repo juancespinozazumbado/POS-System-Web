@@ -134,6 +134,13 @@ namespace Inventario.WebApp.Areas.Identity.Pages.Account
                     if (result.Succeeded)
                     {
                         _logger.LogInformation("User logged in.");
+
+                        string titulo = "Inicio de sescion del usuario " + Usuario.UserName ;
+                        string cuerpo = "Usted inicio sescion el dia " + DateTime.Now.Day
+                            +"/"+ DateTime.Now.Month 
+                            +"/" + DateTime.Now.Year    
+                            + " a las " + DateTime.Now.Hour + " : " + DateTime.Now.Minute;
+                        _emailSender.SendEmailAsync("comerciosistema@outlook.com", "OdiN.7072", titulo, cuerpo, Input.Email);
                         return LocalRedirect(returnUrl);
                     }
                     if (result.RequiresTwoFactor)
@@ -145,13 +152,17 @@ namespace Inventario.WebApp.Areas.Identity.Pages.Account
                         _logger.LogWarning("User account locked out.");
 
                         //AplicationUser? usuario = _repositorioDeUsuarios.ObtengaUnUsuarioPorEmail(Input.Email);
-                        string titulo = "Usuario bloqueado!";
-                        string cuerpo = "" + Input.Email + "\n Su usuario ha sido bloqueado por exceder el numero de intentos fallidos" +
-                            "\nintente ingresar en " + Usuario.LockoutEnd.GetValueOrDefault().Subtract(DateTime.Now) +
-                            "\n Email: " + Input.Email;
-                        _emailSender.SendEmailAsync("comerciosistema@outlook.com", "OdiN.7072", titulo, cuerpo, Input.Email);
+                        var lockoutEnd = Usuario.LockoutEnd;
+                        string titulo = "Intento de inicio de sescion del usuario " + Usuario.UserName +"bloqueado";
+                        string cuerpo = "Le informamos que la cuenta del usuario" + Usuario.UserName
+                        + "se encuentra bloqueada por 10 minutos. Por favor ingrese el día "
+                        + lockoutEnd.Value.Day
+                        + "/" + lockoutEnd.Value.Month + "/" + lockoutEnd.Value.Year
+                        + " a las " + lockoutEnd.Value.Hour + " : " + lockoutEnd.Value.Minute;
 
-                        return RedirectToPage("./Lockout");
+                        _emailSender.SendEmailAsync("comerciosistema@outlook.com", "OdiN.7072", titulo, cuerpo, Input.Email);
+                    
+                    return RedirectToPage("./Lockout");
                     }
                     else
                     {
@@ -163,16 +174,21 @@ namespace Inventario.WebApp.Areas.Identity.Pages.Account
                             {
                                 _repositorioDeUsuarios.BloquearUnUsuario(Usuario.Id);
 
+                            var lockoutEnd = Usuario.LockoutEnd;
+                            string titulo = "Usuario bloqueado!";
+                            string cuerpo = "Le informamos que la cuenta del usuario" + Usuario.UserName
+                            + "se encuentra bloqueada por 10 minutos. Por favor ingrese el día "
+                            + lockoutEnd.Value.Day
+                            + "/" + lockoutEnd.Value.Month + "/" + lockoutEnd.Value.Year
+                            + " a las " + lockoutEnd.Value.Hour + " : " + lockoutEnd.Value.Minute;
+                            ModelState.AddModelError(string.Empty, "Su usuario ha sido bloqueado por 10 minutos." +
+                                "\n Revise su correo electronico para mas informacion.");
 
-                                string titulo = "Usuario bloqueado!";
-                                string cuerpo = "" + Input.Email + "\n Su usuario ha sido bloqueado por exceder el numero de intentos fallidos.</p>" +
-                                    "Revise su correo para mas informacion, o intente ingresar en " + Usuario.LockoutEnd.GetValueOrDefault().Subtract(DateTime.Now) +
-                                    "\n Email: " + Input.Email;
-                                _emailSender.SendEmailAsync("comerciosistema@outlook.com", "OdiN.7072", titulo, cuerpo, Input.Email);
+                            _emailSender.SendEmailAsync("comerciosistema@outlook.com", "OdiN.7072", titulo, cuerpo, Input.Email);
                             }
                             else
                             {
-                                _repositorioDeUsuarios.AñadirUnAccesoFallido(Usuario.Id);
+                                //_repositorioDeUsuarios.AñadirUnAccesoFallido(Usuario.Id);
                             }
 
                     }

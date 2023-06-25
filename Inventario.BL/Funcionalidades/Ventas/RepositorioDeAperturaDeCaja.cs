@@ -2,6 +2,7 @@
 using Inventario.DA.Database;
 using Inventario.Models.Dominio.Ventas;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 
 namespace Inventario.BL.Funcionalidades.Ventas
 {
@@ -26,7 +27,7 @@ namespace Inventario.BL.Funcionalidades.Ventas
 
         public void CerrarUnaAperturaDeCaja(int id)
         {
-            AperturaDeCaja caja = context.AperturasDeCaja.ToList().Find(ap => ap.Id == id);
+            AperturaDeCaja caja = ObtenerUnaAperturaDeCajaPorId( id);
 
             if (caja != null && caja.estado == EstadoCaja.Abierta)
             {
@@ -34,9 +35,10 @@ namespace Inventario.BL.Funcionalidades.Ventas
                              where venta.Estado == EstadoVenta.EnProceso
                              select venta;
 
-                if (ventas.Count() == 0)
+                if (ventas.Count() == 0 || ventas == null)
                 {
                     caja.estado = EstadoCaja.Cerrada;
+                    caja.FechaDeCierre = DateTime.Now;
                     context.AperturasDeCaja.Update(caja);
                     context.SaveChanges();
                 }
@@ -74,7 +76,7 @@ namespace Inventario.BL.Funcionalidades.Ventas
 
         public AperturaDeCaja ObtenerUnaAperturaDeCajaPorId(int id)
         {
-            return ListarAperturasDeCaja().First(a => a.Id == id);
+            return ListarAperturasDeCaja().Where(a => a.Id == id).FirstOrDefault();
         }
 
 
@@ -83,32 +85,32 @@ namespace Inventario.BL.Funcionalidades.Ventas
             AperturaDeCaja Caja = ObtenerUnaAperturaDeCajaPorId(id);
             Dictionary<string, List<Venta>> DiccionarioDeventas = new Dictionary<string, List<Venta>>();
 
-            if (LaCajaEstaCerrada(id))
-            {
+            
                 DiccionarioDeventas = new Dictionary<string, List<Venta>>()
                 {
-                    {"Efectivo", ObtenerElTotalDeVentasPorEfectivo(Caja)},
-                    {"Tarjeta", ObtenerElTotalDeVentasPorTarjeta(Caja)},
-                    {"SinpeMovil", ObtenerElTotalDeVentasPorSinpeMovil(Caja)},
+                    {Enum.GetName(typeof(TipoDePago), 1), ObtenerElTotalDeVentasPorEfectivo(Caja)},
+                    {Enum.GetName(typeof(TipoDePago), 2), ObtenerElTotalDeVentasPorTarjeta(Caja)},
+                    {Enum.GetName(typeof(TipoDePago), 3), ObtenerElTotalDeVentasPorSinpeMovil(Caja)},
                  };
-            }
+               
+            
 
             return DiccionarioDeventas;
         }
 
         private List<Venta>? ObtenerElTotalDeVentasPorEfectivo(AperturaDeCaja caja)
         {
-            return (List<Venta>?)caja.Ventas.Where(a => a.TipoDePago == TipoDePago.Efectivo);
+            return (List<Venta>?)caja.Ventas.Where(a => a.TipoDePago == TipoDePago.Efectivo).ToList();
         }
 
         private List<Venta>? ObtenerElTotalDeVentasPorTarjeta(AperturaDeCaja caja)
         {
-            return (List<Venta>?)caja.Ventas.Where(a => a.TipoDePago == TipoDePago.Tarjeta);
+            return (List<Venta>?)caja.Ventas.Where(a => a.TipoDePago == TipoDePago.Tarjeta).ToList();
         }
 
         private List<Venta>? ObtenerElTotalDeVentasPorSinpeMovil(AperturaDeCaja caja)
         {
-            return (List<Venta>?)caja.Ventas.Where(a => a.TipoDePago == TipoDePago.SinpeMovil);
+            return (List<Venta>?)caja.Ventas.Where(a => a.TipoDePago == TipoDePago.SinpeMovil).ToList() ;
         }
     }
 }

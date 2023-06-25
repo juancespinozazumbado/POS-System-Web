@@ -19,10 +19,19 @@ namespace Inventario.WebApp.Areas.Administracion.Controllers
 
 
         // GET: InventariosController
-        public ActionResult Index()
+        public ActionResult Index( string nombre)
         {
-            List<Inventarios> lista = (List<Inventarios>)_Repo.listeElInventarios();
-            return View(lista);
+            List<Inventarios> ListaDeItems;
+
+            if (nombre == null)
+            {
+                ListaDeItems = (List<Inventarios>)_Repo.listeElInventarios();
+            }else
+            {
+                ListaDeItems = (List<Inventarios>)_Repo.ListarInventariosPorNombre(nombre);    
+            }
+            
+            return View(ListaDeItems);
         }
 
         // GET: InventariosController/Details/5

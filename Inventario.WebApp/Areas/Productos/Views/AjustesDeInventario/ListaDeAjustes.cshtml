@@ -77,7 +77,8 @@
                                     </td>
 
                                     <td>
-                                        @*   @Html.ActionLink("Detalles", "DetalleAjuste", new { id=item.Id  })*@
+                                           @Html.ActionLink("Detalles", "DetalleAjuste", new { InventarioId=item.Id_Inventario, Id= item.Id  })
+                                          
 
                                     </td>
                                 </tr>

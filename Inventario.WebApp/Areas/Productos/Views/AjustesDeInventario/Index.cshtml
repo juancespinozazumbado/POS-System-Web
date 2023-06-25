@@ -30,8 +30,8 @@
                                         <td>@Html.DisplayFor(modelItem => item.Cantidad)</td>
                                         <td>@Html.DisplayFor(modelItem => item.Precio)</td>
                                         <td>
-                                            @Html.ActionLink("Ajuste", "Create", new { id = item.Id }, new { @class="btn btn-primary" })|
-                                            @Html.ActionLink("Detalles", "Details", new { id = item.Id }, new { @class="btn btn-info" })
+                                            @Html.ActionLink("Ajuste", "CrearAjuste", new { id = item.Id }, new { @class="btn btn-primary" })|
+                                            @Html.ActionLink("Detalles", "ListaDeAjustes", new { id = item.Id }, new { @class="btn btn-info" })
                                         </td>
                                     </tr>
                                 }

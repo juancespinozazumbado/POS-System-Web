@@ -34,7 +34,7 @@ namespace Inventario.BL.Funcionalidades.Usuarios
         {
             AplicationUser? usuario = dbContext.Usuarios.
                 Where(u=> u.Id.Equals(id)).FirstOrDefault();
-            usuario.LockoutEnd = DateTime.Now.AddMinutes(15);
+            usuario.LockoutEnd = DateTime.Now.AddMinutes(10);
             usuario.AccessFailedCount = 0;
             dbContext.Update(usuario);
             dbContext.SaveChanges();

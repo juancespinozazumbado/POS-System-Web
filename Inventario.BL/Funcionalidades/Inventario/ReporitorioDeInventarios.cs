@@ -44,7 +44,7 @@ namespace Inventario.BL.Funcionalidades.Inventario
 
         public IEnumerable<Inventarios> ListarInventariosPorNombre(string nombre)
         {
-            return _dbContext.Inventarios.ToList().Where(i => i.Nombre.Equals(nombre));
+            return _dbContext.Inventarios.Where(i => i.Nombre.Contains(nombre)).ToList();
         }
     }
 }

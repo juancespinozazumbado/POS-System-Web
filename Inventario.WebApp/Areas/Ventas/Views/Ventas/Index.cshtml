@@ -1,6 +1,6 @@
 ﻿@using Inventario.Models.Dominio.Usuarios
 @using Inventario.WebApp.Areas.Ventas.Modelos
-@model UsuarioConCajaAbierta
+@model AperturaDeCajaViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -20,9 +20,18 @@
                  <p>
                      <a asp-action="VentaEnProceso" class="btn btn-primary d-inline-flex align-items-center">Iniciar un nueva venta</a>
                      <a href="/" class="btn btn-outline-secondary d-inline-flex align-items-center">Regresar al home</a>
-                 </p>
-                    
-           }                   
-          </div>
+                </p>
+
+            }
+            else
+            {
+                 <p class="lead text-muted"> No tiene cajas abiertas</p>
+                 <p>
+                    <a asp-controller="AperturasDeCaja" asp-action="index" class="btn btn-primary d-inline-flex align-items-center">Abrir caja</a>
+                    <a href="/" class="btn btn-outline-secondary d-inline-flex align-items-center">volver</a>
+                </p>
+                
+            }                  
+        </div>
        </div>
 </section>
