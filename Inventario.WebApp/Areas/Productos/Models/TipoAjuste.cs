@@ -4,9 +4,9 @@ namespace Inventario.WebApp.Areas.Productos.Models
 {
     public enum TipoAjuste
     {
-        [Display(Name = "Auemnto")]
+        [Display(Name = "Aumento")]
         aumento = 1,
-        [Display(Name = "Disminucion")]
+        [Display(Name = "Disminución")]
         disminucion = 2
     }
 }

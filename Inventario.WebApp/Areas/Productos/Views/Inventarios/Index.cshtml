@@ -4,14 +4,14 @@
     ViewData["Title"] = "Index";
 }
 
-<div class="container">
+<div class="container" >
     <div class="row justify-content-center">
         <div class="col-lg-6 mb-5">
             <div class="card">
                 <div class="card-header">
                     <h4 class="card-heading">Catalogo de Inventario</h4>
                 </div>
-                <div class="card-body">
+                <div class="card-body" >
                     <h1 class="text-center text-white">Catálogo de inventarios</h1>
                     <p class="text-center">
                         <a class="btn btn-lg btn-success mx-1" asp-action="Create">Nuevo artículo</a>
@@ -38,8 +38,11 @@
                                         <td>@Html.DisplayFor(modelItem => item.Cantidad)</td>
                                         <td>@Html.DisplayFor(modelItem => item.Precio)</td>
                                         <td>
-                                            @Html.ActionLink("Editar", "Edit", new { id = item.Id }) |
-                                            @Html.ActionLink("Detalles", "Details", new { id = item.Id }) |
+                                            
+                                            <div style="display:flex; flex-direction: row; " >
+                                                @Html.ActionLink("Editar", "Edit", new { id = item.Id }, new { @class="btn btn-primary"} ) |
+                                                @Html.ActionLink("Detalles", "Details", new { id = item.Id }, new { @class="btn btn-info"}) |
+                                            </div>
                                            
                                         </td>
                                     </tr>
