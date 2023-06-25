@@ -137,7 +137,7 @@ namespace Inventario.WebApp.Areas.Identity.Pages.Account
                     string titulo = "Confirmacion de cuenta!";
                     string cuerpo = "Bienvenido " + Input.UserName + "\nUsuario creado con exito! " +
                         "\n Email: " + Input.Email;
-                     _emailSeenders.SendEmailAsync("juan_4002@hotmail.com", "OdiN.7072", titulo,cuerpo,Input.Email);
+                     _emailSeenders.SendEmailAsync("comerciosistema@outlook.com", "OdiN.7072", titulo,cuerpo,Input.Email);
 
 
                     var userId = await _userManager.GetUserIdAsync((AplicationUser)user);

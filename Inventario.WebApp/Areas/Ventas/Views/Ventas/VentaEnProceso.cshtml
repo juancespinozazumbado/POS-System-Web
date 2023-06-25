@@ -1,9 +1,10 @@
 ﻿@using Inventario.Models.Dominio.Ventas;
 @using Inventario.WebApp.Areas.Ventas.Modelos;
-@model VentaParaCrear
+@model VentaEnProcesoViewModel
 
 @{
     ViewData["Title"] = "Index";
+    
 }
 <style>
     h1{
@@ -53,7 +54,8 @@
             <div class="row g-4">
             <div class="input-group">
                 <span class="input-group-text">Id de usuario</span>
-                   <input type="text" readonly="readonly " class="form-control" name="UserId" asp-for="venta.UserId" />
+                   <input type="hidden" readonly="readonly " class="form-control" name="UserId" asp-for="venta.UserId" />
+                    <input type="text" readonly="readonly " class="form-control" name="UserId" value ="@User.Identity.Name" />
                 </div>
             <div class="input-group">
                 <span class="input-group-text">Apertura de caja #:</span>
@@ -66,11 +68,11 @@
                 </div>
 
             <div class="input-group">
-                    <button type="submit"  class="btn btn-outline-dark">
+                    <button type="submit"  class="btn btn-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z" />
                         </svg>
-                        Iniciar ventas
+                        Crear
                     </button>
                 </div>
              
@@ -91,13 +93,15 @@
                              <input type="text" readonly="readonly " class="form-control" name="id" asp-for="venta.Id" />
                      </div>
                      <div class="input-group">
-                         <span class="input-group-text">Id de usuario:</span>
-                             <input type="text" readonly="readonly " class="form-control" name="UserId" asp-for="venta.UserId" />
+                        <span class="input-group-text">Usuario:</span>
+                        <input type="hidden" readonly="readonly " class="form-control" name="UserId" asp-for="venta.UserId" />
+                        <input type="text" readonly="readonly " class="form-control" name="UserId" value ="@User.Identity.Name"/>
+                         
                      </div>
                      <div class="input-group">
-                         <span class="input-group-text">Apertura de caja #:</span>
-                             <input type="text" readonly="readonly " class="form-control" name="UserId" asp-for="venta.IdAperturaDeCaja" />
-                      </div>
+                   
+
+                </div>
 
                      <div class="input-group">
                          <span class="input-group-text">Cliente:</span>
@@ -106,6 +110,7 @@
                         
                 </div>
             </div>
+    </div>
 
         
 
@@ -177,7 +182,7 @@
             </div>
         </div>
     </div>
-        </div>
+       
     }
 
 

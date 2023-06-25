@@ -80,26 +80,6 @@ namespace Inventario.WebApp.Areas.Administracion.Controllers
         }
 
         // GET: InventariosController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            Inventarios inventario = _Repo.ObetenerInevtarioPorId(id);
-            return View(inventario);
-        }
-
-        // POST: InventariosController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(Inventarios inventario)
-        {
-            try
-            {
-                _Repo.EliminarInventario(inventario);
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        
     }
 }

@@ -28,13 +28,14 @@
                             <code style="color:blueviolet;">@Model.Usuario.UserName</code>
                             <p class="lead text-muted">¡Bienvenido/a al sistema de ventas!</p>
                             <p>
-                                <a href="#" class="btn btn-primary my-2">Regresar al home</a>
-                                <a asp-action="AbrirCaja" class="btn btn-secondary my-2">Nueva venta</a>
+                           
+                                <a asp-action="AbrirCaja" class="btn btn-primary my-2">Abrir una Caja</a>
                             </p>
                     </div>
 
                 }
             </div>
+            <a asp-area ="" asp-controller="Home" asp-action="Index" class="btn btn-secondary my-2">Regresar al home</a>
 
         </main>
     </div>

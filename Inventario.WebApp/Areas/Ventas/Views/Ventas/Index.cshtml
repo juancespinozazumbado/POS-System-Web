@@ -20,9 +20,15 @@
                  <p>
                      <a asp-action="VentaEnProceso" class="btn btn-primary d-inline-flex align-items-center">Iniciar un nueva venta</a>
                      <a href="#" class="btn btn-outline-secondary d-inline-flex align-items-center">Regresar al home</a>
-                 </p>
-                    
-           }                   
-          </div>
-       </div>
+                </p>
+
+            }else
+            {
+              <div>
+                    <h1 style="color:azure" class="fw-light">Usted no tiene caja abierta</h1>
+                    <a asp-controller="AperturasdeCaja" asp-action="AbrirCaja" class="btn btn-primary d-inline-flex align-items-center">Abrir una caja</a>
+              </div>
+                
+            }                
+       
 </section>
