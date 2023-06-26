@@ -7,7 +7,7 @@
 <div class="col-lg-6 mb-5">
     <div class="card">
         <div class="card-header">
-            <h4 class="card-heading">Carrito de compras</h4>
+            <h4 class="card-heading">Items de venta</h4>
         </div>
         <div class="card-body">
 
@@ -25,11 +25,14 @@
                                 Cantidad
                             </th>
                             <th>
+                                Precio
+                            </th>
+                            <th>
                                 SubTotal
                             </th>
-                            @* <th>
+                             <th>
                             Descuento
-                            </th>*@
+                            </th>
                             <th>
                                 Total
                             </th>
@@ -39,7 +42,13 @@
                     <tbody>
                         @foreach (var item in Model.venta.VentaDetalles)
                         {
+                            
                             <tr>
+                                @{
+                                    decimal Monto = item.Precio * item.Cantidad;
+
+                                    decimal Total = Monto - item.MontoDescuento;
+                                }
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Id_inventario)
                                 </td>
@@ -47,19 +56,20 @@
                                     @Html.DisplayFor(modelItem => Model.Inventarios.Where(i => i.Id == item.Id_inventario).FirstOrDefault().Nombre)
                                 </td>
                                 <td>
+                                    @Html.DisplayFor(modelItem => item.Precio)
+                                </td>
+                                <td>
                                     @Html.DisplayFor(modelItem => item.Cantidad)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Monto)
+                                    @Html.DisplayFor(modelItem => Monto)
                                 </td>
-                                @*<td>
-                            @Html.DisplayFor(modelItem => item.MontoDescuento)
-                            </td>*@
                                 <td>
-                                    @{
-                                        decimal resultado = item.Monto - item.MontoDescuento;
-                                    }
-                                    @Html.DisplayFor(modelItem => resultado)
+                            @Html.DisplayFor(modelItem => item.MontoDescuento)
+                            </td>
+                                <td>
+                                   
+                                    @Html.DisplayFor(modelItem => Total)
                                 </td>
                                 <td>
                                     <form asp-controller="Ventas" asp-action="EliminarItem" method="post">

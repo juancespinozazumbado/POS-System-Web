@@ -76,13 +76,11 @@ namespace Inventario.BL.Funcionalidades.Ventas
             {
                 if (venta.VentaDetalles.Count == 0) throw new NotImplementedException();
 
-
-
                 foreach (VentaDetalle item in venta.VentaDetalles)
                 {
                     venta.SubTotal += item.Monto;
-                    Inventarios inventario = item.Inventarios;
-                    item.MontoDescuento = item.Monto * venta.PorcentajeDesCuento / 100;
+                    //Inventarios inventario = item.Inventarios;
+                     //item.MontoDescuento = item.Monto* venta.PorcentajeDesCuento / 100;
                     _dbContext.SaveChanges();
                 }
                 venta.MontoDescuento = venta.SubTotal * venta.PorcentajeDesCuento / 100;
@@ -110,7 +108,18 @@ namespace Inventario.BL.Funcionalidades.Ventas
             Venta venta = ObtengaUnaVentaPorId(id);
             if (!LaVentaEstaTerminada(venta))
             {
+
                 venta.PorcentajeDesCuento = decuento;
+                decimal porcejtaje = venta.PorcentajeDesCuento;
+                decimal porcentajeDescuento = porcejtaje  / 100;
+                foreach (var item in venta.VentaDetalles)
+                {
+                    item.Monto = item.Precio * item.Cantidad;
+                    item.MontoDescuento = 0;
+                    item.MontoDescuento = item.Monto * porcentajeDescuento;
+                    item.Monto -= item.MontoDescuento;
+
+                }
                 _dbContext.Update(venta);
                 _dbContext.SaveChanges();
             }
@@ -135,5 +144,7 @@ namespace Inventario.BL.Funcionalidades.Ventas
         {
             return venta.Estado == EstadoVenta.Terminada;
         }
+
+       
     }
 }
