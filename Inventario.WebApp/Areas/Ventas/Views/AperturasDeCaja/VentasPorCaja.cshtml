@@ -5,13 +5,6 @@
     ViewData["Title"] = "Ventas";
 }
 
-<div>
-    <label asp-for="Usuario.UserName" ></label>
-    <input type="tex" readonly="readonly" asp-for="Usuario.UserName" />
-
-    <label asp-for="Caja.Id"></label>
-    <input type="tex" readonly="readonly" asp-for="Caja.Id" />
-</div>
 
 <div class="container">
     <div class="row justify-content-center">
@@ -19,6 +12,14 @@
             <div class="card">
                 <div class="card-header">
                     <h4 class="card-heading">Ventas</h4>
+                    <div>
+                        <label asp-for="Usuario.UserName">Usuario:</label>
+                        <input type="tex" readonly="readonly" asp-for="Usuario.UserName" />
+
+                        <label asp-for="Caja.Id">ID:</label>
+                        <input type="tex" readonly="readonly" asp-for="Caja.Id" />
+                    </div>
+
                 </div>
                 <div class="card-body">
                     <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
@@ -32,13 +33,9 @@
                                     <td>% descuento</td>
                                     <td>Descuento</td>
                                     <td>Total</td>
+                                    <td>Tipo de pago</td>
                                     <td>Estado</td>
-                                    <td></td>
-
-
-                                    
-
-                                    <th></th>
+                              
                                 </tr>
                             </thead>
                             <tbody>
@@ -54,14 +51,7 @@
                                         <td>@Html.DisplayFor(modelItem => item.Total)</td>
                                         <td>@Html.DisplayFor(modelItem => item.TipoDePago)</td>
                                         <td>@Html.DisplayFor(modelItem => item.Estado)</td>
-                                      
 
-
-                                        <td>
-                                            @*@Html.ActionLink("Ver Detalles", "DetallesCajaCerrada", new { id = item.Id }, new { @class="btn btn-primary" }*@)
-
-                                           
-                                        </td>
                                     </tr>
                                 }
                             </tbody>

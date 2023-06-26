@@ -8,16 +8,16 @@
     decimal TotalSinpeMovil = 0;
     decimal Total = 0;
 
-    if(Model.Totales != null)
+    if (Model.Totales != null)
     {
-         TotalEfectivo = Model.Totales.GetValueOrDefault(Enum.GetName(typeof(TipoDePago), 1)).Sum(t => t.Total);
-         TotalTarheta = Model.Totales.GetValueOrDefault(Enum.GetName(typeof(TipoDePago), 2)).Sum(t => t.Total);
-         TotalSinpeMovil = Model.Totales.GetValueOrDefault(Enum.GetName(typeof(TipoDePago), 3)).Sum(t => t.Total);
+        TotalEfectivo = Model.Totales.GetValueOrDefault(Enum.GetName(typeof(TipoDePago), 1)).Sum(t => t.Total);
+        TotalTarheta = Model.Totales.GetValueOrDefault(Enum.GetName(typeof(TipoDePago), 2)).Sum(t => t.Total);
+        TotalSinpeMovil = Model.Totales.GetValueOrDefault(Enum.GetName(typeof(TipoDePago), 3)).Sum(t => t.Total);
         Total = TotalEfectivo + TotalTarheta + TotalSinpeMovil;
 
     }
-    
-    
+
+
 }
 
 
@@ -26,110 +26,124 @@
     <div b-xnbhh5729m="" class="container">
         <main b-xnbhh5729m="" role="main" class="pb-3">
 
-            <div class="text-center">
-                @if(Model.TieneUnaCajaAbierta)
-                {
-                    <h2 style="color:aliceblue;" id="toggle-visibility">
-                        El usuario  <code style="color:blueviolet;">@Model.Usuario.UserName</code> ya tiene una caja abierta <a class="anchor-link" href="#toggle-visibility" aria-label="Link to this section: Toggle visibility"></a>
-                    </h2>
-                   @* La caja que actualmente esta abierta *@
 
-                    <div class="card-body">
-                        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
-                            <table class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th>Id</th>
-                                        <th>Fecha de Apertura</th>
-                                        <th>Ventas</th>
-                                       
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                   
-                                        <tr>
-                                            <td>@Html.DisplayFor(i => Model.Caja.Id)</td>
-                                            <td>@Html.DisplayFor(i=> Model.Caja.FechaDeInicio)</td>
-                                            <td>@Html.DisplayFor(i=> Model.Caja.Ventas.Count)</td>
-                                            <td>
-                                            <a style="margin-block:20px;" class="btn btn-primary" asp-action="VentasPorCaja" asp-route-id="@Model.Caja.Id">Ver Ventas</a>
+            @if (Model.TieneUnaCajaAbierta)
+            {
 
-                                            </td>
-                                        </tr>
-                                    
-                                </tbody>
-                            </table>
-                          
-                        </div>
-                    </div>
-                    @if(Model.Totales != null)
-                    {
-                        <div class="card-body">
-                            <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                <div class="row justify-content-center">
+
+                    <div class="col-lg-6 mb-5">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 id="toggle-visibility">
+                                    El usuario  <code style="color:blueviolet;">@Model.Usuario.UserName</code> ya tiene una caja abierta <a class="anchor-link" href="#toggle-visibility" aria-label="Link to this section: Toggle visibility"></a>
+                                </h2>
+
+                            </div>
+                            <div class="card-body">
                                 <table class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
                                     <thead>
                                         <tr>
+                                            <th>Id</th>
+                                            <th>Fecha de Apertura</th>
+                                            <th>Ventas</th>
 
-                                            <th>Efectivo</th>
-                                            <th>Tarjeta</th>
-                                            <th>Sinpe Movil</th>
-
-                                            <th>Total Caja </th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
 
                                         <tr>
-                                            <td>@Html.DisplayFor(i => TotalEfectivo)</td>
-                                            <td>@Html.DisplayFor(i=> TotalTarheta)</td>
-                                            <td>@Html.DisplayFor(i=> TotalSinpeMovil)</td>
-                                            <td>@Html.DisplayFor(i=> Total)</td>
+                                            <td>@Html.DisplayFor(i => Model.Caja.Id)</td>
+                                            <td>@Html.DisplayFor(i=> Model.Caja.FechaDeInicio)</td>
+                                            <td>@Html.DisplayFor(i=> Model.Caja.Ventas.Count)</td>
+                                            <td>
+                                                <a style="margin-block:20px;" class="btn btn-primary" asp-action="VentasPorCaja" asp-route-id="@Model.Caja.Id">Ver Ventas</a>
 
-
+                                            </td>
                                         </tr>
 
                                     </tbody>
                                 </table>
-                                <a asp-action="CerrarLaCaja" class="btn btn-primary" asp-route-id="@Model.Caja.Id">Cerrar Caja</a>
+
                             </div>
                         </div>
-
-                    }
-                   
-
-                }
-                else
-                {
-                    <div class="container">
-                        <h1 class="jumbotron-heading">  </h1>
-                        <code style="color:blueviolet;">@Model.Usuario.UserName</code>
-                        <p class="lead text-muted">¡Bienvenido/a al sistema de ventas!</p>
-                        <p>
-                            
-                            <a asp-action="AbrirCaja" class="btn btn-primary my-2">Abrir una Caja</a>
-                        </p>
                     </div>
-                    
-                }
-            </div>
-            @if(Model.Cajas.Count > 0)
-            {
-                <div>
-                    <h2 style="color:aliceblue;" id="toggle-visibility"> Cajas cerradas </h2>
-                    @Html.Partial("ListaDeCajasCerradas", Model)
-
                 </div>
-            }
-       
-            <div b-xnbhh5729m="" style="margin-block: 12%">
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="btn btn-secondary my-2">Regresar al home</a>
-            </div>
-            
 
-        </main>
+                @if (Model.Totales != null)
+                {
+                    <div class="row justify-content-center">
+
+                        <div class="col-lg-6 mb-5">
+                            <div class="card">
+                               
+                                <div class="card-body">
+                                    <table class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+
+                                                <th>Efectivo</th>
+                                                <th>Tarjeta</th>
+                                                <th>Sinpe Movil</th>
+
+                                                <th>Total Caja </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            <tr>
+                                                <td>@Html.DisplayFor(i => TotalEfectivo)</td>
+                                                <td>@Html.DisplayFor(i=> TotalTarheta)</td>
+                                                <td>@Html.DisplayFor(i=> TotalSinpeMovil)</td>
+                                                <td>@Html.DisplayFor(i=> Total)</td>
+
+
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                    <a asp-action="CerrarLaCaja" class="btn btn-primary" asp-route-id="@Model.Caja.Id">Cerrar Caja</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+
+
+            }
+            else
+            {
+                <div class="container">
+                    <h1 class="jumbotron-heading">  </h1>
+                    <code style="color:blueviolet;">@Model.Usuario.UserName</code>
+                    <p class="lead text-muted">¡Bienvenido/a al sistema de ventas!</p>
+                    <p>
+
+                        <a asp-action="AbrirCaja" class="btn btn-primary my-2">Abrir una Caja</a>
+                    </p>
+                </div>
+
+            }
     </div>
+    @if (Model.Cajas.Count > 0)
+    {
+        <div>
+            <h2 style="color:aliceblue;" id="toggle-visibility"> Cajas cerradas </h2>
+            @Html.Partial("ListaDeCajasCerradas", Model)
+
+        </div>
+    }
+
+    <div b-xnbhh5729m="" style="margin-block: 12%">
+        <a asp-area="" asp-controller="Home" asp-action="Index" class="btn btn-secondary my-2">Regresar al home</a>
+    </div>
+
+
+    </main>
+</div>
 </div>
 
 
-   
+
