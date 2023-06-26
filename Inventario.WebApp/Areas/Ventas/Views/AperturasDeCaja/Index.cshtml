@@ -6,12 +6,15 @@
     decimal TotalEfectivo = 0;
     decimal TotalTarheta = 0;
     decimal TotalSinpeMovil = 0;
+    decimal Total = 0;
 
     if(Model.Totales != null)
     {
          TotalEfectivo = Model.Totales.GetValueOrDefault(Enum.GetName(typeof(TipoDePago), 1)).Sum(t => t.Total);
          TotalTarheta = Model.Totales.GetValueOrDefault(Enum.GetName(typeof(TipoDePago), 2)).Sum(t => t.Total);
          TotalSinpeMovil = Model.Totales.GetValueOrDefault(Enum.GetName(typeof(TipoDePago), 3)).Sum(t => t.Total);
+        Total = TotalEfectivo + TotalTarheta + TotalSinpeMovil;
+
     }
     
     
@@ -72,7 +75,7 @@
                                             <th>Tarjeta</th>
                                             <th>Sinpe Movil</th>
 
-                                            <th></th>
+                                            <th>Total Caja </th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -81,6 +84,8 @@
                                             <td>@Html.DisplayFor(i => TotalEfectivo)</td>
                                             <td>@Html.DisplayFor(i=> TotalTarheta)</td>
                                             <td>@Html.DisplayFor(i=> TotalSinpeMovil)</td>
+                                            <td>@Html.DisplayFor(i=> Total)</td>
+
 
                                         </tr>
 
