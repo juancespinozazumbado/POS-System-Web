@@ -2,15 +2,16 @@
 
 namespace Inventario.BL.Funcionalidades.Usuarios.Interfaces
 {
-    public interface IrepositorioDeUsuarios
+    public interface IRepositorioDeUsuarios
     {
 
         public void AgregueUnUsuario(AplicationUser user);
 
-        public List<AplicationUser> ListeLosUsuarios();   
-        
-        public AplicationUser ObtengaUnUsuarioPorId(string id);     
-        
+        public List<AplicationUser> ListeLosUsuarios();
+
+        public AplicationUser ObtengaUnUsuarioPorId(string id);
+        public AplicationUser ObtengaUnUsuarioPorEmail(string email);
+
         public void ElimineUnUsuario(AplicationUser usuario);
 
 

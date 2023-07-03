@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Inventario.BL.Funcionalidades.Usuarios
 {
-    public class RepositorioDeUsuarios : IrepositorioDeUsuarios
+    public class RepositorioDeUsuarios : IRepositorioDeUsuarios
     {
 
         private readonly InventarioDBContext dbContext;
@@ -63,7 +63,7 @@ namespace Inventario.BL.Funcionalidades.Usuarios
 
         public AplicationUser ObtengaUnUsuarioPorEmail(string email)
         {
-            return ListeLosUsuarios().Find(u => u.Email.Equals(email));
+            return ListeLosUsuarios().FirstOrDefault(u => u.Email.Equals(email));
         }
     }
 }

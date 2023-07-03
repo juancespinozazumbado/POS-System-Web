@@ -24,20 +24,10 @@ namespace Inventario.WebApp.Areas.Administracion.Controllers
             _RepositorioDeInventarios = new(context);
             _RpepositorioDeUsuarios = new(context);
         }
-        public ActionResult Index(string nombre )
+        public ActionResult Index()
         {
-            List<Inventarios> ListaDeItems;
-
-            if (nombre == null)
-            {
-                ListaDeItems = (List<Inventarios>)_RepositorioDeInventarios.listeElInventarios();
-            }
-            else
-            {
-                ListaDeItems = (List<Inventarios>)_RepositorioDeInventarios.ListarInventariosPorNombre(nombre);
-            }
-
-            return View(ListaDeItems);
+            List<Inventarios> inventarios = (List<Inventarios>)_RepositorioDeInventarios.listeElInventarios();
+            return View(inventarios);
         }
 
         // GET: AjustestDeInventarioController/Details/5
