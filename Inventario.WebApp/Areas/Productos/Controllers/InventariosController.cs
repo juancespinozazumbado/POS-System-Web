@@ -11,10 +11,10 @@ namespace Inventario.WebApp.Areas.Administracion.Controllers
     [Authorize]
     public class InventariosController : Controller
     {
-        private readonly ReporitorioDeInventarios _Repo;
+        private readonly ReporitorioDeInventarios _RepositorioDeInventarios;
         public InventariosController(InventarioDBContext contexto)
         {
-            _Repo = new ReporitorioDeInventarios(contexto);
+            _RepositorioDeInventarios = new ReporitorioDeInventarios(contexto);
         }
 
 
@@ -25,10 +25,10 @@ namespace Inventario.WebApp.Areas.Administracion.Controllers
 
             if (nombre == null)
             {
-                ListaDeItems = (List<Inventarios>)_Repo.listeElInventarios();
+                ListaDeItems = (List<Inventarios>)_RepositorioDeInventarios.listeElInventarios();
             }else
             {
-                ListaDeItems = (List<Inventarios>)_Repo.ListarInventariosPorNombre(nombre);    
+                ListaDeItems = (List<Inventarios>)_RepositorioDeInventarios.ListarInventariosPorNombre(nombre);    
             }
             
             return View(ListaDeItems);
@@ -37,7 +37,7 @@ namespace Inventario.WebApp.Areas.Administracion.Controllers
         // GET: InventariosController/Details/5
         public ActionResult Details(int id)
         {
-            Inventarios inventario = _Repo.ObetenerInevtarioPorId(id);
+            Inventarios inventario = _RepositorioDeInventarios.ObetenerInevtarioPorId(id);
             return View(inventario);
         }
 
@@ -56,7 +56,7 @@ namespace Inventario.WebApp.Areas.Administracion.Controllers
             try
             {
 
-                _Repo.AgregarInventario(inventario);
+                _RepositorioDeInventarios.AgregarInventario(inventario);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -68,7 +68,7 @@ namespace Inventario.WebApp.Areas.Administracion.Controllers
         // GET: InventariosController/Edit/5
         public ActionResult Edit(int id)
         {
-            Inventarios inventario = _Repo.ObetenerInevtarioPorId(id);
+            Inventarios inventario = _RepositorioDeInventarios.ObetenerInevtarioPorId(id);
             return View(inventario);
         }
 
@@ -79,7 +79,7 @@ namespace Inventario.WebApp.Areas.Administracion.Controllers
         {
             try
             {
-                _Repo.EditarInventario(inventario);
+                _RepositorioDeInventarios.EditarInventario(inventario);
                 return RedirectToAction(nameof(Index));
             }
             catch

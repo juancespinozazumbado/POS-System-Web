@@ -20,15 +20,18 @@ namespace Inventario.Models.Dominio.Ventas
         public TipoDePago TipoDePago { get; set; }
 
         [Column("Total")]
+        [DisplayFormat(DataFormatString = "{0:C0}")]
         public decimal Total { get; set; }
 
         [Column("SubTotal")]
+        [DisplayFormat(DataFormatString = "{0:C0}")]
         public decimal SubTotal { get; set; }
 
         [Column("PorcentajeDesCuento")]
         public int PorcentajeDesCuento { get; set; }
 
         [Column("MontoDescuento")]
+        [DisplayFormat(DataFormatString = "{0:C0}")]
         public decimal MontoDescuento { get; set; }
 
         [Column("UserId")]
