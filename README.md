@@ -5,6 +5,7 @@
 
 
 ## Projecto programado 
+   - Version MVC
 
 ## Modulos de aplicacion:
 #### Usuarios
