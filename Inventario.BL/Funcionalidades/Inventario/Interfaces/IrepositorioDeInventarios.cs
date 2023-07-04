@@ -2,7 +2,7 @@
 
 namespace Inventario.BL.Funcionalidades.Inventario.Interfaces
 {
-    public interface IrepositorioDeInventarios
+    public interface IRepositorioDeInventarios
     {
         public void AgregarInventario(Inventarios inventario);
         public IEnumerable<Inventarios> listeElInventarios();

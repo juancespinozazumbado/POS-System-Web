@@ -6,6 +6,7 @@ using Inventario.SI.Modelos.Dtos.Usuarios;
 using Inventario.SI.Servicios.Autenticacion.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
 
@@ -111,7 +112,7 @@ namespace Inventario.SI.Servicios.Autenticacion
             return null;
         }
 
-        public async Task<RegistroResponsetDto> Registro(RegistroRequestDto registroRequest)
+        public async Task<ActionResult<Object>> Registro(RegistroRequestDto registroRequest)
         {
 
             AplicationUser usuaurio = new()
@@ -129,7 +130,7 @@ namespace Inventario.SI.Servicios.Autenticacion
                     usuaurio = _repositorioDeUsuarios.ObtengaUnUsuarioPorEmail(registroRequest.Correo);
 
                     var userId = await _userManager.GetUserIdAsync((AplicationUser)usuaurio);
-                   
+
                     RegistroResponsetDto respuesta = new()
                     {
                         Nombre = usuaurio.UserName,
@@ -138,14 +139,14 @@ namespace Inventario.SI.Servicios.Autenticacion
 
                     return respuesta;
                 }
+                else return resultado.Errors.ToList();
                
 
             }catch(Exception ex)
             {
-                Console.Write(ex.ToString());       
+                Console.Write(ex.ToString());
+                return ex;
             }
-
-            return null;
         }
         
     }

@@ -28,9 +28,9 @@ namespace Inventario.SI.Controllers.Usuarios
             try
             {
                 var respuesta =  await _servicioDeAutenticacion.Registro(request);
-                if(respuesta != null) 
+                if(respuesta.Value.GetType() == typeof(RegistroResponsetDto)) 
                 {
-                    return Ok(respuesta);   
+                    return Ok(respuesta.Value);   
                 }else
                 {
                     return BadRequest(respuesta);
