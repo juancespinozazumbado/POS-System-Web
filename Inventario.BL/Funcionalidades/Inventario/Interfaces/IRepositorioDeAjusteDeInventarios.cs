@@ -10,11 +10,11 @@ namespace Inventario.BL.Funcionalidades.Inventario.Interfaces
     public interface IRepositorioDeAjusteDeInventarios
     {
 
-        public IEnumerable<AjusteDeInventario> ListarAjustesPorId(int id);
+        public Task<List<AjusteDeInventario>> ListarAjustesPorId(int id);
 
-        public void AgegarAjusteDeInventario(int id, AjusteDeInventario ajusteDeInventario);
+        public Task<bool> AgegarAjusteDeInventario(int id, AjusteDeInventario ajusteDeInventario);
 
-        public AjusteDeInventario ObtenerAjustePorId(int id);
+        public Task<AjusteDeInventario> ObtenerAjustePorId(int id);
 
 
     }

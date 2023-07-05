@@ -28,16 +28,16 @@ namespace Inventario.WebApp.Areas.Administracion.Controllers
                 ListaDeItems = await _RepositorioDeInventarios.listeElInventarios();
             }else
             {
-                ListaDeItems = (List<Inventarios>)_RepositorioDeInventarios.ListarInventariosPorNombre(nombre);    
+                ListaDeItems = await _RepositorioDeInventarios.ListarInventariosPorNombre(nombre);    
             }
             
             return View(ListaDeItems);
         }
 
         // GET: InventariosController/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(int id)
         {
-            Inventarios inventario = _RepositorioDeInventarios.ObetenerInevtarioPorId(id);
+            Inventarios inventario = await _RepositorioDeInventarios.ObetenerInevtarioPorId(id);
             return View(inventario);
         }
 
@@ -66,9 +66,9 @@ namespace Inventario.WebApp.Areas.Administracion.Controllers
         }
 
         // GET: InventariosController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
-            Inventarios inventario = _RepositorioDeInventarios.ObetenerInevtarioPorId(id);
+            Inventarios inventario = await _RepositorioDeInventarios.ObetenerInevtarioPorId(id);
             return View(inventario);
         }
 

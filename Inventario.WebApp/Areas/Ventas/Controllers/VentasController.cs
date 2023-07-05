@@ -90,7 +90,7 @@ namespace Inventario.WebApp.Areas.Ventas.Controllers
         {
 
             // Obtener el item seleccionado del inventario
-            var itemDelInventario = ReporitorioDeInventarios.ObetenerInevtarioPorId(modelo.Detalles.Id_inventario);
+            var itemDelInventario = await ReporitorioDeInventarios.ObetenerInevtarioPorId(modelo.Detalles.Id_inventario);
 
             // Verificar si hay suficiente cantidad disponible en el inventario
             if (itemDelInventario.Cantidad >= modelo.Detalles.Cantidad && modelo.Detalles.Cantidad > 0)
@@ -132,7 +132,7 @@ namespace Inventario.WebApp.Areas.Ventas.Controllers
         {
             try
             {
-                Inventarios inventario = ReporitorioDeInventarios.ObetenerInevtarioPorId(modelo.Detalles.Id_inventario);
+                Inventarios inventario = await ReporitorioDeInventarios.ObetenerInevtarioPorId(modelo.Detalles.Id_inventario);
                 inventario.Cantidad += modelo.Detalles.Cantidad;
                 ReporitorioDeInventarios.EditarInventario(inventario);
 

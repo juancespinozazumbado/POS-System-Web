@@ -3,8 +3,6 @@ using Inventario.SI.Servicios.Autenticacion;
 using Inventario.SI.Servicios.Autenticacion.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace Inventario.SI.Controllers.Usuarios
 {
     [Route("api/[controller]")]
@@ -20,7 +18,7 @@ namespace Inventario.SI.Controllers.Usuarios
         }
 
 
-        // PUT api/<Autenticacion>/5
+        // PUT api/Autenticacion/Registro
         [HttpPost("Registro")]
         public async Task<ActionResult<RegistroResponseDto>> Registro([FromBody] RegistroRequestDto request)
         {
@@ -46,8 +44,7 @@ namespace Inventario.SI.Controllers.Usuarios
             
         } 
 
-
-        // POST api/Autenticacion/Login/5
+        // POST api/Autenticacion/Login/
         [HttpPost("Login")]
         public async Task<ActionResult<LoginRequestDto>> Login ([FromBody] LoginRequestDto request)
         {

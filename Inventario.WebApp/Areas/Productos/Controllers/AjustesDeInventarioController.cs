@@ -32,18 +32,18 @@ namespace Inventario.WebApp.Areas.Administracion.Controllers
 
         // GET: AjustestDeInventarioController/Details/5
 
-        public ActionResult ListaDeAjustes(int id)
+        public async Task<ActionResult> ListaDeAjustes(int id)
         {
-            Inventarios invenntario = _RepositorioDeInventarios.ObetenerInevtarioPorId(id);
+            Inventarios invenntario = await _RepositorioDeInventarios.ObetenerInevtarioPorId(id);
             return View(invenntario);
         }
 
-        public ActionResult DetalleAjuste(int InventarioId, int Id)
+        public async Task<ActionResult> DetalleAjuste(int InventarioId, int Id)
         {
 
             string id = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             AplicationUser usaurioActual = _RpepositorioDeUsuarios.ObtengaUnUsuarioPorId(id);
-            Inventarios invenntario = _RepositorioDeInventarios.ObetenerInevtarioPorId(InventarioId);
+            Inventarios invenntario = await _RepositorioDeInventarios.ObetenerInevtarioPorId(InventarioId);
             AjusteDeInventario ajuste = invenntario.Ajustes.Where(a => a.Id == Id).FirstOrDefault();
             AjusteViweModel modelo = new AjusteViweModel {Inventario = invenntario, Ajuste = ajuste , usuario = usaurioActual };
             return View(modelo);
@@ -51,9 +51,9 @@ namespace Inventario.WebApp.Areas.Administracion.Controllers
 
         // GET: AjustestDeInventarioController/Create
 
-        public ActionResult CrearAjuste(int id)
+        public async Task<ActionResult> CrearAjuste(int id)
         {
-            Inventarios inventario = _RepositorioDeInventarios.ObetenerInevtarioPorId(id);
+            Inventarios inventario = await _RepositorioDeInventarios.ObetenerInevtarioPorId(id);
 
             AjusteViweModel ajuste = new();
             ajuste.Inventario = inventario;

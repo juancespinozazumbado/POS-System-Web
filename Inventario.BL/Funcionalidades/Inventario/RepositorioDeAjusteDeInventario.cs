@@ -14,39 +14,45 @@ namespace Inventario.BL.Funcionalidades.Inventario
         }
 
 
-        public void AgegarAjusteDeInventario(int id, AjusteDeInventario ajuste)
+        public async Task<bool> AgegarAjusteDeInventario(int id, AjusteDeInventario ajuste)
         {
-            Inventarios inventario = _dbContext.Inventarios.Include(a=> a.Ajustes).ToList().Find(i => i.Id == id);
+            var inventarios = await _dbContext.Inventarios.Include(a => a.Ajustes).ToListAsync();
+            Inventarios inventario = inventarios.Find(i => i.Id == id);
 
-            if (ajuste.Tipo == TipoAjuste.Aumento)
+            if (inventario != null)
             {
-                inventario.Cantidad += ajuste.Ajuste;
-                inventario.Ajustes.Add(ajuste);
-                _dbContext.Inventarios.Update(inventario);
-                _dbContext.SaveChanges();
+                if (ajuste.Tipo == TipoAjuste.Aumento)
+                {
+                    inventario.Cantidad += ajuste.Ajuste;
+                    inventario.Ajustes.Add(ajuste);
+                    _dbContext.Inventarios.Update(inventario);
+                    await _dbContext.SaveChangesAsync();
 
+                }
+                if (inventario.Cantidad >= ajuste.Ajuste && ajuste.Tipo == TipoAjuste.Disminucion)
+                {
+
+                    inventario.Cantidad += -(ajuste.Ajuste);
+                    inventario.Ajustes.Add(ajuste);
+                    _dbContext.Inventarios.Update(inventario);
+                    await _dbContext.SaveChangesAsync();
+
+                }
+                return true;
             }
-            if (inventario.Cantidad >= ajuste.Ajuste && ajuste.Tipo == TipoAjuste.Disminucion) 
-            {
-
-                inventario.Cantidad += -(ajuste.Ajuste);
-                inventario.Ajustes.Add(ajuste);
-                _dbContext.Inventarios.Update(inventario);
-                _dbContext.SaveChanges();
-
-            }
-
+            else return false;
             
         }
 
-        public IEnumerable<AjusteDeInventario> ListarAjustesPorId(int id)
+        public async Task<List<AjusteDeInventario>> ListarAjustesPorId(int id)
         {
             return _dbContext.Inventarios.ToList().Find(i => i.Id == id).Ajustes;  
         }
 
-        public AjusteDeInventario ObtenerAjustePorId(int id)
+        public async Task<AjusteDeInventario> ObtenerAjustePorId(int id)
         {
-            return _dbContext.AjusteDeInventarios.ToList().Find(Aj => Aj.Id == id);  
+            var ajustes = await _dbContext.AjusteDeInventarios.ToListAsync();
+            return ajustes.Find(Aj => Aj.Id == id);  
         }
     }
 }

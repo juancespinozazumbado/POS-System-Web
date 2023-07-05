@@ -14,22 +14,26 @@ namespace Inventario.BL.Funcionalidades.Inventario
         {
             _dbContext = dbContext;
         }
-        public void AgregarInventario(Inventarios inventario)
+        public async Task<bool> AgregarInventario(Inventarios inventario)
         {
-            _dbContext.Inventarios.Add(inventario);
-            _dbContext.SaveChanges();
+            await _dbContext.Inventarios.AddAsync(inventario);
+            await _dbContext.SaveChangesAsync();
+            return true;
         }
 
-        public void EditarInventario(Inventarios inventario)
+        public async Task<bool> EditarInventario(Inventarios inventario)
         {
-            _dbContext.Inventarios.Update(inventario);
-            _dbContext.SaveChanges();
+             _dbContext.Inventarios.Update(inventario);
+            await _dbContext.SaveChangesAsync();
+            return true;
         }
 
-        public void EliminarInventario(Inventarios inventario)
+        public async Task<bool> EliminarInventario(Inventarios inventario)
         {
-            _dbContext.Inventarios.Remove(inventario);
-            _dbContext.SaveChanges();
+             _dbContext.Inventarios.Remove(inventario);
+            await _dbContext.SaveChangesAsync();
+            return true;
+
         }
 
         public async Task<List<Inventarios>> listeElInventarios()
@@ -38,14 +42,15 @@ namespace Inventario.BL.Funcionalidades.Inventario
             return Lista;
         }
 
-        public Inventarios ObetenerInevtarioPorId(int id)
+        public async Task<Inventarios> ObetenerInevtarioPorId(int id)
         {
-            return _dbContext.Inventarios.Include(a => a.Ajustes).ToList().Find(i => i.Id == id);
+            var Inventarios = await _dbContext.Inventarios.Include(a => a.Ajustes).ToListAsync();
+            return Inventarios.Find(i => i.Id == id);
         }
 
-        public IEnumerable<Inventarios> ListarInventariosPorNombre(string nombre)
+        public async Task<List<Inventarios>> ListarInventariosPorNombre(string nombre)
         {
-            return _dbContext.Inventarios.Where(i => i.Nombre.Contains(nombre)).ToList();
+            return await _dbContext.Inventarios.Where(i => i.Nombre.Contains(nombre)).ToListAsync();
         }
     }
 }
