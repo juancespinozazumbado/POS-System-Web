@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Inventario.BL.Funcionalidades.Inventario
 {
-    public class ReporitorioDeInventarios : IrepositorioDeInventarios
+    public class ReporitorioDeInventarios : IRepositorioDeInventarios
     {
         private readonly InventarioDBContext _dbContext;
         public ReporitorioDeInventarios(InventarioDBContext dbContext)
@@ -32,9 +32,10 @@ namespace Inventario.BL.Funcionalidades.Inventario
             _dbContext.SaveChanges();
         }
 
-        public IEnumerable<Inventarios> listeElInventarios()
+        public async Task<List<Inventarios>> listeElInventarios()
         {
-            return _dbContext.Inventarios.Include(a=> a.Ajustes).ToList();
+            List<Inventarios> Lista = await _dbContext.Inventarios.Include(a => a.Ajustes).ToListAsync();
+            return Lista;
         }
 
         public Inventarios ObetenerInevtarioPorId(int id)

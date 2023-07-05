@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Inventario.BL.Funcionalidades.Inventario.Interfaces
 {
-    public interface RepositorioDeInventarios
+    public interface IRepositorioDeAjusteDeInventarios
     {
 
         public IEnumerable<AjusteDeInventario> ListarAjustesPorId(int id);

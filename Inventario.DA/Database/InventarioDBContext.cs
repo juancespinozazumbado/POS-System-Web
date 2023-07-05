@@ -21,7 +21,6 @@ namespace Inventario.DA.Database
         public DbSet<Venta> Ventas { get; set; }
         public DbSet<VentaDetalle> VentaDetalles { get; set; }
         public DbSet<AperturaDeCaja> AperturasDeCaja { get; set; }
-
         public DbSet<AplicationUser> Usuarios { get; set; } 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -31,7 +30,7 @@ namespace Inventario.DA.Database
 
 
 
-           builder.Ignore<AplicationUser>();
+            builder.Ignore<AplicationUser>();
 
             builder.Entity<AplicationUser>().ToTable("AspNetUsers");
 

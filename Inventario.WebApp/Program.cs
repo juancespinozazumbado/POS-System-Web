@@ -13,6 +13,9 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<AplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<InventarioDBContext>();
+
+
+
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddMemoryCache();

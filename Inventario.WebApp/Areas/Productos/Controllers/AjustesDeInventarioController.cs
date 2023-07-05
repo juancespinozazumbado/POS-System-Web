@@ -24,20 +24,10 @@ namespace Inventario.WebApp.Areas.Administracion.Controllers
             _RepositorioDeInventarios = new(context);
             _RpepositorioDeUsuarios = new(context);
         }
-        public ActionResult Index(string nombre )
+        public async Task<ActionResult> Index()
         {
-            List<Inventarios> ListaDeItems;
-
-            if (nombre == null)
-            {
-                ListaDeItems = (List<Inventarios>)_RepositorioDeInventarios.listeElInventarios();
-            }
-            else
-            {
-                ListaDeItems = (List<Inventarios>)_RepositorioDeInventarios.ListarInventariosPorNombre(nombre);
-            }
-
-            return View(ListaDeItems);
+            List<Inventarios> inventarios = await _RepositorioDeInventarios.listeElInventarios();
+            return View(inventarios);
         }
 
         // GET: AjustestDeInventarioController/Details/5
@@ -82,7 +72,7 @@ namespace Inventario.WebApp.Areas.Administracion.Controllers
                 int id = ajustes.Inventario.Id;
                 ajustes.Ajuste.Fecha = DateTime.Now;
                 ajustes.Ajuste.Id_Inventario = id;
-                ajustes.Ajuste.UserId = "";
+                ajustes.Ajuste.UserId = User.Identity.Name;
                 _RepositorioDeAjustes.AgegarAjusteDeInventario(id, ajustes.Ajuste);
                 return RedirectToAction(nameof(Index));
             }

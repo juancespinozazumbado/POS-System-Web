@@ -19,13 +19,13 @@ namespace Inventario.WebApp.Areas.Administracion.Controllers
 
 
         // GET: InventariosController
-        public ActionResult Index( string nombre)
+        public async Task<ActionResult> Index( string nombre)
         {
             List<Inventarios> ListaDeItems;
 
             if (nombre == null)
             {
-                ListaDeItems = (List<Inventarios>)_RepositorioDeInventarios.listeElInventarios();
+                ListaDeItems = await _RepositorioDeInventarios.listeElInventarios();
             }else
             {
                 ListaDeItems = (List<Inventarios>)_RepositorioDeInventarios.ListarInventariosPorNombre(nombre);    

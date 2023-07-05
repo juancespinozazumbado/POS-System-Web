@@ -2,10 +2,10 @@
 
 namespace Inventario.BL.Funcionalidades.Inventario.Interfaces
 {
-    public interface IrepositorioDeInventarios
+    public interface IRepositorioDeInventarios
     {
         public void AgregarInventario(Inventarios inventario);
-        public IEnumerable<Inventarios> listeElInventarios();
+        public Task<List<Inventarios>> listeElInventarios();
 
         public void EliminarInventario(Inventarios inventario);
 
