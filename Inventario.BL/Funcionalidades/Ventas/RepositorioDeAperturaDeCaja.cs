@@ -14,20 +14,20 @@ namespace Inventario.BL.Funcionalidades.Ventas
         {
             this.context = context;
         }
-        public IEnumerable<AperturaDeCaja> AperturasDeCajaPorUsuario(string idUsuario)
+        public async Task<List<AperturaDeCaja>> AperturasDeCajaPorUsuario(string idUsuario)
         {
-            List<AperturaDeCaja> AperturasDeCajaRegistradas = (List<AperturaDeCaja>)ListarAperturasDeCaja();
+            List<AperturaDeCaja> AperturasDeCajaRegistradas = await ListarAperturasDeCaja();
 
-            var CajasPorUsuario = from caja in AperturasDeCajaRegistradas
-                                  where caja.UserId.Equals(idUsuario)
-                                  select caja;
-
-            return CajasPorUsuario;
+            //var CajasPorUsuario = from caja in AperturasDeCajaRegistradas
+            //                      where caja.UserId.Equals(idUsuario)
+           
+            List<AperturaDeCaja> Cajas = AperturasDeCajaRegistradas.Where( c => c.UserId == idUsuario ).ToList();  
+            return Cajas;
         }
 
-        public void CerrarUnaAperturaDeCaja(int id)
+        public async Task<bool> CerrarUnaAperturaDeCaja(int id)
         {
-            AperturaDeCaja caja = ObtenerUnaAperturaDeCajaPorId( id);
+            AperturaDeCaja caja = await ObtenerUnaAperturaDeCajaPorId( id);
 
             if (caja != null && caja.estado == EstadoCaja.Abierta)
             {
@@ -40,14 +40,16 @@ namespace Inventario.BL.Funcionalidades.Ventas
                     caja.estado = EstadoCaja.Cerrada;
                     caja.FechaDeCierre = DateTime.Now;
                     context.AperturasDeCaja.Update(caja);
-                    context.SaveChanges();
+                    await context.SaveChangesAsync();
+                    return true;
                 }
             }
+            return false;
         }
 
-        public void CrearUnaAperturaDeCaja(AperturaDeCaja aperturaDeCaja)
+        public async  Task<bool> CrearUnaAperturaDeCaja(AperturaDeCaja aperturaDeCaja)
         {
-            var Cajas = ListarAperturasDeCaja();
+            var Cajas = await ListarAperturasDeCaja();
 
             var CajasAbiertas = from caja in Cajas
                                 where caja.estado == EstadoCaja.Abierta
@@ -57,32 +59,34 @@ namespace Inventario.BL.Funcionalidades.Ventas
             if (CajasAbiertas.Count() == 0)
             {
                 context.AperturasDeCaja.Add(aperturaDeCaja);
-                context.SaveChanges();
-
-            }
+               await  context.SaveChangesAsync();
+                return true;
+            }return false;
         }
 
-        public IEnumerable<AperturaDeCaja> ListarAperturasDeCaja()
+        public async Task<List<AperturaDeCaja>> ListarAperturasDeCaja()
         {
-            return context.AperturasDeCaja.Include(a => a.Ventas).ToList();
+            return await context.AperturasDeCaja.Include(a => a.Ventas).ThenInclude(v=> v.VentaDetalles).ToListAsync();
 
-        }
-
-
-        public bool LaCajaEstaCerrada(int id)
-        {
-            return ObtenerUnaAperturaDeCajaPorId(id).estado == EstadoCaja.Cerrada;
-        }
-
-        public AperturaDeCaja ObtenerUnaAperturaDeCajaPorId(int id)
-        {
-            return ListarAperturasDeCaja().Where(a => a.Id == id).FirstOrDefault();
         }
 
 
-        public Dictionary<string, List<Venta>> OtenerTotalesPorCaja(int id)
+        public async Task<bool> LaCajaEstaCerrada(int id)
         {
-            AperturaDeCaja Caja = ObtenerUnaAperturaDeCajaPorId(id);
+            var caja = await ObtenerUnaAperturaDeCajaPorId(id);
+            return caja.estado == EstadoCaja.Cerrada;
+        }
+
+        public async Task<AperturaDeCaja> ObtenerUnaAperturaDeCajaPorId(int id)
+        {
+            var aperturasExistentes = await ListarAperturasDeCaja();
+            return aperturasExistentes.Where(a => a.Id == id).FirstOrDefault();
+        }
+
+
+        public async Task<Dictionary<string, List<Venta>>> OtenerTotalesPorCaja(int id)
+        {
+            AperturaDeCaja Caja = await ObtenerUnaAperturaDeCajaPorId(id);
             Dictionary<string, List<Venta>> DiccionarioDeventas = new Dictionary<string, List<Venta>>();
 
             
@@ -92,15 +96,13 @@ namespace Inventario.BL.Funcionalidades.Ventas
                     {Enum.GetName(typeof(TipoDePago), 2), ObtenerElTotalDeVentasPorTarjeta(Caja)},
                     {Enum.GetName(typeof(TipoDePago), 3), ObtenerElTotalDeVentasPorSinpeMovil(Caja)},
                  };
-               
-            
 
             return DiccionarioDeventas;
         }
 
-        private List<Venta>? ObtenerElTotalDeVentasPorEfectivo(AperturaDeCaja caja)
+        private  List<Venta>? ObtenerElTotalDeVentasPorEfectivo(AperturaDeCaja caja)
         {
-            return (List<Venta>?)caja.Ventas.Where(a => a.TipoDePago == TipoDePago.Efectivo).ToList();
+            return  (List<Venta>?)caja.Ventas.Where(a => a.TipoDePago == TipoDePago.Efectivo).ToList();
         }
 
         private List<Venta>? ObtenerElTotalDeVentasPorTarjeta(AperturaDeCaja caja)

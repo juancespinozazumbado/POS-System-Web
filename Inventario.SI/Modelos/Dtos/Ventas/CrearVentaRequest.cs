@@ -2,5 +2,6 @@
 {
     public class CrearVentaRequest
     {
+        public string Cliente { get; set; }     
     }
 }

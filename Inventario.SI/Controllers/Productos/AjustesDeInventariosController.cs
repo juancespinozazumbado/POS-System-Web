@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Inventario.BL.Funcionalidades.Inventario.Interfaces;
+using Inventario.Models.Dominio.Productos;
+using Inventario.SI.Modelos.Dtos.Productos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Inventario.SI.Controllers.Productos
@@ -8,36 +11,67 @@ namespace Inventario.SI.Controllers.Productos
     [ApiController]
     public class AjustesDeInventariosController : ControllerBase
     {
-        // GET: api/<InventariosController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly IRepositorioDeAjusteDeInventarios _repositorioDeAjusteDeInventarios;
+        private readonly IRepositorioDeInventarios _repositorioDeInventarios;
+        public AjustesDeInventariosController(IRepositorioDeAjusteDeInventarios repositorioDeAjustesDeInventarios, 
+            IRepositorioDeInventarios repositorioDeInventarios)
         {
-            return new string[] { "value1", "value2" };
+            _repositorioDeInventarios = repositorioDeInventarios;
+            _repositorioDeAjusteDeInventarios = repositorioDeAjustesDeInventarios;
+        }
+
+
+        // GET: api/<InventariosController>
+        [HttpGet("{id}")]
+        public  async Task<ActionResult<List<AjusteDeInventario>>> listarAjustesdeInentario(int id)
+        {
+            var inventario = await _repositorioDeInventarios.ObetenerInevtarioPorId(id);
+            if(inventario != null)
+            {
+                return Ok(inventario);
+            }else { return BadRequest("No existe el inventario"); }  
+            
         }
 
         // GET api/<InventariosController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{id}/Detalle")]
+        public async Task<ActionResult<AjusteDeInventario>> VerElDetalleDeUnAjuste(int id, int id_detalle)
         {
-            return "value";
+            var inventario = await _repositorioDeInventarios.ObetenerInevtarioPorId(id);
+            if(inventario.Ajustes.Count ==0) return BadRequest("El inventario no tiene ajustes");
+            if (inventario != null)
+            {
+                var ajuste = inventario.Ajustes.Find( a => a.Id == id_detalle);
+                if (ajuste != null) { return Ok(ajuste); } else return BadRequest("No existe este ajuste");
+                return Ok(inventario);
+            }
+            else { return BadRequest("No existe el inventario"); }
+
         }
 
         // POST api/<InventariosController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [HttpPost("{id}")]
+        public async Task<ActionResult<bool>> CrearUnAjusteDeInventario(int id, [FromBody] CrearAjusteDeInventarioRequest request)
         {
-        }
+            var inventario = await _repositorioDeInventarios.ObetenerInevtarioPorId(id);
+            
+            if (inventario != null)
+            {
+                AjusteDeInventario ajusteDeInventario = new()
+                {
+                    Id_Inventario = id,
+                    UserId = request.Id_Usuario,
+                    Fecha = DateTime.Now,
+                    CantidadActual = inventario.Cantidad,
+                    Tipo = (TipoAjuste)request.TipoAjuste,
+                    Ajuste = request.Ajuste,
+                    Observaciones = request.Observaciones
 
-        // PUT api/<InventariosController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<InventariosController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+                };
+                await _repositorioDeAjusteDeInventarios.AgegarAjusteDeInventario(id, ajusteDeInventario);
+                return Ok(inventario);
+            }
+            else { return BadRequest("No existe el inventario"); }
         }
     }
 }

@@ -19,59 +19,65 @@ namespace Inventario.BL.Funcionalidades.Ventas
            
 
         }
-        public void AñadaUnDetalleAlaVenta(int idVenta, VentaDetalle item)
+        public async Task<bool> AñadaUnDetalleAlaVenta(int idVenta, VentaDetalle item)
         {
 
-            Venta venta = ObtengaUnaVentaPorId(idVenta);
+            Venta venta = await  ObtengaUnaVentaPorId(idVenta);
             if (!LaVentaEstaTerminada(venta))
             {
                 venta.VentaDetalles.Add(item);
                 _dbContext.Ventas.Update(venta);
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
+                return true;
             }
+            else return false;
         }
 
-        public void CreeUnaVenta(Venta venta)
+        public async Task<bool> CreeUnaVenta(Venta venta)
         {
-            _dbContext.Ventas.Add(venta);
-            _dbContext.SaveChanges();
+            await _dbContext.Ventas.AddAsync(venta);
+            await _dbContext.SaveChangesAsync();
+            return true;
 
 
         }
-        public void ElimineUnDetalleDeLaVenta(int idVenta, VentaDetalle item)
+        public async Task<bool> ElimineUnDetalleDeLaVenta(int idVenta, VentaDetalle item)
         {
-            Venta venta = ObtengaUnaVentaPorId(idVenta);
+            Venta venta = await ObtengaUnaVentaPorId(idVenta);
             if (!LaVentaEstaTerminada(venta))
             {
                 venta.VentaDetalles.Remove(item);
 
                 _dbContext.Ventas.Update(venta);
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
+                return true;
 
             }
+            else return false;
 
         }
 
-        public IEnumerable<Venta> ListeLasVentas()
+        public async Task<List<Venta>> ListeLasVentas()
         {
-            return _dbContext.Ventas.Include(v => v.VentaDetalles).ToList();
+            return await _dbContext.Ventas.Include(v => v.VentaDetalles).ToListAsync();
         }
 
-        public Venta? ObtengaUnaVentaPorId(int id)
+        public async Task<Venta> ObtengaUnaVentaPorId(int id)
         {
-            return _dbContext.Ventas.Include(v => v.VentaDetalles).ThenInclude(d => d.Inventarios)
-                             .ToList().Find(v => v.Id == id);
+            var ventas = await _dbContext.Ventas.Include(v => v.VentaDetalles).ThenInclude(d => d.Inventarios).ToListAsync();
+            return ventas.Find(v => v.Id == id);
         }
 
-        public IEnumerable<Venta> ListeLasVentasPorUsuario(string userId)
+        public async Task<List<Venta>> ListeLasVentasPorUsuario(string userId)
         {
-            return _dbContext.Ventas.Include(v => v.VentaDetalles).ThenInclude(d => d.Inventarios)
-                             .ToList().Where(v => v.UserId == userId);
+            var ventas = await _dbContext.Ventas.Include(v => v.VentaDetalles).ThenInclude(d => d.Inventarios)
+                             .ToListAsync();
+            return ventas.Where(v => v.UserId == userId).ToList();
         }
 
-        public void TermineLaVenta(int id)
+        public async Task<bool> TermineLaVenta(int id)
         {
-            Venta venta = ObtengaUnaVentaPorId(id);
+            Venta venta = await ObtengaUnaVentaPorId(id);
             if (!LaVentaEstaTerminada(venta))
             {
                 if (venta.VentaDetalles.Count == 0) throw new NotImplementedException();
@@ -81,37 +87,37 @@ namespace Inventario.BL.Funcionalidades.Ventas
                     venta.SubTotal += item.Monto;
                     //Inventarios inventario = item.Inventarios;
                      //item.MontoDescuento = item.Monto* venta.PorcentajeDesCuento / 100;
-                    _dbContext.SaveChanges();
+                    await _dbContext.SaveChangesAsync();
                 }
                 venta.MontoDescuento = venta.SubTotal * venta.PorcentajeDesCuento / 100;
                 venta.Total = venta.SubTotal - venta.MontoDescuento;
                 venta.Estado = EstadoVenta.Terminada;
                 _dbContext.Update(venta);
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
+                return true;
 
-            }
-
+            }else return false;
         }
 
 
-        public IEnumerable<Venta> ListeLasVentasPorFecha(DateTime fecha_inicial, DateTime fecha_final)
+        public async  Task<List<Venta>> ListeLasVentasPorFecha(DateTime fecha_inicial, DateTime fecha_final)
         {
-            var ventas = from venta in ListeLasVentas()
+            var ventas = from venta in await ListeLasVentas()
                          where venta.Fecha >= fecha_inicial
                          || venta.Fecha <= fecha_final
                          select venta;
-            return ventas;
+            return (List<Venta>) ventas;
         }
 
-        public void ApliqueUnDescuento(int id, int decuento)
+        public async Task<bool> ApliqueUnDescuento(int id, int decuento)
         {
-            Venta venta = ObtengaUnaVentaPorId(id);
+            Venta venta = await ObtengaUnaVentaPorId(id);
             if (!LaVentaEstaTerminada(venta))
             {
 
                 venta.PorcentajeDesCuento = decuento;
                 decimal porcejtaje = venta.PorcentajeDesCuento;
-                decimal porcentajeDescuento = porcejtaje  / 100;
+                decimal porcentajeDescuento = porcejtaje / 100;
                 foreach (var item in venta.VentaDetalles)
                 {
                     item.Monto = item.Precio * item.Cantidad;
@@ -121,22 +127,24 @@ namespace Inventario.BL.Funcionalidades.Ventas
 
                 }
                 _dbContext.Update(venta);
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
+                return true;
             }
-
+            else return false;
 
         }
 
-        public void EstablescaElTipoDePago(int id, TipoDePago tipoDePago)
+        public async Task<bool> EstablescaElTipoDePago(int id, TipoDePago tipoDePago)
         {
-            Venta venta = ObtengaUnaVentaPorId(id);
+            Venta venta = await ObtengaUnaVentaPorId(id);
             if (!LaVentaEstaTerminada(venta))
             {
                 venta.TipoDePago = tipoDePago;
                 _dbContext.Update(venta);
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
+                return true;
             }
-
+            else return false;
         }
 
 
