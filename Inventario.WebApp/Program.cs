@@ -6,13 +6,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-//var connectionString = builder.Configuration.GetConnectionString("DefaultConnection"); /*?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");*/
-//builder.Services.AddDbContext<InventarioDBContext>(options =>
-//    options.UseSqlServer(connectionString));
-//builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection"); /*?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");*/
+builder.Services.AddDbContext<InventarioDBContext>(options =>
+    options.UseSqlServer(connectionString));
+builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-//builder.Services.AddDefaultIdentity<AplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-//    .AddEntityFrameworkStores<InventarioDBContext>();
+builder.Services.AddDefaultIdentity<AplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<InventarioDBContext>();
+
+
+
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddMemoryCache();

@@ -24,9 +24,9 @@ namespace Inventario.WebApp.Areas.Administracion.Controllers
             _RepositorioDeInventarios = new(context);
             _RpepositorioDeUsuarios = new(context);
         }
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            List<Inventarios> inventarios = (List<Inventarios>)_RepositorioDeInventarios.listeElInventarios();
+            List<Inventarios> inventarios = await _RepositorioDeInventarios.listeElInventarios();
             return View(inventarios);
         }
 
@@ -72,7 +72,7 @@ namespace Inventario.WebApp.Areas.Administracion.Controllers
                 int id = ajustes.Inventario.Id;
                 ajustes.Ajuste.Fecha = DateTime.Now;
                 ajustes.Ajuste.Id_Inventario = id;
-                ajustes.Ajuste.UserId = "";
+                ajustes.Ajuste.UserId = User.Identity.Name;
                 _RepositorioDeAjustes.AgegarAjusteDeInventario(id, ajustes.Ajuste);
                 return RedirectToAction(nameof(Index));
             }

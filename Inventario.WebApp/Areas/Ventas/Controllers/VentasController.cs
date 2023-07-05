@@ -48,7 +48,7 @@ namespace Inventario.WebApp.Areas.Ventas.Controllers
         }
 
         // GET: VentasController/Create
-        public ActionResult VentaEnProceso()
+        public async Task<ActionResult> VentaEnProceso()
         {
 
             string IdUsuario = User.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -59,7 +59,7 @@ namespace Inventario.WebApp.Areas.Ventas.Controllers
             Venta? ventaAbierta = RepositorioDeVentas.ListeLasVentasPorUsuario(IdUsuario)
                .Where(v => v.Estado == EstadoVenta.EnProceso).FirstOrDefault();
 
-            List<Inventarios> inventarios = (List<Inventarios>)ReporitorioDeInventarios.listeElInventarios();
+            List<Inventarios> inventarios = await ReporitorioDeInventarios.listeElInventarios();
 
 
             VentaEnProcesoViewModel modelo = new() { Inventarios = inventarios, Detalles = new() };
@@ -86,7 +86,7 @@ namespace Inventario.WebApp.Areas.Ventas.Controllers
         }
 
         [HttpPost]
-        public ActionResult AgregarItem(VentaEnProcesoViewModel modelo)
+        public async Task<ActionResult> AgregarItem(VentaEnProcesoViewModel modelo)
         {
 
             // Obtener el item seleccionado del inventario
@@ -105,7 +105,7 @@ namespace Inventario.WebApp.Areas.Ventas.Controllers
                 ReporitorioDeInventarios.EditarInventario(itemDelInventario);
                 RepositorioDeVentas.AñadaUnDetalleAlaVenta(ventaDetalle.Id_venta, ventaDetalle);
 
-                List<Inventarios> inventarios = (List<Inventarios>)ReporitorioDeInventarios.listeElInventarios();
+                List<Inventarios> inventarios = await ReporitorioDeInventarios.listeElInventarios();
                 Venta venta = RepositorioDeVentas.ObtengaUnaVentaPorId(ventaDetalle.Id_venta);
                 VentaEnProcesoViewModel VentaEnProcesoViewModel = new()
                 {
@@ -128,7 +128,7 @@ namespace Inventario.WebApp.Areas.Ventas.Controllers
         // POST: VentasController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EliminarItem(VentaEnProcesoViewModel modelo)
+        public async Task<ActionResult >EliminarItem(VentaEnProcesoViewModel modelo)
         {
             try
             {
@@ -140,7 +140,7 @@ namespace Inventario.WebApp.Areas.Ventas.Controllers
                 VentaDetalle item = venta.VentaDetalles.Find(d => d.Id == modelo.Detalles.Id);
 
                 RepositorioDeVentas.ElimineUnDetalleDeLaVenta(venta.Id, item);
-                List<Inventarios> inventarios = (List<Inventarios>)ReporitorioDeInventarios.listeElInventarios();
+                List<Inventarios> inventarios = await ReporitorioDeInventarios.listeElInventarios();
 
                 VentaEnProcesoViewModel VentaEnProcesoViewModel = new()
                 {
