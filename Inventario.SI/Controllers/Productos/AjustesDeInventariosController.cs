@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Inventario.SI.Controllers.Productos
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class AjustesDeInventariosController : ControllerBase
     {

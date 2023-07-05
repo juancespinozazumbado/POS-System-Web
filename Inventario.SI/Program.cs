@@ -10,10 +10,14 @@ using Inventario.Models.Dominio.Usuarios;
 using Inventario.SI.Modelos;
 using Inventario.SI.Servicios.Autenticacion;
 using Inventario.SI.Servicios.Autenticacion.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,8 +31,8 @@ builder.Services.AddIdentityCore<AplicationUser>()
     .AddEntityFrameworkStores<InventarioDBContext>()
     .AddSignInManager<SignInManager<AplicationUser>>()
     .AddUserManager<UserManager<AplicationUser>>()
-    .AddDefaultTokenProviders(); 
-    
+    .AddDefaultTokenProviders();
+
 
 
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("ApiSettings:JwtOptions"));
@@ -48,9 +52,29 @@ builder.Services.AddTransient<IRepositorioDeVentas, RepositorioDeVentas>();
 builder.Services.AddTransient<IrepositorioDeAperturaDeCaja, RepositorioDeAperturaDeCaja>();
 
 builder.Services.AddTransient<IServicioDeEmail, ServicioDeEmail>();
-
-
+builder.Services.AddScoped<IServicioDeJWT, ServicioDeJWT>();
 builder.Services.AddScoped<IServicioDeAutenticacion, ServicioDeAutenticacion>();
+
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            // validate the token based on the key we have provided inside appsettings.development.json JWT:Key
+            ValidateIssuerSigningKey = true,
+            // the issuer singning key based on JWT:Key
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["ApiSettings:JwtOptions:secret"])),
+            // the issuer which in here is the api project url we are using
+            ValidIssuer = builder.Configuration["ApiSettings:JwtOptions:Issuer"],
+            // validate the issuer (who ever is issuing the JWT)
+            ValidateIssuer = true,
+            // don't validate audience (angular side)
+            ValidateAudience = false
+        };
+    });
+
+builder.Services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 var app = builder.Build();
 

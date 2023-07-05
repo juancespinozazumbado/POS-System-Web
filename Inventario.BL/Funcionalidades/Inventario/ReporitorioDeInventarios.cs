@@ -32,9 +32,10 @@ namespace Inventario.BL.Funcionalidades.Inventario
             _dbContext.SaveChanges();
         }
 
-        public IEnumerable<Inventarios> listeElInventarios()
+        public async Task<List<Inventarios>> listeElInventarios()
         {
-            return _dbContext.Inventarios.Include(a=> a.Ajustes).ToList();
+            List<Inventarios> Lista = await _dbContext.Inventarios.Include(a => a.Ajustes).ToListAsync();
+            return Lista;
         }
 
         public Inventarios ObetenerInevtarioPorId(int id)

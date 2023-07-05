@@ -1,16 +1,28 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Inventario.BL.Funcionalidades.Inventario.Interfaces;
+using Inventario.Models.Dominio.Productos;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Inventario.SI.Controllers.Productos
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class InventariosController : ControllerBase
     {
+        private readonly IRepositorioDeInventarios _repositorioDeInventarios;   
+
+        public InventariosController( IRepositorioDeInventarios repositorioDeInventarios)
+        {
+            _repositorioDeInventarios = repositorioDeInventarios;
+        }
+
         // GET: api/<InventariosController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<ActionResult<List<Inventarios>>> ListaDeInvetarios()
         {
-            return new string[] { "value1", "value2" };
+            List<Inventarios> lista = await _repositorioDeInventarios.listeElInventarios();
+            return  Ok(lista);
         }
 
         // GET api/<InventariosController>/5

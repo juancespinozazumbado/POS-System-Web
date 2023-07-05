@@ -22,40 +22,52 @@ namespace Inventario.SI.Controllers.Usuarios
 
         // PUT api/<Autenticacion>/5
         [HttpPost("Registro")]
-        public async Task<ActionResult<RegistroResponsetDto>> Registro([FromBody] RegistroRequestDto request)
+        public async Task<ActionResult<RegistroResponseDto>> Registro([FromBody] RegistroRequestDto request)
         {
 
             try
             {
                 var respuesta =  await _servicioDeAutenticacion.Registro(request);
-                if(respuesta.Value.GetType() == typeof(RegistroResponsetDto)) 
+                if(respuesta.EntidadDto != null) 
                 {
-                    return Ok(respuesta.Value);   
+                    return Ok(respuesta.EntidadDto);   
                 }else
                 {
-                    return BadRequest(respuesta);
+                    return BadRequest(respuesta.Error);
                 }
 
 
 
             }catch (Exception ex)
             { 
-                Console.Write(ex.ToString());   
+                Console.Write(ex.ToString());
+                return BadRequest(ex);
             }
-            return null;
+            
         } 
 
 
-        // POST api/<Autenticacion>
+        // POST api/Autenticacion/Login/5
         [HttpPost("Login")]
-        public void Login([FromBody] string value)
+        public async Task<ActionResult<LoginRequestDto>> Login ([FromBody] LoginRequestDto request)
         {
-        }
+             try
+            {
+                var respuesta =  await _servicioDeAutenticacion.Login(request);
+                if (respuesta.EntidadDto != null)
+                {
+                    return Ok(respuesta.EntidadDto);
+                }
+                else
+                {
+                    return BadRequest(respuesta.Mensaje);
+                }
 
-        // PUT api/<Autenticacion>/5
-        [HttpPost("Logoutfc")]
-        public void Logout([FromBody] string value)
-        {
+            }catch (Exception ex)
+            { 
+                Console.Write(ex.ToString());
+                return BadRequest(ex);
+            }
         }
 
     }
