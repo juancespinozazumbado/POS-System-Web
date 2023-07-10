@@ -1,4 +1,4 @@
-image: mcr.microsoft.com/dotnet/sdk:7.0
+image: $DOTNET_SDK
 
 
 stages:
@@ -9,10 +9,10 @@ stages:
 
 variables:
   # Define your Azure-specific variables
-  AZURE_RESOURCE_GROUP: Inventario-App
-  AZURE_API_APP_NAME: ApiInventario
-  AZURE_MVC_APP_NAME: sistemadeinventario
-  AZURE_REGION: East US 
+  # AZURE_RESOURCE_GROUP: Inventario-App
+  # AZURE_API_APP_NAME: ApiInventario
+  # AZURE_MVC_APP_NAME: sistemadeinventario
+  # AZURE_REGION: East US 
 
   
 #   AZURE_API_PACKAGE_PATH: Inventario.SI\publish
@@ -25,7 +25,6 @@ variables:
 before_script:
   # Install dependencies and prepare environment
    
-
     - dotnet restore $API_WORKING_DIRECTORY
     - dotnet restore $MVC_WORKING_DIRECTORY
 
@@ -44,8 +43,9 @@ build_mvc:
 
 
 deploy_api:
-  image: mcr.microsoft.com/azure-cli
+  
   stage: deploy_api
+  image: mcr.microsoft.com/azure-cli
   script:
     - cd $API_WORKING_DIRECTORY
     - dotnet publish --configuration Release --output publish
@@ -54,8 +54,9 @@ deploy_api:
     - az webapp deployment source config-zip --resource-group $AZURE_RESOURCE_GROUP --name $AZURE_API_APP_NAME --src publish/ApiProject.zip
 
 deploy_mvc:
-  image: mcr.microsoft.com/azure-cli
+ 
   stage: deploy_mvc
+  image: mcr.microsoft.com/azure-cli
   script:
     - cd $MVC_WORKING_DIRECTORY
     - dotnet publish --configuration Release --output publish
