@@ -1,4 +1,14 @@
-image: $DOTNET_SDK
+
+services:
+  - name: $DOTNET_SDK
+    alias: dotnet
+
+  - name: $AZURE_CLI_SDK
+    alias: azcli
+    entrypoint:
+      - /bin/sh
+      - -c
+      - "while sleep 3600; do :; done"
 
 
 stages:
@@ -21,6 +31,7 @@ variables:
   DOTNET_CORE_VERSION: 7.0.x
   API_WORKING_DIRECTORY: Inventario.SI
   MVC_WORKING_DIRECTORY: Inventario.WebApp
+  SERVICES_TIMEOUT: 60m  # Increase the timeout to 60 minutes
 
 before_script:
   # Install dependencies and prepare environment
@@ -45,8 +56,7 @@ build_mvc:
 deploy_api:
   
   stage: deploy_api
-  services:
-    - name: $AZURE_CLI_SDK
+ 
       
   script:
     - cd $API_WORKING_DIRECTORY
@@ -58,8 +68,7 @@ deploy_api:
 deploy_mvc:
   
   stage: deploy_mvc
-  services:
-    - name: $AZURE_CLI_SDK
+
     
   script:
     - cd $MVC_WORKING_DIRECTORY
