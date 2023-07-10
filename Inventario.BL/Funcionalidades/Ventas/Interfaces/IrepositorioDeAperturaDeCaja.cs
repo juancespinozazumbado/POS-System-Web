@@ -4,15 +4,15 @@ namespace Inventario.BL.Funcionalidades.Ventas.Interfaces
 {
     public interface IrepositorioDeAperturaDeCaja
     {
-        public void CrearUnaAperturaDeCaja(AperturaDeCaja aperturaDeCaja);
+        public Task<bool> CrearUnaAperturaDeCaja(AperturaDeCaja aperturaDeCaja);
 
-        public IEnumerable<AperturaDeCaja> ListarAperturasDeCaja();
+        public Task<List<AperturaDeCaja>> ListarAperturasDeCaja();
 
-        public IEnumerable<AperturaDeCaja> AperturasDeCajaPorUsuario(string idUsuario);
+        public Task<List<AperturaDeCaja>> AperturasDeCajaPorUsuario(string idUsuario);
 
-        public AperturaDeCaja ObtenerUnaAperturaDeCajaPorId(int id);
+        public Task<AperturaDeCaja> ObtenerUnaAperturaDeCajaPorId(int id);
 
-        public void CerrarUnaAperturaDeCaja(int id);
+        public Task<bool> CerrarUnaAperturaDeCaja(int id);
 
     }
 }

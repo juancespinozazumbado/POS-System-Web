@@ -4,16 +4,16 @@ namespace Inventario.BL.Funcionalidades.Inventario.Interfaces
 {
     public interface IRepositorioDeInventarios
     {
-        public void AgregarInventario(Inventarios inventario);
+        public Task<bool> AgregarInventario(Inventarios inventario);
         public Task<List<Inventarios>> listeElInventarios();
 
-        public void EliminarInventario(Inventarios inventario);
+        public Task<bool> EliminarInventario(Inventarios inventario);
 
-        public void EditarInventario(Inventarios inventario);
+        public Task<bool> EditarInventario(Inventarios inventario);
 
-        public Inventarios ObetenerInevtarioPorId(int id);
+        public Task<Inventarios> ObetenerInevtarioPorId(int id);
 
-        public IEnumerable<Inventarios> ListarInventariosPorNombre(string nombre);
+        public Task<List<Inventarios>> ListarInventariosPorNombre(string nombre);
 
 
     }

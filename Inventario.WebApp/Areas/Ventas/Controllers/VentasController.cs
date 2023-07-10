@@ -31,15 +31,15 @@ namespace Inventario.WebApp.Areas.Ventas.Controllers
             
         }
         // GET: VentasController
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
 
             string id = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             AplicationUser usaurioActual = RepositorioDeUsuarios.ObtengaUnUsuarioPorId(id);
             AperturaDeCajaViewModel modelo = new() { Usuario = usaurioActual };
 
-            AperturaDeCaja? caja = RepositorioDeAperturaDeCaja.AperturasDeCajaPorUsuario(id)
-               .Where(c => c.estado == EstadoCaja.Abierta).FirstOrDefault();
+            var cajas = await RepositorioDeAperturaDeCaja.AperturasDeCajaPorUsuario(id);
+              AperturaDeCaja caja = cajas.Where(c => c.estado == EstadoCaja.Abierta).FirstOrDefault();
             if (caja != null)
                 modelo.TieneUnaCajaAbierta = true;
 
@@ -53,11 +53,12 @@ namespace Inventario.WebApp.Areas.Ventas.Controllers
 
             string IdUsuario = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             AplicationUser usaurioActual = RepositorioDeUsuarios.ObtengaUnUsuarioPorId(IdUsuario);
-            AperturaDeCaja? caja = RepositorioDeAperturaDeCaja.AperturasDeCajaPorUsuario(IdUsuario)
-              .Where(c => c.estado == EstadoCaja.Abierta).FirstOrDefault();
+            var cajas = await RepositorioDeAperturaDeCaja.AperturasDeCajaPorUsuario(IdUsuario);
 
-            Venta? ventaAbierta = RepositorioDeVentas.ListeLasVentasPorUsuario(IdUsuario)
-               .Where(v => v.Estado == EstadoVenta.EnProceso).FirstOrDefault();
+              AperturaDeCaja caja = cajas.Where(c => c.estado == EstadoCaja.Abierta).FirstOrDefault();
+
+            var ventasDelusario = await  RepositorioDeVentas.ListeLasVentasPorUsuario(IdUsuario);
+               Venta ventaAbierta = ventasDelusario.Where(v => v.Estado == EstadoVenta.EnProceso).FirstOrDefault();
 
             List<Inventarios> inventarios = await ReporitorioDeInventarios.listeElInventarios();
 
@@ -90,7 +91,7 @@ namespace Inventario.WebApp.Areas.Ventas.Controllers
         {
 
             // Obtener el item seleccionado del inventario
-            var itemDelInventario = ReporitorioDeInventarios.ObetenerInevtarioPorId(modelo.Detalles.Id_inventario);
+            var itemDelInventario = await ReporitorioDeInventarios.ObetenerInevtarioPorId(modelo.Detalles.Id_inventario);
 
             // Verificar si hay suficiente cantidad disponible en el inventario
             if (itemDelInventario.Cantidad >= modelo.Detalles.Cantidad && modelo.Detalles.Cantidad > 0)
@@ -102,11 +103,11 @@ namespace Inventario.WebApp.Areas.Ventas.Controllers
 
                 // Actualizar la cantidad en el inventario
                 itemDelInventario.Cantidad -= ventaDetalle.Cantidad;
-                ReporitorioDeInventarios.EditarInventario(itemDelInventario);
-                RepositorioDeVentas.AñadaUnDetalleAlaVenta(ventaDetalle.Id_venta, ventaDetalle);
+                await ReporitorioDeInventarios.EditarInventario(itemDelInventario);
+                await RepositorioDeVentas.AñadaUnDetalleAlaVenta(ventaDetalle.Id_venta, ventaDetalle);
 
                 List<Inventarios> inventarios = await ReporitorioDeInventarios.listeElInventarios();
-                Venta venta = RepositorioDeVentas.ObtengaUnaVentaPorId(ventaDetalle.Id_venta);
+                Venta venta = await RepositorioDeVentas.ObtengaUnaVentaPorId(ventaDetalle.Id_venta);
                 VentaEnProcesoViewModel VentaEnProcesoViewModel = new()
                 {
                     Inventarios = inventarios,
@@ -132,14 +133,14 @@ namespace Inventario.WebApp.Areas.Ventas.Controllers
         {
             try
             {
-                Inventarios inventario = ReporitorioDeInventarios.ObetenerInevtarioPorId(modelo.Detalles.Id_inventario);
+                Inventarios inventario = await ReporitorioDeInventarios.ObetenerInevtarioPorId(modelo.Detalles.Id_inventario);
                 inventario.Cantidad += modelo.Detalles.Cantidad;
-                ReporitorioDeInventarios.EditarInventario(inventario);
+                await ReporitorioDeInventarios.EditarInventario(inventario);
 
-                Venta venta = RepositorioDeVentas.ObtengaUnaVentaPorId(modelo.Detalles.Id_venta);
+                Venta venta = await RepositorioDeVentas.ObtengaUnaVentaPorId(modelo.Detalles.Id_venta);
                 VentaDetalle item = venta.VentaDetalles.Find(d => d.Id == modelo.Detalles.Id);
 
-                RepositorioDeVentas.ElimineUnDetalleDeLaVenta(venta.Id, item);
+                await RepositorioDeVentas.ElimineUnDetalleDeLaVenta(venta.Id, item);
                 List<Inventarios> inventarios = await ReporitorioDeInventarios.listeElInventarios();
 
                 VentaEnProcesoViewModel VentaEnProcesoViewModel = new()
@@ -163,15 +164,15 @@ namespace Inventario.WebApp.Areas.Ventas.Controllers
         // POST: VentasController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CrearVenta(Venta venta)
+        public async Task<ActionResult> CrearVenta(Venta venta)
         {
             try
             {
 
                 string IdUsuario = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 AplicationUser usaurioActual = RepositorioDeUsuarios.ObtengaUnUsuarioPorId(IdUsuario);
-                AperturaDeCaja? caja = RepositorioDeAperturaDeCaja.AperturasDeCajaPorUsuario(IdUsuario)
-                  .Where(c => c.estado == EstadoCaja.Abierta).FirstOrDefault();
+                var cajas = await RepositorioDeAperturaDeCaja.AperturasDeCajaPorUsuario(IdUsuario);
+                  AperturaDeCaja caja = cajas.Where(c => c.estado == EstadoCaja.Abierta).FirstOrDefault();
 
                 Venta LaVenta = new()
                 {
@@ -183,8 +184,9 @@ namespace Inventario.WebApp.Areas.Ventas.Controllers
                     Estado = EstadoVenta.EnProceso,
                     VentaDetalles = new()
                 };
-                RepositorioDeVentas.CreeUnaVenta(LaVenta);
-                LaVenta = RepositorioDeVentas.ListeLasVentasPorUsuario(IdUsuario).Where(v => v.Estado != EstadoVenta.Terminada).FirstOrDefault();
+                await RepositorioDeVentas.CreeUnaVenta(LaVenta);
+                 var ventas = await RepositorioDeVentas.ListeLasVentasPorUsuario(IdUsuario);
+                 LaVenta  = ventas.Where(v => v.Estado != EstadoVenta.Terminada).FirstOrDefault();
 
                 return RedirectToAction(nameof(VentaEnProceso), LaVenta);
             }
@@ -197,14 +199,14 @@ namespace Inventario.WebApp.Areas.Ventas.Controllers
         // POST: VentasController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult TerminarVenta(VentaEnProcesoViewModel modelo)
+        public async Task<ActionResult>TerminarVenta(VentaEnProcesoViewModel modelo)
         {
             try
             {
-                Venta venta = RepositorioDeVentas.ObtengaUnaVentaPorId(modelo.venta.Id);
+                Venta venta = await  RepositorioDeVentas.ObtengaUnaVentaPorId(modelo.venta.Id);
                 venta.TipoDePago = modelo.venta.TipoDePago;
-                RepositorioDeVentas.EstablescaElTipoDePago(venta.Id, modelo.venta.TipoDePago);
-                RepositorioDeVentas.TermineLaVenta(venta.Id);
+               await  RepositorioDeVentas.EstablescaElTipoDePago(venta.Id, modelo.venta.TipoDePago);
+               await  RepositorioDeVentas.TermineLaVenta(venta.Id);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -216,12 +218,12 @@ namespace Inventario.WebApp.Areas.Ventas.Controllers
         // POST: VentasController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AplicarUnDescuento(VentaEnProcesoViewModel modelo)
+        public async Task<ActionResult> AplicarUnDescuento(VentaEnProcesoViewModel modelo)
         {
             try
             {
-                Venta venta = RepositorioDeVentas.ObtengaUnaVentaPorId(modelo.venta.Id);
-                RepositorioDeVentas.ApliqueUnDescuento(venta.Id, modelo.venta.PorcentajeDesCuento);
+                Venta venta = await RepositorioDeVentas.ObtengaUnaVentaPorId(modelo.venta.Id);
+                await RepositorioDeVentas.ApliqueUnDescuento(venta.Id, modelo.venta.PorcentajeDesCuento);
 
                 modelo.venta = venta;
 

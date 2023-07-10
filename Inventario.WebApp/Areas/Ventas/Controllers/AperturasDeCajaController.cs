@@ -27,23 +27,25 @@ namespace Inventario.WebApp.Areas.Ventas.Controllers
             RepositorioDeAperturaDeCAja = new(context);
         }
         // GET: VentasController
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            string id = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            AplicationUser usaurioActual = RepositorioDeUsuarios.ObtengaUnUsuarioPorId(id);
-            AperturaDeCaja? cajaActual = RepositorioDeAperturaDeCAja.AperturasDeCajaPorUsuario(id)
+            string id =  User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            AplicationUser usaurioActual =  RepositorioDeUsuarios.ObtengaUnUsuarioPorId(id);
+            var cajas = await RepositorioDeAperturaDeCAja.AperturasDeCajaPorUsuario(id);
+            var cajasCerradas = cajas.Where(c => c.estado == EstadoCaja.Cerrada).ToList();
+            AperturaDeCaja  cajaActual = cajas
                 .Where(c => c.estado == EstadoCaja.Abierta).FirstOrDefault();
-            List<AperturaDeCaja> cajas = RepositorioDeAperturaDeCAja.AperturasDeCajaPorUsuario(id)
-                .Where(c => c.estado == EstadoCaja.Cerrada).ToList();
+            List<AperturaDeCaja> cajasDelUsuario = await RepositorioDeAperturaDeCAja.AperturasDeCajaPorUsuario(id);
+            cajasDelUsuario = cajasDelUsuario.Where(c => c.estado == EstadoCaja.Cerrada).ToList();
     
           
                 AperturaDeCajaViewModel modelo = new()
                 {
                     Usuario = usaurioActual,
                     TieneUnaCajaAbierta = cajaActual != null,
-                    Cajas = cajas,
+                    Cajas = cajasCerradas,
                     Caja = cajaActual,
-                    Totales = cajaActual != null ? RepositorioDeAperturaDeCAja.OtenerTotalesPorCaja(cajaActual.Id) : null
+                    Totales = cajaActual != null ?  await RepositorioDeAperturaDeCAja.OtenerTotalesPorCaja(cajaActual.Id) : null
 
                 };
             
@@ -57,9 +59,9 @@ namespace Inventario.WebApp.Areas.Ventas.Controllers
         }
 
         // GET: VentasController/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(int id)
         {
-            AperturaDeCaja caja = RepositorioDeAperturaDeCAja.ObtenerUnaAperturaDeCajaPorId(id);
+            AperturaDeCaja caja = await RepositorioDeAperturaDeCAja.ObtenerUnaAperturaDeCajaPorId(id);
 
             return View(caja);
         }
@@ -84,11 +86,11 @@ namespace Inventario.WebApp.Areas.Ventas.Controllers
         // POST: VentasController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(AperturaDeCaja caja)
+        public async Task<ActionResult> Create(AperturaDeCaja caja)
         {
             try
             {
-                RepositorioDeAperturaDeCAja.CrearUnaAperturaDeCaja(caja);
+                await RepositorioDeAperturaDeCAja.CrearUnaAperturaDeCaja(caja);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -99,16 +101,18 @@ namespace Inventario.WebApp.Areas.Ventas.Controllers
         }
 
         // GET: VentasController/CerrarLaCaja/5
-        public ActionResult CerrarLaCaja(int id)
+        public async Task<ActionResult> CerrarLaCaja(int id)
         {
-            RepositorioDeAperturaDeCAja.CerrarUnaAperturaDeCaja(id);
+            await RepositorioDeAperturaDeCAja.CerrarUnaAperturaDeCaja(id);
 
             string usuarioId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             AplicationUser usaurioActual = RepositorioDeUsuarios.ObtengaUnUsuarioPorId(usuarioId);
-            AperturaDeCaja? cajaActual = RepositorioDeAperturaDeCAja.AperturasDeCajaPorUsuario(usuarioId)
-                .Where(c => c.estado == EstadoCaja.Abierta).FirstOrDefault();
-            List<AperturaDeCaja> cajas = RepositorioDeAperturaDeCAja.AperturasDeCajaPorUsuario(usuarioId)
-                .Where(c => c.estado == EstadoCaja.Cerrada).ToList();
+
+            var cajasDelUsuario = await RepositorioDeAperturaDeCAja.AperturasDeCajaPorUsuario(usuarioId);
+                AperturaDeCaja cajaActual = cajasDelUsuario.Where(c => c.estado == EstadoCaja.Abierta).FirstOrDefault();
+
+            List<AperturaDeCaja> cajas = await RepositorioDeAperturaDeCAja.AperturasDeCajaPorUsuario(usuarioId);
+                cajas = cajas.Where(c => c.estado == EstadoCaja.Cerrada).ToList();
             AperturaDeCajaViewModel modelo = new()
             {
                 Usuario = usaurioActual,
@@ -123,15 +127,15 @@ namespace Inventario.WebApp.Areas.Ventas.Controllers
        
 
         // GET: VentasController/Delete/5
-        public ActionResult DetallesCajaCerrada(int id)
+        public async Task<ActionResult> DetallesCajaCerrada(int id)
         {
 
             string usuarioId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             AplicationUser usaurioActual = RepositorioDeUsuarios.ObtengaUnUsuarioPorId(usuarioId);
 
-            AperturaDeCaja caja = RepositorioDeAperturaDeCAja.ObtenerUnaAperturaDeCajaPorId(id);
+            AperturaDeCaja caja = await RepositorioDeAperturaDeCAja.ObtenerUnaAperturaDeCajaPorId(id);
 
-            var Totales = RepositorioDeAperturaDeCAja.OtenerTotalesPorCaja(id);
+            var Totales = await RepositorioDeAperturaDeCAja.OtenerTotalesPorCaja(id);
 
             AperturaDeCajaViewModel modelo = new()
             {
@@ -146,13 +150,13 @@ namespace Inventario.WebApp.Areas.Ventas.Controllers
         }
 
 
-        public ActionResult VentasPorCaja(int id)
+        public async Task<ActionResult> VentasPorCaja(int id)
         {
 
             string usuarioId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             AplicationUser usaurioActual = RepositorioDeUsuarios.ObtengaUnUsuarioPorId(usuarioId);
 
-            AperturaDeCaja caja = RepositorioDeAperturaDeCAja.ObtenerUnaAperturaDeCajaPorId(id);
+            AperturaDeCaja caja = await RepositorioDeAperturaDeCAja.ObtenerUnaAperturaDeCajaPorId(id);
 
 
 
