@@ -21,7 +21,7 @@ variables:
 
 before_script:
   # Install dependencies and prepare environment
-  - dotnet restore
+  - choco install dotnet-sdk --version=7.0.100 -y
 
 build_api:
   stage: build_api
