@@ -49,7 +49,5 @@ namespace Inventario.SI.Servicios.Autenticacion
             return ProvedorDeToken.WriteToken(token);
             
         }
-
-        
     }
 }
