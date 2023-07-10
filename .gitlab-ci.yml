@@ -46,8 +46,8 @@ deploy_api:
   
   stage: deploy_api
   services:
-    - name: mcr.microsoft.com/azure-cli
-      alias: azcli
+    - name: $AZURE_CLI_SDK
+      
   script:
     - cd $API_WORKING_DIRECTORY
     - dotnet publish --configuration Release --output publish
@@ -59,8 +59,8 @@ deploy_mvc:
   
   stage: deploy_mvc
   services:
-    - name: mcr.microsoft.com/azure-cli
-      alias: azcli
+    - name: $AZURE_CLI_SDK
+    
   script:
     - cd $MVC_WORKING_DIRECTORY
     - dotnet publish --configuration Release --output publish
