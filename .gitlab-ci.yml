@@ -44,6 +44,7 @@ build_mvc:
 
 
 deploy_api:
+  image: mcr.microsoft.com/azure-cli
   stage: deploy_api
   script:
     - cd $API_WORKING_DIRECTORY
@@ -53,6 +54,7 @@ deploy_api:
     - az webapp deployment source config-zip --resource-group $AZURE_RESOURCE_GROUP --name $AZURE_API_APP_NAME --src publish/ApiProject.zip
 
 deploy_mvc:
+  image: mcr.microsoft.com/azure-cli
   stage: deploy_mvc
   script:
     - cd $MVC_WORKING_DIRECTORY
