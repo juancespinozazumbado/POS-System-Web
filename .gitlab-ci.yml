@@ -24,7 +24,10 @@ variables:
 
 before_script:
   # Install dependencies and prepare environment
-  - dotnet restore
+   
+
+    - dotnet restore $API_WORKING_DIRECTORY
+    - dotnet restore $MVC_WORKING_DIRECTORY
 
 
 build_api:
