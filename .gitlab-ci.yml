@@ -1,16 +1,7 @@
 
-services:
-  - name: $DOTNET_SDK
-    alias: dotnet
-
-  - name: $AZURE_CLI_SDK
-    alias: azcli
-    entrypoint:
-      - /bin/sh
-      - -c
-      - "while sleep 3600; do :; done"
-
-
+image: $DOTNET_SDK
+    
+   
 stages:
   - build_api
   - build_mvc
@@ -43,6 +34,8 @@ before_script:
 
 build_api:
   stage: build_api
+  services:
+    - $AZURE_CLI_SDK
   script:
     - cd $API_WORKING_DIRECTORY
     - dotnet build --configuration Release
@@ -57,6 +50,8 @@ build_mvc:
 deploy_api:
   
   stage: deploy_api
+  services:
+    - $AZURE_CLI_SDK
  
       
   script:
