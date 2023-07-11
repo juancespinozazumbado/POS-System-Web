@@ -34,8 +34,7 @@ before_script:
 
 build_api:
   stage: build_api
-  services:
-    - $AZURE_CLI_SDK
+ 
   script:
     - cd $API_WORKING_DIRECTORY
     - dotnet build --configuration Release
@@ -64,7 +63,8 @@ deploy_api:
 deploy_mvc:
   
   stage: deploy_mvc
-
+  services:
+    - $AZURE_CLI_SDK
     
   script:
     - cd $MVC_WORKING_DIRECTORY
