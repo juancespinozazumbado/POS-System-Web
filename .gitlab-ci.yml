@@ -57,7 +57,7 @@ deploy_api:
     - apt-get update && apt-get -y install zip
     - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
     - az login -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET 
-    - az account set --subscription $AZURE_SUBSCRIPTION_ID
+    # - az account set --subscription $AZURE_SUBSCRIPTION_ID
     - az webapp deployment source config-zip --resource-group $AZURE_RESOURCE_GROUP --name $AZURE_API_APP_NAME --src publish/Inventario.SI.zip
 
 deploy_mvc:
@@ -73,6 +73,5 @@ deploy_mvc:
     - apt-get update && apt-get -y install zip
     - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
     - az login -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET 
-    - az account set --subscription $AZURE_SUBSCRIPTION_ID
+    # - az account set --subscription $AZURE_SUBSCRIPTION_ID
     - az webapp deployment source config-zip --resource-group $AZURE_RESOURCE_GROUP --name $AZURE_MVC_APP_NAME --src publish/Inventario.WebApp.zip
-
