@@ -55,6 +55,7 @@ deploy_api:
     
     - apt-get update && apt-get -y install zip
     - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+    - az --version
     - az login -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET 
     # - az account set --subscription $AZURE_SUBSCRIPTION_ID
     - cd $API_WORKING_DIRECTORY
