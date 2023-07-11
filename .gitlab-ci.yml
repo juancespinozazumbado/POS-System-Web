@@ -56,8 +56,8 @@ deploy_api:
     - dotnet publish --configuration Release --output publish
     - apt-get update && apt-get -y install zip
     - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
-    # - az login --service-principal --username $AZURE_CLIENT_ID --password $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
-    # - az account set --subscription $AZURE_SUBSCRIPTION_ID
+    - az login -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET 
+    - az account set --subscription $AZURE_SUBSCRIPTION_ID
     - az webapp deployment source config-zip --resource-group $AZURE_RESOURCE_GROUP --name $AZURE_API_APP_NAME --src publish/ApiProject.zip
 
 deploy_mvc:
@@ -70,7 +70,7 @@ deploy_mvc:
     - dotnet publish --configuration Release --output publish
     - apt-get update && apt-get -y install zip
     - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
-    # - az login --service-principal --username $AZURE_CLIENT_ID --password $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
-    # - az account set --subscription $AZURE_SUBSCRIPTION_ID
+    - az login -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET 
+    - az account set --subscription $AZURE_SUBSCRIPTION_ID
     - az webapp deployment source config-zip --resource-group $AZURE_RESOURCE_GROUP --name $AZURE_MVC_APP_NAME --src publish/MvcProject.zip
 
