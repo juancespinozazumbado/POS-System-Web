@@ -1,7 +1,9 @@
 ﻿using Inventario.BL.Funcionalidades.Ventas.Interfaces;
+using Inventario.Models.Dominio.Usuarios;
 using Inventario.Models.Dominio.Ventas;
 using Inventario.SI.Modelos.Dtos.Ventas;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Inventario.SI.Controllers.Ventas
@@ -13,18 +15,22 @@ namespace Inventario.SI.Controllers.Ventas
     {
         private readonly IrepositorioDeAperturaDeCaja _repositorioDeAperturasDeCaja;
         private readonly IRepositorioDeVentas _repositoriodeVentas;
+        private readonly UserManager<AplicationUser> _userManager;
 
         public AperturasDeCajaController(IRepositorioDeVentas repositoriodeVentas,
-            IrepositorioDeAperturaDeCaja repositorioDeAperturaDeCaja)
+            IrepositorioDeAperturaDeCaja repositorioDeAperturaDeCaja, UserManager<AplicationUser> userManagger)
         {
             _repositoriodeVentas = repositoriodeVentas;
             _repositorioDeAperturasDeCaja = repositorioDeAperturaDeCaja;
+            _userManager = userManagger;
         }
 
         // GET: api/<InventariosController>
         [HttpGet("usuario/cajas")]
         public async Task<ActionResult<List<AperturaDeCaja>>> verCajasPorUsuario(string Id_Usuario)
         {
+            var usuario = await _userManager.FindByIdAsync(Id_Usuario);
+            if (usuario == null) return BadRequest("Usuario no encontrado");
             var cajas = await _repositorioDeAperturasDeCaja.AperturasDeCajaPorUsuario(Id_Usuario);
             if (cajas != null)
             {
@@ -37,6 +43,8 @@ namespace Inventario.SI.Controllers.Ventas
         [HttpGet("usuario/cajas/{id}")]
         public async Task<ActionResult<AperturaDeCaja>> VerUnaCajaDelUsuario( string Id_Usuario, int id)
         {
+            var usuario = await _userManager.FindByIdAsync(Id_Usuario);
+            if (usuario == null) return BadRequest("Usuario no encontrado");
             var cajas = await _repositorioDeAperturasDeCaja.AperturasDeCajaPorUsuario(Id_Usuario);
             if (cajas != null)
             {
@@ -56,7 +64,9 @@ namespace Inventario.SI.Controllers.Ventas
         [HttpPost("usuario/cajas/")]
         public async Task<ActionResult<AperturaDeCaja>> CrearAperturaDeCaja([FromBody] CrearAperturaCajaRequest request, string Id_Usuario)
         {
-            
+            var usuario = await _userManager.FindByIdAsync(Id_Usuario);
+            if (usuario == null) return BadRequest("Usuario no encontrado");
+
             AperturaDeCaja nuevaAperturaDeCaja = new()
             {
                 FechaDeInicio = DateTime.Now,
@@ -73,6 +83,8 @@ namespace Inventario.SI.Controllers.Ventas
         [HttpPut("usuario/cajas/{id_caja}")]
         public async Task<ActionResult<AperturaDeCaja>> CerrarLaCaja( string Id_Usuario, int id_caja)
         {
+            var usuario = await _userManager.FindByIdAsync(Id_Usuario);
+            if (usuario == null) return BadRequest("Usuario no encontrado");
             var cajas = await _repositorioDeAperturasDeCaja.AperturasDeCajaPorUsuario(Id_Usuario);
             if (cajas != null)
             {
@@ -80,7 +92,8 @@ namespace Inventario.SI.Controllers.Ventas
                 if (caja != null)
                 {
                    var resultado =  await _repositorioDeAperturasDeCaja.CerrarUnaAperturaDeCaja(id_caja);
-                    if(!resultado) return BadRequest("La caja no tiene ventas terminadas");
+                    if(caja.estado == EstadoCaja.Cerrada) return BadRequest("La caja esta cerrada");
+                    if (!resultado) return BadRequest("La caja no tiene ventas terminadas");
                     return Ok(caja);
                 }
                 else return BadRequest("No se enconrtro la caja");
