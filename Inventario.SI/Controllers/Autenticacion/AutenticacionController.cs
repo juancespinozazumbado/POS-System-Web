@@ -67,5 +67,29 @@ namespace Inventario.SI.Controllers.Usuarios
             }
         }
 
+        // POST api/Autenticacion/Login/
+        [HttpPost("usuario/cambioDeContraseña")]
+        public async Task<ActionResult<LoginRequestDto>> CambioDeContraseña([FromBody] CambioDeContraseñaRequestDto request)
+        {
+            try
+            {
+                var respuesta =  await _servicioDeAutenticacion.CambiarContraseña(request);
+                if (respuesta.Error == null)
+                {
+                    return Ok(respuesta.Mensaje);
+                }
+                else
+                {
+                    return BadRequest(respuesta.Error);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex.ToString());
+                return BadRequest(ex);
+            }
+        }
+
     }
 }

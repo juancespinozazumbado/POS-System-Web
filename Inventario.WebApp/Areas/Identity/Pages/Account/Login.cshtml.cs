@@ -26,6 +26,7 @@ namespace Inventario.WebApp.Areas.Identity.Pages.Account
 {
     public class LoginModel : PageModel
     {
+        HttpClient cliente = new HttpClient();
         private readonly SignInManager<AplicationUser> _signInManager;
         //private readonly UserManager<AplicationUser> _userManager;   
         private readonly ILogger<LoginModel> _logger;

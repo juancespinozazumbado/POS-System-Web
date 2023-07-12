@@ -89,10 +89,5 @@ namespace Inventario.SI.Controllers.Ventas
             else return BadRequest("No existe el usuario");
         }
 
-        // DELETE api/<InventariosController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
     }
 }

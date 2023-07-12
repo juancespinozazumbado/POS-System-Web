@@ -2,5 +2,6 @@
 {
     public class CrearVentaResponse
     {
+        public string respuesta { get; set; }   
     }
 }

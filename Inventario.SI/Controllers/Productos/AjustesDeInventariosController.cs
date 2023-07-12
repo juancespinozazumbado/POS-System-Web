@@ -43,7 +43,7 @@ namespace Inventario.SI.Controllers.Productos
             {
                 var ajuste = inventario.Ajustes.Find( a => a.Id == id_detalle);
                 if (ajuste != null) { return Ok(ajuste); } else return BadRequest("No existe este ajuste");
-                return Ok(inventario);
+                
             }
             else { return BadRequest("No existe el inventario"); }
 
