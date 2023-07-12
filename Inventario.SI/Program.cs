@@ -30,7 +30,7 @@ var conectionString = builder.Configuration.GetConnectionString(cadena);
 // Agrega los servicios
 
 builder.Services.AddDbContext<InventarioDBContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString(conectionString)));
 //builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddIdentityCore<AplicationUser>()
