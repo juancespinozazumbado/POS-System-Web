@@ -21,7 +21,13 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+string cadena = builder.Environment.IsDevelopment() ? "Local" : "Produccion";
+
+
+var conectionString = builder.Configuration.GetConnectionString(cadena);
+
+
+// Agrega los servicios
 
 builder.Services.AddDbContext<InventarioDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -91,5 +97,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.Run();
