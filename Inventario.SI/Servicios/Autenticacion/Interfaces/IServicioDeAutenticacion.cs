@@ -11,5 +11,7 @@ namespace Inventario.SI.Servicios.Autenticacion.Interfaces
 
         Task<RespuestaDeAutenticacion<LoginResponsetDto>> Login(LoginRequestDto loginRequest);
 
+        Task<RespuestaDeAutenticacion<string>> CambiarContraseña(CambioDeContraseñaRequestDto request);
+
     }
 }

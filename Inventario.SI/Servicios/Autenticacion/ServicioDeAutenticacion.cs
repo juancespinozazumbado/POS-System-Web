@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace Inventario.SI.Servicios.Autenticacion
@@ -168,6 +169,22 @@ namespace Inventario.SI.Servicios.Autenticacion
                 Console.Write(ex.ToString());
                 return new RespuestaDeAutenticacion<RegistroResponseDto> {Mensaje = ex.Message };
             }
+        }
+
+        public async Task<RespuestaDeAutenticacion<string>> CambiarContraseña(CambioDeContraseñaRequestDto request)
+        {
+            var usuario =  await _userManager.FindByNameAsync(request.username);
+            if(usuario != null)
+            {
+                var resultado = await _userManager.ChangePasswordAsync(usuario, request.Contraseña, request.NuevaContraseña);
+                if (resultado.Succeeded)
+                {
+                    return new RespuestaDeAutenticacion<string>() {Mensaje ="Contraseña cambiada con exito !" };
+                }else 
+                {
+                    return new RespuestaDeAutenticacion<string>() { Error = resultado.Errors.ToList() };
+                }
+            } else return new RespuestaDeAutenticacion<string>() { Mensaje = "El Usaurio no existe!" };
         }
         
     }

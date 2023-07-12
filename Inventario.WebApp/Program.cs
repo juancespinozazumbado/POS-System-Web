@@ -6,6 +6,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+string opcion = builder.Environment.IsDevelopment() ? "Local" : "Produccion";
+var CadenaDeConeccion = builder.Configuration.GetConnectionString(opcion);
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection"); /*?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");*/
 builder.Services.AddDbContext<InventarioDBContext>(options =>
     options.UseSqlServer(connectionString));
@@ -18,7 +21,9 @@ builder.Services.AddDefaultIdentity<AplicationUser>(options => options.SignIn.Re
 
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddMemoryCache();
+//builder.Services.AddHttpContextAccessor();
+//builder.Services.AddHttpClient();
+
 
 var app = builder.Build();
 

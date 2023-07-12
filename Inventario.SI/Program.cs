@@ -30,7 +30,7 @@ var conectionString = builder.Configuration.GetConnectionString(cadena);
 // Agrega los servicios
 
 builder.Services.AddDbContext<InventarioDBContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString(conectionString)));
+    options.UseSqlServer(conectionString));
 //builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddIdentityCore<AplicationUser>()
@@ -96,9 +96,10 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
-
 app.UseSwagger();
 app.UseSwaggerUI();
+
+app.MapControllers();
+
 
 app.Run();

@@ -1,4 +1,5 @@
-﻿using Inventario.BL.Funcionalidades.Inventario.Interfaces;
+﻿using Azure.Core;
+using Inventario.BL.Funcionalidades.Inventario.Interfaces;
 using Inventario.BL.Funcionalidades.Ventas.Interfaces;
 using Inventario.Models.Dominio.Ventas;
 using Inventario.SI.Modelos.Dtos.Ventas;
@@ -125,15 +126,33 @@ namespace Inventario.SI.Controllers.Ventas
         }
 
         // PUT api/<InventariosController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut("{id_venta}/Descuento")]
+        public async Task<ActionResult<Venta>> AplicarUnDescuento(int id_venta, [FromBody] AplicarDescuentoRequest request)
         {
+            var venta = await _repositoriodeVentas.ObtengaUnaVentaPorId(id_venta);
+            if (venta != null)
+            {
+                await _repositoriodeVentas.ApliqueUnDescuento(venta.Id, request.descuento);
+                venta = await _repositoriodeVentas.ObtengaUnaVentaPorId(id_venta);
+                return Ok(venta);
+            }
+            else return BadRequest("La Venta esta terminada.");
+
         }
 
-        // DELETE api/<InventariosController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+       
+        [HttpDelete("{id_venta}/Terminar")]
+        public async Task<ActionResult<Venta>> TerminarVenta(int id_venta)
         {
+            var venta = await _repositoriodeVentas.ObtengaUnaVentaPorId(id_venta);
+            if (venta != null)
+            {
+                await _repositoriodeVentas.TermineLaVenta(venta.Id);
+                venta = await _repositoriodeVentas.ObtengaUnaVentaPorId(id_venta);
+                return Ok(venta);
+            }
+            else return BadRequest("La Venta esta terminada.");
+
         }
     }
 }
