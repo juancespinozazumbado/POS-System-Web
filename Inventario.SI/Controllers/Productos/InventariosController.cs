@@ -1,5 +1,6 @@
 ﻿using Inventario.BL.Funcionalidades.Inventario.Interfaces;
 using Inventario.Models.Dominio.Productos;
+using Inventario.SI.Modelos;
 using Inventario.SI.Modelos.Dtos.Productos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,33 +21,36 @@ namespace Inventario.SI.Controllers.Productos
 
         // GET: api/<InventariosController>
         [HttpGet]
-        public async Task<ActionResult<List<Inventarios>>> ListaDeInvetarios()
+        public async Task<ActionResult<RespuestaDto>> ListaDeInvetarios()
         {
             List<Inventarios> lista = await _repositorioDeInventarios.listeElInventarios();
-            return  Ok(lista);
+            var respuesta = new RespuestaDto { Respuesta = lista };
+            return  Ok(respuesta);
         }
 
         // GET api/<InventariosController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Inventarios>> InventarioPorId(int id)
+        public async Task<ActionResult<RespuestaDto>> InventarioPorId(int id)
         {
             var inventario = await _repositorioDeInventarios.ObetenerInevtarioPorId(id);
             if (inventario != null)
             {
-                return Ok(inventario);
+                var respuesta = new RespuestaDto() { Respuesta = inventario };
+                return Ok(respuesta);
             }
             else return BadRequest("id no encontardo.");
         }
 
         // GET api/Inventarios/nombre/Lit
 
-        [HttpGet("Nombre/{nombre}")]
-        public async Task<ActionResult<List<Inventarios>>> InventariosPorNombre(string nombre)
+        [HttpGet("Nombre")]
+        public async Task<ActionResult<List<Inventarios>>> InventariosPorNombre(string Nombre)
         {
-            var inventarios = await _repositorioDeInventarios.ListarInventariosPorNombre(nombre);
+            var inventarios = await _repositorioDeInventarios.ListarInventariosPorNombre(Nombre);
             if (inventarios != null)
             {
-                return Ok(inventarios);
+                var respuesta = new RespuestaDto() { Respuesta = inventarios };
+                return Ok(respuesta);
             }
             else return BadRequest("id no encontardo.");
 

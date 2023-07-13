@@ -19,6 +19,8 @@ namespace Inventario.BL.Funcionalidades.Ventas.Interfaces
         public  Task<List<Venta>> ListeLasVentasPorFecha(DateTime fecha_inicial, DateTime fecha_final);
         public Task<List<Venta>> ListeLasVentasPorUsuario(string userId);
 
+        public  Task<bool> EstablescaElTipoDePago(int id, TipoDePago tipoDePago);
+
 
     }
 

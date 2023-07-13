@@ -14,30 +14,33 @@ namespace Inventario.BL.Funcionalidades.Usuarios
         {
             this.dbContext = dbContext;
         }
-        public void AgregueUnUsuario(AplicationUser user)
+        public async Task<bool> AgregueUnUsuario(AplicationUser user)
         {
-            dbContext.Usuarios.Add(user);
-            dbContext.SaveChanges();
+            await dbContext.Usuarios.AddAsync(user);
+            await dbContext.SaveChangesAsync();
+            return true;    
 
         }
 
-        public void AñadirUnAccesoFallido(string id)
+        public async Task<bool> AñadirUnAccesoFallido(string id)
         {
             AplicationUser? usuario = dbContext.Usuarios.
                Where(u => u.Id.Equals(id)).FirstOrDefault();
-            usuario.AccessFailedCount += 1;
+              usuario.AccessFailedCount += 1;
             dbContext.Update(usuario);
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
+            return true;
         }
 
-        public void BloquearUnUsuario(string id)
+        public async Task<bool> BloquearUnUsuario(string id)
         {
             AplicationUser? usuario = dbContext.Usuarios.
                 Where(u=> u.Id.Equals(id)).FirstOrDefault();
             usuario.LockoutEnd = DateTime.Now.AddMinutes(10);
             usuario.AccessFailedCount = 0;
             dbContext.Update(usuario);
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
+            return true;
         }
 
         public void ElimineUnUsuario(AplicationUser usuario)
@@ -45,9 +48,9 @@ namespace Inventario.BL.Funcionalidades.Usuarios
             dbContext.Usuarios.Remove(usuario);
         }
 
-        public List<AplicationUser> ListeLosUsuarios()
+        public async Task<List<AplicationUser>> ListeLosUsuarios()
         {
-            return dbContext.Usuarios.ToList();
+            return await dbContext.Usuarios.ToListAsync();
         }
 
         // se necesita servicio STPM
@@ -56,14 +59,24 @@ namespace Inventario.BL.Funcionalidades.Usuarios
             throw new NotImplementedException();
         }
 
-        public AplicationUser ObtengaUnUsuarioPorId(string id)
+        public async Task<AplicationUser> ObtengaUnUsuarioPorId(string id)
         {
-            return ListeLosUsuarios().Find(u => u.Id.Equals(id));
+             var usuarios = await  ListeLosUsuarios();
+            return  usuarios.FirstOrDefault(u => u.Id.Equals(id));
         }
 
-        public AplicationUser ObtengaUnUsuarioPorEmail(string email)
+        public async Task<AplicationUser> ObtengaUnUsuarioPorUserName(string username)
         {
-            return ListeLosUsuarios().FirstOrDefault(u => u.Email.Equals(email));
+            var usuarios = await ListeLosUsuarios();
+
+            return usuarios.FirstOrDefault(u => u.UserName.Equals(username));
+        }
+
+        public async Task<AplicationUser> ObtengaUnUsuarioPorEmial(string email)
+        {
+            var usuarios = await ListeLosUsuarios();
+
+            return usuarios.FirstOrDefault(u => u.Email.Equals(email));
         }
     }
 }

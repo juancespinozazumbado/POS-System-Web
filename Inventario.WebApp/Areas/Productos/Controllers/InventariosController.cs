@@ -1,6 +1,9 @@
 ﻿using Inventario.BL.Funcionalidades.Inventario;
 using Inventario.DA.Database;
 using Inventario.Models.Dominio.Productos;
+using Inventario.WebApp.Areas.Productos.Models;
+using Inventario.WebApp.Areas.Productos.Servicio.Iservicio;
+using Inventario.WebApp.Servicios.IServicio;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,25 +14,31 @@ namespace Inventario.WebApp.Areas.Administracion.Controllers
     [Authorize]
     public class InventariosController : Controller
     {
-        private readonly ReporitorioDeInventarios _RepositorioDeInventarios;
-        public InventariosController(InventarioDBContext contexto)
+        private readonly IServicioDeInventario _servicioDeInventario;
+        
+        public InventariosController(IServicioDeInventario servicioDeInventario)
         {
-            _RepositorioDeInventarios = new ReporitorioDeInventarios(contexto);
+            _servicioDeInventario = servicioDeInventario;
         }
 
 
         // GET: InventariosController
         public async Task<ActionResult> Index( string nombre)
         {
+            
+
             List<Inventarios> ListaDeItems;
 
             if (nombre == null)
             {
-                ListaDeItems = await _RepositorioDeInventarios.listeElInventarios();
+                ListaDeItems = await _servicioDeInventario.ListarInventarios();
+
             }else
             {
-                ListaDeItems = await _RepositorioDeInventarios.ListarInventariosPorNombre(nombre);    
+                ListaDeItems = await _servicioDeInventario.InventariosPorNombre(nombre);    
             }
+
+            if (ListaDeItems == null) ListaDeItems = new();
             
             return View(ListaDeItems);
         }
@@ -37,7 +46,7 @@ namespace Inventario.WebApp.Areas.Administracion.Controllers
         // GET: InventariosController/Details/5
         public async Task<ActionResult> Details(int id)
         {
-            Inventarios inventario = await _RepositorioDeInventarios.ObetenerInevtarioPorId(id);
+            Inventarios inventario = await _servicioDeInventario.InvenatrioPorId(id);
             return View(inventario);
         }
 
@@ -51,12 +60,11 @@ namespace Inventario.WebApp.Areas.Administracion.Controllers
         // POST: InventariosController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Inventarios inventario)
+        public async Task<ActionResult> Create(InventarioDto inventario)
         {
             try
-            {
-
-                _RepositorioDeInventarios.AgregarInventario(inventario);
+            { 
+                var resultado = await  _servicioDeInventario.AgregarInvenatrio(inventario);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -68,18 +76,25 @@ namespace Inventario.WebApp.Areas.Administracion.Controllers
         // GET: InventariosController/Edit/5
         public async Task<ActionResult> Edit(int id)
         {
-            Inventarios inventario = await _RepositorioDeInventarios.ObetenerInevtarioPorId(id);
+            Inventarios inventario = await _servicioDeInventario.InvenatrioPorId(id);
             return View(inventario);
         }
 
         // POST: InventariosController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Inventarios inventario)
+        public async Task< ActionResult> Edit(Inventarios inventario)
         {
             try
             {
-                _RepositorioDeInventarios.EditarInventario(inventario);
+                int id = inventario.Id;
+
+                await  _servicioDeInventario.EditarInvenatrio( id, new InventarioDto()
+                {
+                    Nombre = inventario.Nombre,
+                    Precio = inventario.Precio,
+                    Categoria = (Productos.Models.Categoria)inventario.Categoria
+                });
                 return RedirectToAction(nameof(Index));
             }
             catch

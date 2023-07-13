@@ -1,26 +1,37 @@
-﻿using Inventario.Models.Dominio.Usuarios;
+﻿using Inventario.DA.Database;
+using Inventario.Models.Dominio.Usuarios;
+using Microsoft.EntityFrameworkCore;
 
 namespace Inventario.BL.Funcionalidades.Usuarios.Interfaces
 {
     public interface IRepositorioDeUsuarios
     {
 
-        public void AgregueUnUsuario(AplicationUser user);
 
-        public List<AplicationUser> ListeLosUsuarios();
+        public Task<bool> AgregueUnUsuario(AplicationUser user);
 
-        public AplicationUser ObtengaUnUsuarioPorId(string id);
-        public AplicationUser ObtengaUnUsuarioPorEmail(string email);
+        public  Task<bool> AñadirUnAccesoFallido(string id);
+
+        public Task<bool> BloquearUnUsuario(string id);
+
 
         public void ElimineUnUsuario(AplicationUser usuario);
 
+        public Task<List<AplicationUser>> ListeLosUsuarios();
 
-        public void AñadirUnAccesoFallido(string id);
 
-        public void BloquearUnUsuario(string id);
-
-        // necesita el servicio de STMP
+        // se necesita servicio STPM
         public void NotificarUnusuarioBloqueado(string id);
+
+
+        public Task<AplicationUser> ObtengaUnUsuarioPorId(string id);
+
+
+        public Task<AplicationUser> ObtengaUnUsuarioPorUserName(string username);
+
+        public Task<AplicationUser> ObtengaUnUsuarioPorEmial(string email);
+
+
 
 
     }

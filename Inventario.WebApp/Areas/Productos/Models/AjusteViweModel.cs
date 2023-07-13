@@ -9,6 +9,6 @@ namespace Inventario.WebApp.Areas.Productos.Models
         public Inventarios Inventario { get; set; }
         public AjusteDeInventario Ajuste { get; set; }
 
-        public AplicationUser usuario { get; set; } 
+        public string usuario { get; set; } 
     }
 }

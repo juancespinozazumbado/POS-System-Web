@@ -1,8 +1,10 @@
-﻿namespace Inventario.SI.Modelos.Dtos.Usuarios
+﻿using Inventario.Models.Dominio.Usuarios;
+
+namespace Inventario.SI.Modelos.Dtos.Usuarios
 {
     public class LoginResponsetDto
     {
-        public string Usuario { get; set; }
+        public AplicationUser Usuario { get; set; }
         public string Token { get; set; }
 
     }

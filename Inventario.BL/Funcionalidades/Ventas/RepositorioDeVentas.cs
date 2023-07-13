@@ -123,7 +123,7 @@ namespace Inventario.BL.Funcionalidades.Ventas
                     item.Monto = item.Precio * item.Cantidad;
                     item.MontoDescuento = 0;
                     item.MontoDescuento = item.Monto * porcentajeDescuento;
-                    item.Monto -= item.MontoDescuento;
+                    
 
                 }
                 _dbContext.Update(venta);
