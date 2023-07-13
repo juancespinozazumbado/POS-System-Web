@@ -5,7 +5,7 @@ namespace Inventario.WebApp.Areas.Ventas.Modelos
 {
     public class AperturaDeCajaViewModel
     {
-        public AplicationUser Usuario { get; set; }
+        public string Usuario { get; set; }
         public bool TieneUnaCajaAbierta { get; set; } = false;
         public List<AperturaDeCaja> Cajas { get; set; }
 

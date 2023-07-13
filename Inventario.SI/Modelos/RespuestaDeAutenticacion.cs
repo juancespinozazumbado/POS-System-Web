@@ -2,13 +2,15 @@
 
 namespace Inventario.SI.Modelos
 {
-    public class RespuestaDeAutenticacion<T> where T : class 
+    public class RespuestaDto 
     {
         public string Mensaje { get; set; } 
 
-        public T EntidadDto { get; set; }  
+        public Object Respuesta { get; set; }
+
+        public bool esSucces { get; set; } = true; 
         
-        public List<IdentityError> Error { get; set; }
+        public List<IdentityError> Error { get; set; }     
 
     }
     

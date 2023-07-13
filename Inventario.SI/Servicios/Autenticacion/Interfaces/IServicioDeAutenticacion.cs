@@ -7,11 +7,11 @@ namespace Inventario.SI.Servicios.Autenticacion.Interfaces
 {
     public interface IServicioDeAutenticacion
     {
-        Task<RespuestaDeAutenticacion<RegistroResponseDto>> Registro(RegistroRequestDto registroRequest);
+        Task<RespuestaDto> Registro(RegistroRequestDto registroRequest);
 
-        Task<RespuestaDeAutenticacion<LoginResponsetDto>> Login(LoginRequestDto loginRequest);
+        Task<RespuestaDto> Login(LoginRequestDto loginRequest);
 
-        Task<RespuestaDeAutenticacion<string>> CambiarContraseña(CambioDeContraseñaRequestDto request);
+        Task<RespuestaDto> CambiarContraseña(CambioDeContraseñaRequestDto request);
 
     }
 }

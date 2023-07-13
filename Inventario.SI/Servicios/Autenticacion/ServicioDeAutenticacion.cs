@@ -37,9 +37,9 @@ namespace Inventario.SI.Servicios.Autenticacion
 
         }
 
-        public async Task<RespuestaDeAutenticacion<LoginResponsetDto>> Login(LoginRequestDto loginRequest)
+        public async Task<RespuestaDto> Login(LoginRequestDto loginRequest)
         {      
-            var Usuario = _repositorioDeUsuarios.ObtengaUnUsuarioPorEmail(loginRequest.Correo);
+            var Usuario =  await _repositorioDeUsuarios.ObtengaUnUsuarioPorEmial(loginRequest.Correo);
             if (Usuario != null)
             {
                     var resultado = await _signInManager.CheckPasswordSignInAsync(Usuario, loginRequest.Contraseña, false);
@@ -48,7 +48,7 @@ namespace Inventario.SI.Servicios.Autenticacion
                 {
                     LoginResponsetDto respuesta = new()
                     {
-                        Usuario = Usuario.UserName,
+                        Usuario = Usuario,
                         Token = _servicioDeJWT.GenerarToken(Usuario)
 
                     };
@@ -61,10 +61,10 @@ namespace Inventario.SI.Servicios.Autenticacion
                     _servicioDeEmail.SendEmailAsync(
                         "comerciosistema@outlook.com", "OdiN.7072", titulo, cuerpo, Usuario.Email);
 
-                    return new RespuestaDeAutenticacion<LoginResponsetDto>()
+                    return new RespuestaDto()
                     {
                         Mensaje = "Credenciales correctos",
-                        EntidadDto = respuesta
+                        Respuesta = respuesta
                     };
 
                 }
@@ -81,7 +81,7 @@ namespace Inventario.SI.Servicios.Autenticacion
 
                     _servicioDeEmail.SendEmailAsync("comerciosistema@outlook.com", "OdiN.7072", titulo, cuerpo, Usuario.Email);
 
-                    return new RespuestaDeAutenticacion<LoginResponsetDto>()
+                    return new RespuestaDto()
                     {
                         Mensaje = "Su usuario esta bloqueado bloqueado!",
 
@@ -106,7 +106,7 @@ namespace Inventario.SI.Servicios.Autenticacion
                         _servicioDeEmail.SendEmailAsync(
                             "comerciosistema@outlook.com", "OdiN.7072", titulo, cuerpo, Usuario.Email);
 
-                        return new RespuestaDeAutenticacion<LoginResponsetDto>()
+                        return new RespuestaDto()
                         {
                             Mensaje = "Su usuario ha sido bloqueado bloqueado!"
                         };
@@ -116,8 +116,7 @@ namespace Inventario.SI.Servicios.Autenticacion
                     else
                     {
                         _repositorioDeUsuarios.AñadirUnAccesoFallido(Usuario.Id);
-                        return new RespuestaDeAutenticacion<LoginResponsetDto>()
-                        {
+                        return new RespuestaDto  ()  {
                             Mensaje = "Credenciales invalidos!"
                         };
                     }
@@ -125,7 +124,7 @@ namespace Inventario.SI.Servicios.Autenticacion
 
             }
             else{
-                return new RespuestaDeAutenticacion<LoginResponsetDto>()
+                return new RespuestaDto()
                 {
                     Mensaje = "Usuario no encontrado"
                 };
@@ -134,7 +133,7 @@ namespace Inventario.SI.Servicios.Autenticacion
             
         }
 
-        public async Task<RespuestaDeAutenticacion<RegistroResponseDto>> Registro(RegistroRequestDto registroRequest)
+        public async Task<RespuestaDto> Registro(RegistroRequestDto registroRequest)
         {
 
             AplicationUser usuaurio = new()
@@ -149,7 +148,7 @@ namespace Inventario.SI.Servicios.Autenticacion
 
                 if (resultado.Succeeded)
                 {
-                    usuaurio = _repositorioDeUsuarios.ObtengaUnUsuarioPorEmail(registroRequest.Correo);
+                    usuaurio = await _repositorioDeUsuarios.ObtengaUnUsuarioPorUserName(registroRequest.Nombre);
 
                     var userId = await _userManager.GetUserIdAsync((AplicationUser)usuaurio);
 
@@ -159,19 +158,19 @@ namespace Inventario.SI.Servicios.Autenticacion
                         Correo = registroRequest.Correo,
                     };
 
-                    return new RespuestaDeAutenticacion<RegistroResponseDto>() { EntidadDto = respuesta };
+                    return new RespuestaDto() { Respuesta = respuesta };
                 }
-                else return new RespuestaDeAutenticacion<RegistroResponseDto>() { Error = resultado.Errors.ToList() };
+                else return new RespuestaDto() { Mensaje = resultado.Errors.ToList().ToString() };
                
 
             }catch(Exception ex)
             {
                 Console.Write(ex.ToString());
-                return new RespuestaDeAutenticacion<RegistroResponseDto> {Mensaje = ex.Message };
+                return new RespuestaDto {Mensaje = ex.Message };
             }
         }
 
-        public async Task<RespuestaDeAutenticacion<string>> CambiarContraseña(CambioDeContraseñaRequestDto request)
+        public async Task<RespuestaDto> CambiarContraseña(CambioDeContraseñaRequestDto request)
         {
             var usuario =  await _userManager.FindByNameAsync(request.username);
             if(usuario != null)
@@ -179,12 +178,12 @@ namespace Inventario.SI.Servicios.Autenticacion
                 var resultado = await _userManager.ChangePasswordAsync(usuario, request.Contraseña, request.NuevaContraseña);
                 if (resultado.Succeeded)
                 {
-                    return new RespuestaDeAutenticacion<string>() {Mensaje ="Contraseña cambiada con exito !" };
+                    return new RespuestaDto() {Mensaje ="Contraseña cambiada con exito !" };
                 }else 
                 {
-                    return new RespuestaDeAutenticacion<string>() { Error = resultado.Errors.ToList() };
+                    return new RespuestaDto() { Mensaje = resultado.Errors.ToList().ToString() };
                 }
-            } else return new RespuestaDeAutenticacion<string>() { Mensaje = "El Usaurio no existe!" };
+            } else return new RespuestaDto() { Mensaje = "El Usaurio no existe!" };
         }
         
     }

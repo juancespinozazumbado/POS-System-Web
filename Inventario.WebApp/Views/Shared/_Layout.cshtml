@@ -1,8 +1,8 @@
 ﻿@using Inventario.Models.Dominio.Usuarios;
 @using Microsoft.AspNetCore.Identity;
-@inject SignInManager<AplicationUser> SignInManager
-@inject UserManager<AplicationUser> UserManager
-<!DOCTYPE html>
+@*@inject SignInManager<AplicationUser> SignInManager*@
+@*@inject UserManager<AplicationUser> UserManager
+*@<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -27,7 +27,7 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        @if (SignInManager.IsSignedIn(User))
+                        @if (User.Identity.IsAuthenticated)
                         {
 
                            

@@ -1,0 +1,39 @@
+﻿@using Inventario.WebApp.Areas.Autenticacion.Models
+@model RegistroDto
+
+
+<form asp-controller="Cuenta" asp-action="Registre" method="post">
+
+    <div class="container border p-4">
+        <div class="row text-center p-3">
+            <h1>Registro</h1>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6 offset-md-3 pb-2">
+                <input asp-for="NombreUsario" class="form-control" placeholder="Nombre de Usuario..." />
+                <span asp-validation-for="NombreUsario" class="text-danger" />
+            </div>
+            <div class="col-12 col-md-6 offset-md-3 pb-2">
+                <input asp-for="Correo" class="form-control" placeholder="Correo..." />
+                <span asp-validation-for="Correo" class="text-danger" />
+            </div>
+            <div class="col-12 col-md-6 offset-md-3 pb-2">
+                <input type ="text" asp-for="Contraseña" class="form-control" placeholder="Contraseña..." />
+                <span asp-validation-for="Contraseña" class="text-danger" />
+            </div>
+            <div class="col-12 col-md-6 offset-md-3 pb-2">
+                <input type="text" asp-for="ConfirmarContraseña" class="form-control" placeholder="Confirma Contrasela..." />
+                <span asp-validation-for="ConfirmarContraseña" class="text-danger" />
+            </div>
+           
+
+            <div class="col-12 col-md-6 offset-md-3 pb-2">
+                <button type="submit" class="form-control btn btn-success" value="Submit">Registro</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

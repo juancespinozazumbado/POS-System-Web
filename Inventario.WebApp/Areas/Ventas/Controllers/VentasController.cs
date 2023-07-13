@@ -1,11 +1,12 @@
-﻿using Inventario.BL.Funcionalidades.Inventario;
-using Inventario.BL.Funcionalidades.Usuarios;
-using Inventario.BL.Funcionalidades.Ventas;
+﻿
 using Inventario.DA.Database;
 using Inventario.Models.Dominio.Productos;
 using Inventario.Models.Dominio.Usuarios;
 using Inventario.Models.Dominio.Ventas;
+using Inventario.WebApp.Areas.Productos.Servicio.Iservicio;
 using Inventario.WebApp.Areas.Ventas.Modelos;
+using Inventario.WebApp.Areas.Ventas.Modelos.Dtos;
+using Inventario.WebApp.Areas.Ventas.Servicio.IServicio;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
@@ -17,28 +18,33 @@ namespace Inventario.WebApp.Areas.Ventas.Controllers
     [Authorize]
     public class VentasController : Controller
     {
-        RepositorioDeVentas RepositorioDeVentas;
-        ReporitorioDeInventarios ReporitorioDeInventarios;
-        RepositorioDeUsuarios RepositorioDeUsuarios;
-        RepositorioDeAperturaDeCaja RepositorioDeAperturaDeCaja;
+    
+
+        private readonly IServicioDeVentas _servicioDeVentas;
+        private readonly IservicioDeAperturaDeCaja _servicioDeCajas;
+        private readonly IServicioDeInventario _servicioDeInventarios;
         
-        public VentasController(InventarioDBContext context)
+        public VentasController(
+            IServicioDeInventario servicioDeInevnatrio, 
+            IservicioDeAperturaDeCaja servicioDeDecajas, 
+            IServicioDeVentas serviciodeVentas )
         {
-            RepositorioDeVentas = new(context);
-            ReporitorioDeInventarios = new(context);
-            RepositorioDeUsuarios = new(context);
-            RepositorioDeAperturaDeCaja = new(context);
+            
+            _servicioDeCajas = servicioDeDecajas;
+            _servicioDeInventarios = servicioDeInevnatrio;
+            _servicioDeVentas = serviciodeVentas;
             
         }
         // GET: VentasController
         public async Task<ActionResult> Index()
         {
 
-            string id = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            AplicationUser usaurioActual = RepositorioDeUsuarios.ObtengaUnUsuarioPorId(id);
-            AperturaDeCajaViewModel modelo = new() { Usuario = usaurioActual };
+            string Id_Usuario = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            string username = User.Identity.Name;
+            
+            AperturaDeCajaViewModel modelo = new() { Usuario = username };
 
-            var cajas = await RepositorioDeAperturaDeCaja.AperturasDeCajaPorUsuario(id);
+            var cajas = await _servicioDeCajas.AperturasDeCajaPorUsuario(Id_Usuario);
               AperturaDeCaja caja = cajas.Where(c => c.estado == EstadoCaja.Abierta).FirstOrDefault();
             if (caja != null)
                 modelo.TieneUnaCajaAbierta = true;
@@ -52,15 +58,15 @@ namespace Inventario.WebApp.Areas.Ventas.Controllers
         {
 
             string IdUsuario = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            AplicationUser usaurioActual = RepositorioDeUsuarios.ObtengaUnUsuarioPorId(IdUsuario);
-            var cajas = await RepositorioDeAperturaDeCaja.AperturasDeCajaPorUsuario(IdUsuario);
+           
+            var cajas = await _servicioDeCajas.AperturasDeCajaPorUsuario(IdUsuario);
 
               AperturaDeCaja caja = cajas.Where(c => c.estado == EstadoCaja.Abierta).FirstOrDefault();
 
-            var ventasDelusario = await  RepositorioDeVentas.ListeLasVentasPorUsuario(IdUsuario);
-               Venta ventaAbierta = ventasDelusario.Where(v => v.Estado == EstadoVenta.EnProceso).FirstOrDefault();
+            var ventasDelusario = caja.Ventas;
+            Venta ventaAbierta = ventasDelusario.Where(v => v.Estado == EstadoVenta.EnProceso).FirstOrDefault();
 
-            List<Inventarios> inventarios = await ReporitorioDeInventarios.listeElInventarios();
+            List<Inventarios> inventarios = await _servicioDeInventarios.ListarInventarios();
 
 
             VentaEnProcesoViewModel modelo = new() { Inventarios = inventarios, Detalles = new() };
@@ -89,25 +95,33 @@ namespace Inventario.WebApp.Areas.Ventas.Controllers
         [HttpPost]
         public async Task<ActionResult> AgregarItem(VentaEnProcesoViewModel modelo)
         {
+            var Id_Usuario = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            // Obtener el item seleccionado del inventario
-            var itemDelInventario = await ReporitorioDeInventarios.ObetenerInevtarioPorId(modelo.Detalles.Id_inventario);
+            
+            var cajas = await _servicioDeCajas.AperturasDeCajaPorUsuario(Id_Usuario);
+
+            AperturaDeCaja caja = cajas.Where(c => c.estado == EstadoCaja.Abierta).FirstOrDefault();
+
+
+            AgregarItemDeVenatRequest itemDeVenta = new()
+            { 
+                id_Usuario = Id_Usuario ,
+                Id_venta = modelo.Detalles.Id_venta,
+                cantidad = modelo.Detalles.Cantidad,
+                Id_Inventario = modelo.Detalles.Id_inventario,
+                Id_caja = caja.Id
+            };
+            var inventarios = await _servicioDeInventarios.ListarInventarios();
+
+            var itemDelInventario = inventarios.Find(i => i.Id == modelo.Detalles.Id_inventario);
 
             // Verificar si hay suficiente cantidad disponible en el inventario
             if (itemDelInventario.Cantidad >= modelo.Detalles.Cantidad && modelo.Detalles.Cantidad > 0)
             {
-
-                VentaDetalle ventaDetalle = modelo.Detalles;
-
-                ventaDetalle.Monto = ventaDetalle.Cantidad * ventaDetalle.Precio;
-
-                // Actualizar la cantidad en el inventario
-                itemDelInventario.Cantidad -= ventaDetalle.Cantidad;
-                await ReporitorioDeInventarios.EditarInventario(itemDelInventario);
-                await RepositorioDeVentas.AñadaUnDetalleAlaVenta(ventaDetalle.Id_venta, ventaDetalle);
-
-                List<Inventarios> inventarios = await ReporitorioDeInventarios.listeElInventarios();
-                Venta venta = await RepositorioDeVentas.ObtengaUnaVentaPorId(ventaDetalle.Id_venta);
+                itemDeVenta.cantidad = modelo.Detalles.Cantidad;
+                var venta = await _servicioDeVentas.AñadaUnDetalleAlaVenta(modelo.Detalles.Id_venta, itemDeVenta);
+                 inventarios = await _servicioDeInventarios.ListarInventarios();
+                // reconstruye el modelo de la vista principal
                 VentaEnProcesoViewModel VentaEnProcesoViewModel = new()
                 {
                     Inventarios = inventarios,
@@ -116,9 +130,7 @@ namespace Inventario.WebApp.Areas.Ventas.Controllers
                 };
 
                 return RedirectToAction(nameof(VentaEnProceso), VentaEnProcesoViewModel);
-            }
-            else
-            {
+            } else { 
                 ModelState.AddModelError("", "La cantidad solicitada excede la cantidad disponible en el inventario.");
             }
 
@@ -133,15 +145,27 @@ namespace Inventario.WebApp.Areas.Ventas.Controllers
         {
             try
             {
-                Inventarios inventario = await ReporitorioDeInventarios.ObetenerInevtarioPorId(modelo.Detalles.Id_inventario);
-                inventario.Cantidad += modelo.Detalles.Cantidad;
-                await ReporitorioDeInventarios.EditarInventario(inventario);
+                var Id_Usuario =  User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-                Venta venta = await RepositorioDeVentas.ObtengaUnaVentaPorId(modelo.Detalles.Id_venta);
-                VentaDetalle item = venta.VentaDetalles.Find(d => d.Id == modelo.Detalles.Id);
+                var inventarios = await _servicioDeInventarios.ListarInventarios();
+                var cajas = await _servicioDeCajas.AperturasDeCajaPorUsuario(Id_Usuario);
 
-                await RepositorioDeVentas.ElimineUnDetalleDeLaVenta(venta.Id, item);
-                List<Inventarios> inventarios = await ReporitorioDeInventarios.listeElInventarios();
+                AperturaDeCaja caja = cajas.Where(c => c.estado == EstadoCaja.Abierta).FirstOrDefault();
+
+                var inventario = inventarios.Find(i => i.Id == modelo.Detalles.Id_inventario);
+
+                var venta = await _servicioDeVentas.ElimineUnDetalleDeLaVenta(modelo.Detalles.Id_venta,
+                    new QuitarItemDeVentaRequest()
+                    {
+                        id_Item = modelo.Detalles.Id,
+                        id_Usuario = Id_Usuario,
+                        Id_venta = modelo.Detalles.Id_venta,
+                        Id_caja = caja.Id
+                    });
+
+                //Venta venta = await RepositorioDeVentas.ObtengaUnaVentaPorId(modelo.Detalles.Id_venta);
+                //VentaDetalle item = venta.VentaDetalles.Find(d => d.Id == modelo.Detalles.Id);
+                inventarios = await _servicioDeInventarios.ListarInventarios();
 
                 VentaEnProcesoViewModel VentaEnProcesoViewModel = new()
                 {
@@ -170,25 +194,22 @@ namespace Inventario.WebApp.Areas.Ventas.Controllers
             {
 
                 string IdUsuario = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                AplicationUser usaurioActual = RepositorioDeUsuarios.ObtengaUnUsuarioPorId(IdUsuario);
-                var cajas = await RepositorioDeAperturaDeCaja.AperturasDeCajaPorUsuario(IdUsuario);
-                  AperturaDeCaja caja = cajas.Where(c => c.estado == EstadoCaja.Abierta).FirstOrDefault();
+               
+                var cajas = await _servicioDeCajas.AperturasDeCajaPorUsuario(IdUsuario);
+                AperturaDeCaja caja = cajas.Where(c => c.estado == EstadoCaja.Abierta).FirstOrDefault();
 
-                Venta LaVenta = new()
+                CrearVentaRequest LaVenta = new()
                 {
-                    AperturaDeCaja = caja,
-                    IdAperturaDeCaja = caja.Id,
-                    UserId = IdUsuario,
-                    NombreCliente = venta.NombreCliente,
-                    Fecha = DateTime.Now,
-                    Estado = EstadoVenta.EnProceso,
-                    VentaDetalles = new()
+                    Id_caja  = caja.Id,
+                    Id_Usuario = IdUsuario,
+                    Cliente = venta.NombreCliente,
+                    
                 };
-                await RepositorioDeVentas.CreeUnaVenta(LaVenta);
-                 var ventas = await RepositorioDeVentas.ListeLasVentasPorUsuario(IdUsuario);
-                 LaVenta  = ventas.Where(v => v.Estado != EstadoVenta.Terminada).FirstOrDefault();
+                var ventaActual = await _servicioDeVentas.CreeUnaVenta(LaVenta);
 
-                return RedirectToAction(nameof(VentaEnProceso), LaVenta);
+                 //var ventaActual  = caja.Ventas.Where(v => v.Estado != EstadoVenta.Terminada).FirstOrDefault();
+
+                return RedirectToAction(nameof(VentaEnProceso), ventaActual);
             }
             catch (Exception e)
             {
@@ -203,10 +224,14 @@ namespace Inventario.WebApp.Areas.Ventas.Controllers
         {
             try
             {
-                Venta venta = await  RepositorioDeVentas.ObtengaUnaVentaPorId(modelo.venta.Id);
-                venta.TipoDePago = modelo.venta.TipoDePago;
-               await  RepositorioDeVentas.EstablescaElTipoDePago(venta.Id, modelo.venta.TipoDePago);
-               await  RepositorioDeVentas.TermineLaVenta(venta.Id);
+
+                var venta = await _servicioDeVentas.TermineLaVenta(modelo.venta.Id, 
+                    new TerminarVentaRequest() { Id_venta = modelo.venta.Id, TipoDePago = (Modelos.TipoDePago)modelo.venta.TipoDePago});
+
+                
+               // venta.TipoDePago = modelo.venta.TipoDePago;
+               //await  RepositorioDeVentas.EstablescaElTipoDePago(venta.Id, modelo.venta.TipoDePago);
+               //await  RepositorioDeVentas.TermineLaVenta(venta.Id);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -222,10 +247,16 @@ namespace Inventario.WebApp.Areas.Ventas.Controllers
         {
             try
             {
-                Venta venta = await RepositorioDeVentas.ObtengaUnaVentaPorId(modelo.venta.Id);
-                await RepositorioDeVentas.ApliqueUnDescuento(venta.Id, modelo.venta.PorcentajeDesCuento);
+                var venta = await _servicioDeVentas.ApliqueUnDescuento(modelo.venta.Id,
+                    new AplicarDescuentoRequest()
+                    {
+                        Id_venta = modelo.venta.Id,
+                        descuento = modelo.venta.PorcentajeDesCuento,
 
-                modelo.venta = venta;
+                    });
+
+                
+                //modelo.venta = venta;
 
                 return RedirectToAction(nameof(VentaEnProceso));
             }
@@ -235,12 +266,6 @@ namespace Inventario.WebApp.Areas.Ventas.Controllers
             }
         }
 
-
-        // GET: VentasController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
 
   
     }

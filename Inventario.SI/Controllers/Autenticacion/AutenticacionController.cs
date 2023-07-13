@@ -1,4 +1,5 @@
-﻿using Inventario.SI.Modelos.Dtos.Usuarios;
+﻿using Inventario.SI.Modelos;
+using Inventario.SI.Modelos.Dtos.Usuarios;
 using Inventario.SI.Servicios.Autenticacion;
 using Inventario.SI.Servicios.Autenticacion.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -26,9 +27,9 @@ namespace Inventario.SI.Controllers.Usuarios
             try
             {
                 var respuesta =  await _servicioDeAutenticacion.Registro(request);
-                if(respuesta.EntidadDto != null) 
+                if(respuesta.Respuesta != null) 
                 {
-                    return Ok(respuesta.EntidadDto);   
+                    return Ok(respuesta.Respuesta);   
                 }else
                 {
                     return BadRequest(respuesta.Error);
@@ -46,14 +47,14 @@ namespace Inventario.SI.Controllers.Usuarios
 
         // POST api/Autenticacion/Login/
         [HttpPost("Login")]
-        public async Task<ActionResult<LoginRequestDto>> Login ([FromBody] LoginRequestDto request)
+        public async Task<ActionResult<RespuestaDto>> Login ([FromBody] LoginRequestDto request)
         {
              try
             {
                 var respuesta =  await _servicioDeAutenticacion.Login(request);
-                if (respuesta.EntidadDto != null)
+                if (respuesta.Respuesta != null)
                 {
-                    return Ok(respuesta.EntidadDto);
+                    return Ok( respuesta );
                 }
                 else
                 {
@@ -67,29 +68,6 @@ namespace Inventario.SI.Controllers.Usuarios
             }
         }
 
-        // POST api/Autenticacion/Login/
-        [HttpPost("usuario/cambioDeContraseña")]
-        public async Task<ActionResult<LoginRequestDto>> CambioDeContraseña([FromBody] CambioDeContraseñaRequestDto request)
-        {
-            try
-            {
-                var respuesta =  await _servicioDeAutenticacion.CambiarContraseña(request);
-                if (respuesta.Error == null)
-                {
-                    return Ok(respuesta.Mensaje);
-                }
-                else
-                {
-                    return BadRequest(respuesta.Error);
-                }
-
-            }
-            catch (Exception ex)
-            {
-                Console.Write(ex.ToString());
-                return BadRequest(ex);
-            }
-        }
 
     }
 }

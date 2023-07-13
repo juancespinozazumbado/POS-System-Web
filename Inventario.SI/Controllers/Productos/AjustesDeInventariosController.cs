@@ -1,5 +1,6 @@
 ﻿using Inventario.BL.Funcionalidades.Inventario.Interfaces;
 using Inventario.Models.Dominio.Productos;
+using Inventario.SI.Modelos;
 using Inventario.SI.Modelos.Dtos.Productos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,26 +24,28 @@ namespace Inventario.SI.Controllers.Productos
 
         // GET: api/<InventariosController>
         [HttpGet("{id}")]
-        public  async Task<ActionResult<List<AjusteDeInventario>>> listarAjustesdeInentario(int id)
+        public  async Task<ActionResult<RespuestaDto>> listarAjustesdeInentario(int id)
         {
             var inventario = await _repositorioDeInventarios.ObetenerInevtarioPorId(id);
             if(inventario != null)
             {
-                return Ok(inventario);
-            }else { return BadRequest("No existe el inventario"); }  
+                
+                return Ok(new RespuestaDto() { Respuesta = inventario });
+            }else { return BadRequest("No existe el inventario" ); }  
             
         }
 
         // GET api/<InventariosController>/5
         [HttpGet("{id}/Detalle")]
-        public async Task<ActionResult<AjusteDeInventario>> VerElDetalleDeUnAjuste(int id, int id_detalle)
+        public async Task<ActionResult<RespuestaDto>> VerElDetalleDeUnAjuste(int id, int id_detalle)
         {
             var inventario = await _repositorioDeInventarios.ObetenerInevtarioPorId(id);
             if(inventario.Ajustes.Count ==0) return BadRequest("El inventario no tiene ajustes");
             if (inventario != null)
             {
                 var ajuste = inventario.Ajustes.Find( a => a.Id == id_detalle);
-                if (ajuste != null) { return Ok(ajuste); } else return BadRequest("No existe este ajuste");
+                if (ajuste != null) { return Ok(new RespuestaDto() { Respuesta = ajuste });  
+                } else return BadRequest("No existe este ajuste");
                 
             }
             else { return BadRequest("No existe el inventario"); }
@@ -51,7 +54,7 @@ namespace Inventario.SI.Controllers.Productos
 
         // POST api/<InventariosController>
         [HttpPost("{id}")]
-        public async Task<ActionResult<bool>> CrearUnAjusteDeInventario(int id, [FromBody] CrearAjusteDeInventarioRequest request)
+        public async Task<ActionResult<RespuestaDto>> CrearUnAjusteDeInventario(int id, [FromBody] CrearAjusteDeInventarioRequest request)
         {
             var inventario = await _repositorioDeInventarios.ObetenerInevtarioPorId(id);
             
@@ -69,7 +72,7 @@ namespace Inventario.SI.Controllers.Productos
 
                 };
                 await _repositorioDeAjusteDeInventarios.AgegarAjusteDeInventario(id, ajusteDeInventario);
-                return Ok(inventario);
+                return Ok(new RespuestaDto() { Respuesta = inventario });
             }
             else { return BadRequest("No existe el inventario"); }
         }
