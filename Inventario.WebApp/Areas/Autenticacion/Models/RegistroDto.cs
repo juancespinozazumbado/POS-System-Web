@@ -5,12 +5,12 @@ namespace Inventario.WebApp.Areas.Autenticacion.Models
     public class RegistroDto
     {
         [Required]
-        public string NombreUsario { get; set; }
+        public string Nombre { get; set; }
         [Required]
         public string Correo { get; set; }
         [Required]
         public string Contraseña { get; set; }
         [Required]
-        public string ConfirmarContraseña { get; set; }
+        public string ComfirmacionDeContraseña { get; set; }
     }
 }

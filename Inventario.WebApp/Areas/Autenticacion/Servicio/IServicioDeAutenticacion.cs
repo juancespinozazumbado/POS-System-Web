@@ -8,6 +8,7 @@ namespace Inventario.WebApp.Areas.Autenticacion.Servicio
         Task<RespuestaRestDto?> LoginAsync(LoginDto request);
         Task<RespuestaRestDto?> Registro(RegistroDto request);
         public Task<RespuestaRestDto?> CambiarClave(CambioDeClaveDto request);
+      
 
 
     }
