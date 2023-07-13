@@ -172,7 +172,7 @@ namespace Inventario.SI.Servicios.Autenticacion
 
         public async Task<RespuestaDto> CambiarContraseña(CambioDeContraseñaRequestDto request)
         {
-            var usuario =  await _userManager.FindByNameAsync(request.username);
+            var usuario =  await _userManager.FindByNameAsync(request.NombreUsario);
             if(usuario != null)
             {
                 var resultado = await _userManager.ChangePasswordAsync(usuario, request.Contraseña, request.NuevaContraseña);

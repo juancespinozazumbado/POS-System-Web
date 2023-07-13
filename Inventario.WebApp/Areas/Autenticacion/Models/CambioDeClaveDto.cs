@@ -10,6 +10,9 @@ namespace Inventario.WebApp.Areas.Autenticacion.Models
         [Required]
         
         public string Contraseña { get; set; }
+
+        [Required]
+        public string NuevaContraseña { get; set; }
         [Required]
         public string ConfirmarContraseña { get; set; }
     }

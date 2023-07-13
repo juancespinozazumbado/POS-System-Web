@@ -52,4 +52,12 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Modelos\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Inventario.Models\Inventario.Models.csproj" />
+	</ItemGroup>
+
 </Project>

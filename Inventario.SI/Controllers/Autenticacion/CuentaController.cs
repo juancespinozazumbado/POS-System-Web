@@ -63,7 +63,7 @@ namespace Inventario.SI.Controllers.Usuarios
         {
              try
             {
-                var usuario = await _userManager.FindByNameAsync(request.username);
+                var usuario = await _userManager.FindByNameAsync(request.NombreUsario);
 
                 if (usuario != null)
                 {

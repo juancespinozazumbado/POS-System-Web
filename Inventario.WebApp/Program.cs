@@ -27,6 +27,7 @@ builder.Services.AddHttpClient<IServicioDeInventario, ServicioDeInventario>();
 builder.Services.AddHttpClient< IservicioDeAjustesDeInventario, ServicioDeAjustesDeInventario >();
 builder.Services.AddHttpClient<IServicioDeVentas, ServicioDeVentas>();
 builder.Services.AddHttpClient<IservicioDeAperturaDeCaja, ServicioDeAperturaDeCaja>();
+builder.Services.AddHttpClient<IServicioBase, ServicioBase>();
 
 
 builder.Services.AddScoped<IServicioDeInventario, ServicioDeInventario>();
@@ -51,9 +52,6 @@ builder.Services.Configure<IdentityOptions>(options => options.ClaimsIdentity.Us
 
 
 builder.Services.AddControllersWithViews();
-
-//builder.Services.AddHttpContextAccessor();
-//builder.Services.AddHttpClient();
 
 
 var app = builder.Build();

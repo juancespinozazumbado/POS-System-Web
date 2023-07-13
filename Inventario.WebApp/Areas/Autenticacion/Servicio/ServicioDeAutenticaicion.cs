@@ -33,26 +33,14 @@ namespace Inventario.WebApp.Areas.Autenticacion.Servicio
 
         public async Task<RespuestaRestDto?> Registro(RegistroDto request)
         {
-            //var resultado =  await _servicioBase.SendAsync(
-            //     new ConsultaRestDto()
-            //     {
-            //         MetodoRest = MetodoREST.POST,
-            //         Cuerpo = request,
-            //         URL = ApiOPciones.API_URL + $"/Autenticacion/Registro",
-            //         TipoDeContenido = TipoDeContenido.Json
-            //     }, conBearer: false);
-
-
-
-            HttpClient cliente = new();
-
-            var url = ApiOPciones.API_URL + $"/Autenticacion/Registro";
-            var cuerpo = JsonConvert.SerializeObject(request);
-            var buffer = System.Text.Encoding.UTF8.GetBytes(cuerpo);
-            var byteContent = new ByteArrayContent(buffer);
-            byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-            var resultado = await cliente.PostAsJsonAsync(url, byteContent);
+            var resultado = await _servicioBase.SendAsync(
+                 new ConsultaRestDto()
+                 {
+                     MetodoRest = MetodoREST.POST,
+                     Cuerpo = request,
+                     URL = ApiOPciones.API_URL + $"/Autenticacion/Registro",
+                     TipoDeContenido = TipoDeContenido.Json
+                 }, conBearer: false);
 
 
             return new RespuestaRestDto() { Respuesta = resultado };

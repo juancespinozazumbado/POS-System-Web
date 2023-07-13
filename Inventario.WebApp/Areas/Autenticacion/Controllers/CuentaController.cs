@@ -37,11 +37,16 @@ namespace Inventario.WebApp.Areas.Autenticacion.Controllers
         public async Task<IActionResult> Registre( RegistroDto registro)
         {
             var resultado = await _servicioDeAutenticacion.Registro(registro);
-            return RedirectToAction(nameof(Login));
-           
+            if (resultado.esSucces)
+            {
+                return RedirectToAction(nameof(Login));
+
+            }else
+            {
+                return RedirectToAction("Index", "Home", new { area = "" });
+            }
 
         }
-
 
         [HttpGet]  
         public ActionResult Login()
@@ -99,7 +104,7 @@ namespace Inventario.WebApp.Areas.Autenticacion.Controllers
             {
                 await HttpContext.SignOutAsync();
                 _proveedorDeToken.LimpiarToken();
-                return RedirectToAction("Index", "Home", new { area = "" });
+                return RedirectToAction( nameof(Login));
 
             }
            
