@@ -3,7 +3,10 @@ using Inventario.WebApp.Areas.Autenticacion.Models;
 using Inventario.WebApp.Models.ApiOpciones;
 using Inventario.WebApp.Models.Dto;
 using Inventario.WebApp.Servicios.IServicio;
+using Newtonsoft.Json;
 using System.Data;
+using System.Net.Http.Headers;
+using System.Security.Policy;
 using static Inventario.WebApp.Models.ApiOpciones.ApiOPciones;
 
 namespace Inventario.WebApp.Areas.Autenticacion.Servicio
@@ -30,16 +33,29 @@ namespace Inventario.WebApp.Areas.Autenticacion.Servicio
 
         public async Task<RespuestaRestDto?> Registro(RegistroDto request)
         {
-            var resultado =  await _servicioBase.SendAsync(
-                 new ConsultaRestDto()
-                 {
-                     MetodoRest = MetodoREST.POST,
-                     Cuerpo = request,
-                     URL = ApiOPciones.API_URL + $"/Autenticacion/Registro",
-                     TipoDeContenido = TipoDeContenido.Json
-                 }, conBearer: false);
+            //var resultado =  await _servicioBase.SendAsync(
+            //     new ConsultaRestDto()
+            //     {
+            //         MetodoRest = MetodoREST.POST,
+            //         Cuerpo = request,
+            //         URL = ApiOPciones.API_URL + $"/Autenticacion/Registro",
+            //         TipoDeContenido = TipoDeContenido.Json
+            //     }, conBearer: false);
 
-            return resultado;
+
+
+            HttpClient cliente = new();
+
+            var url = ApiOPciones.API_URL + $"/Autenticacion/Registro";
+            var cuerpo = JsonConvert.SerializeObject(request);
+            var buffer = System.Text.Encoding.UTF8.GetBytes(cuerpo);
+            var byteContent = new ByteArrayContent(buffer);
+            byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            var resultado = await cliente.PostAsJsonAsync(url, byteContent);
+
+
+            return new RespuestaRestDto() { Respuesta = resultado };
         }
 
         public async Task<RespuestaRestDto?> CambiarClave(CambioDeClaveDto request)
