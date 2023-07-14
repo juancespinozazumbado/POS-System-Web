@@ -1,11 +1,28 @@
 ﻿
 
+using static System.Net.WebRequestMethods;
+
 namespace Inventario.Maui.Modelos
 {
-    internal class ConfiguracionApi
+    public class ConfiguracionApi
     {
-        public string APi_URL;
+        public static string? API_URL { get;  } = "https://apiinventario.azurewebsites.net/api";
 
-        public string Token;
+        public const string CoqueToken = "JWTToken";
+
+        public enum MetodoREST
+        {
+            GET,
+            POST,
+            PUT,
+            DELETE
+        }
+
+        public enum TipoDeContenido
+        {
+            Json,
+            Null
+        }
+
     }
 }

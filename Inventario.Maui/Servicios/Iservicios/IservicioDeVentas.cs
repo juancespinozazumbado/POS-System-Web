@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Inventario.Maui.Servicios.Iservicios
 {
-    internal class IservicioDeVentas
+    public class IservicioDeVentas
     {
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Inventario.Maui.Modelos.Dtos
 {
-    internal class LoginRespuestaDto
+    public class LoginRespuestaDto
     {
         public AplicationUser Usuario { get; set; }
         public string Token { get; set; }
