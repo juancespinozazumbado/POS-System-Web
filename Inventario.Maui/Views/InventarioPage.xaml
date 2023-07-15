@@ -6,11 +6,17 @@
              xmlns:te="clr-namespace:Inventario.Maui.Views.Templates"
              x:DataType="vim:InventariosViewModel"
              Title="Inventarios">
+
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsVisible="False" IsEnabled="False" />
+    </Shell.BackButtonBehavior>
+
     <VerticalStackLayout>
 
         <Button Text="Ver inventarios" Command="{Binding ListarInventariosCommand}"></Button>
+        <Button Text="Voler al menu" Command="{Binding }"></Button>
 
-       
+
         <CollectionView ItemsSource="{Binding Lista_inventarios}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>

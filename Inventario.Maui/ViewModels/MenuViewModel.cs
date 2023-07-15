@@ -18,14 +18,16 @@ namespace Inventario.Maui.ViewModels
         public async  void VerVentas()
         {
             await Task.Delay(1000);
-            await Shell.Current.Navigation.PushAsync(new Views.ResumenDeVentas());
+            //await Shell.Current.Navigation.PushAsync(new Views.ResumenDeVentas());
+            await Shell.Current.GoToAsync($"{nameof(Views.ResumenDeVentas)}");
         }
 
         [RelayCommand]
         public async void VerInventarios()
         {
             await Task.Delay(1000);
-            await Shell.Current.Navigation.PushAsync(new Views.InventarioPage());
+            //await Shell.Current.Navigation.PushAsync(new Views.InventarioPage());
+            await Shell.Current.GoToAsync($"{nameof(Views.InventarioPage)}");
 
         }
 
@@ -34,11 +36,14 @@ namespace Inventario.Maui.ViewModels
         {
             _proveedorDeToken.LimpiarToken();
 
-            SecureStorage.Remove("Id_Usuario");
-            SecureStorage.Remove("Nombre_Usuario");
+            SecureStorage.Default.Remove("Id_Usuario");
+            SecureStorage.Default.Remove("Nombre_Usuario");
 
             await Task.Delay(1000);
-            await Shell.Current.Navigation.PushAsync(new Views.LoginPage());
+
+            //await Shell.Current.Navigation.PushAsync(new Views.LoginPage());
+            await Shell.Current.GoToAsync($"{nameof(Views.LoginPage)}");
+
         }
 
 

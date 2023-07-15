@@ -54,5 +54,11 @@ namespace Inventario.Maui.ViewModels
             
         }
 
+        [RelayCommand]
+        public async void Atras()
+        {
+            await Shell.Current.GoToAsync($"{nameof(Views.Menu)}");
+        }
+
     }
 }
