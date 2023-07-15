@@ -5,6 +5,13 @@
              xmlns:vm ="clr-namespace:Inventario.Maui.ViewModels"
              x:DataType="vm:MenuViewModel"
              Title="Menu">
+    
+    
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsVisible="False" IsEnabled="False" />
+    </Shell.BackButtonBehavior>
+
+
     <VerticalStackLayout>
         <Label 
             Text="Welcome to .NET MAUI!"

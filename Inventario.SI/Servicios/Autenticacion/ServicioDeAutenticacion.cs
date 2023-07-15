@@ -7,11 +7,6 @@ using Inventario.SI.Modelos.Dtos.Autenticacion;
 using Inventario.SI.Modelos.Dtos.Usuarios;
 using Inventario.SI.Servicios.Autenticacion.Interfaces;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.WebUtilities;
-using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace Inventario.SI.Servicios.Autenticacion
 {

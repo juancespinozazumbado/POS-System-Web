@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using Inventario.Maui.Modelos;
 using Inventario.Maui.Modelos.Dtos;
 using Inventario.Maui.Servicios.Iservicios;
+using Microsoft.Maui.Controls;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
@@ -82,10 +83,12 @@ namespace Inventario.Maui.ViewModels
                 //var token = await SecureStorage.GetAsync(ConfiguracionApi.CoqueToken);
 
                 await Task.Delay(1000);
-                await Shell.Current.Navigation.PushAsync(new Views.Menu());
-                
-           
-            }else
+                //await Shell.Current.Navigation.PushAsync(new Views.Menu());
+                await Shell.Current.GoToAsync($"{nameof(Views.Menu)}");
+
+
+            }
+            else
             {
                 correo = "";
                 contraseña="";
