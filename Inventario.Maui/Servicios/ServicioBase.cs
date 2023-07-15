@@ -1,14 +1,16 @@
-﻿using Inventario.WebApp.Models.Dto;
-using Inventario.WebApp.Servicios.IServicio;
+﻿
+using Inventario.Maui.Modelos;
+using Inventario.Maui.Modelos.Dtos;
+using Inventario.Maui.Servicios.Iservicios;
 using Newtonsoft.Json;
-using NuGet.Common;
 using System.Net;
+using System.Net.Http;
 using System.Text;
-using static Inventario.WebApp.Models.ApiOpciones.ApiOPciones;
+using static Inventario.Maui.Modelos.ConfiguracionApi;
 
-namespace Inventario.WebApp.Servicios
+namespace Inventario.Maui.Servicios
 {
-    public class ServicioBase : IServicioBase
+    public class ServicioBase : IServicioBase   
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IProveedorDeToken _proveedorDeToken;
@@ -18,7 +20,7 @@ namespace Inventario.WebApp.Servicios
             _httpClientFactory = HttpClientFactory;
             _proveedorDeToken = proveedorToker;
         }
-        public async  Task<RespuestaRestDto?> SendAsync(ConsultaRestDto requestDto, bool conBearer = true)
+        public async Task<RespuestaRest?> SendAsync(ConsultaRest requestDto, bool conBearer = true)
         {
             try
             {
@@ -32,7 +34,7 @@ namespace Inventario.WebApp.Servicios
                 }
                 if (conBearer)
                 {
-                    var token = _proveedorDeToken.ObtenerToken();
+                    var token = await  _proveedorDeToken.ObtenerToken();
                     if (token != null)
                     {
                         mensaje.Headers.Add("Authorization", $"Bearer {token}");
@@ -72,7 +74,7 @@ namespace Inventario.WebApp.Servicios
                 {
                     case HttpStatusCode.NotFound:
                         return new() { esSucces = false, Mensaje = "Not Found : 404" };
-                    case HttpStatusCode.Forbidden: 
+                    case HttpStatusCode.Forbidden:
                         return new() { esSucces = false, Mensaje = "Access Denied : 403" };
                     case HttpStatusCode.Unauthorized:
                         return new() { esSucces = false, Mensaje = "Unauthorized : 401" };
@@ -82,7 +84,7 @@ namespace Inventario.WebApp.Servicios
                         return new() { esSucces = false, Mensaje = "Bad Request: 400" };
                     default:
                         var apiContent = await respuestaApi.Content.ReadAsStringAsync();
-                        var apiResponseDto = JsonConvert.DeserializeObject<RespuestaRestDto>(apiContent);
+                        var apiResponseDto = JsonConvert.DeserializeObject<RespuestaRest>(apiContent);
                         return apiResponseDto;
 
                 }
@@ -91,7 +93,7 @@ namespace Inventario.WebApp.Servicios
             {
                 return new() { esSucces = false, Mensaje = ex.Message };
             }
-           
+
         }
     }
 }

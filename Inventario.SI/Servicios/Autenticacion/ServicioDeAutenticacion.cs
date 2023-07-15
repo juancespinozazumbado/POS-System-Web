@@ -3,6 +3,7 @@ using Inventario.BL.Funcionalidades.Usuarios.Interfaces;
 using Inventario.BL.ServicioEmail;
 using Inventario.Models.Dominio.Usuarios;
 using Inventario.SI.Modelos;
+using Inventario.SI.Modelos.Dtos.Autenticacion;
 using Inventario.SI.Modelos.Dtos.Usuarios;
 using Inventario.SI.Servicios.Autenticacion.Interfaces;
 using Microsoft.AspNetCore.Identity;
@@ -46,9 +47,15 @@ namespace Inventario.SI.Servicios.Autenticacion
 
                 if (resultado.Succeeded)
                 {
+                    var dato = new UsuarioDto()
+                    {
+                        Id = Usuario.Id,
+                        UserName =Usuario.UserName,
+                        Email = Usuario.Email
+                    };
                     LoginResponsetDto respuesta = new()
                     {
-                        Usuario = Usuario,
+                        Usuario = dato,
                         Token = _servicioDeJWT.GenerarToken(Usuario)
 
                     };

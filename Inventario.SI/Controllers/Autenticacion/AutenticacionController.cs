@@ -1,4 +1,5 @@
 ﻿using Inventario.SI.Modelos;
+using Inventario.SI.Modelos.Dtos.Autenticacion;
 using Inventario.SI.Modelos.Dtos.Usuarios;
 using Inventario.SI.Servicios.Autenticacion;
 using Inventario.SI.Servicios.Autenticacion.Interfaces;
@@ -47,13 +48,14 @@ namespace Inventario.SI.Controllers.Usuarios
 
         // POST api/Autenticacion/Login/
         [HttpPost("Login")]
-        public async Task<ActionResult<RespuestaDto>> Login ([FromBody] LoginRequestDto request)
+        public async Task<ActionResult<LoginResponsetDto>> Login ([FromBody] LoginRequestDto request)
         {
              try
             {
                 var respuesta =  await _servicioDeAutenticacion.Login(request);
                 if (respuesta.Respuesta != null)
                 {
+                    
                     return Ok( respuesta );
                 }
                 else

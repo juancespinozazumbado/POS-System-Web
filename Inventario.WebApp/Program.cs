@@ -1,16 +1,13 @@
-using Inventario.DA.Database;
-using Inventario.Models.Dominio.Usuarios;
 using Inventario.WebApp.Areas.Autenticacion.Servicio;
+using Inventario.WebApp.Areas.Ventas.Servicio;
 using Inventario.WebApp.Areas.Productos.Servicio;
 using Inventario.WebApp.Areas.Productos.Servicio.Iservicio;
-using Inventario.WebApp.Areas.Ventas.Servicio;
 using Inventario.WebApp.Areas.Ventas.Servicio.IServicio;
 using Inventario.WebApp.Models.ApiOpciones;
 using Inventario.WebApp.Servicios;
 using Inventario.WebApp.Servicios.IServicio;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
