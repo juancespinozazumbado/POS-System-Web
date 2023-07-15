@@ -14,7 +14,7 @@
     <VerticalStackLayout>
 
         <Button Text="Ver inventarios" Command="{Binding ListarInventariosCommand}"></Button>
-        <Button Text="Voler al menu" Command="{Binding }"></Button>
+        <Button Text="Voler al menu" Command="{Binding AtrasCommand}"></Button>
 
 
         <CollectionView ItemsSource="{Binding Lista_inventarios}">
