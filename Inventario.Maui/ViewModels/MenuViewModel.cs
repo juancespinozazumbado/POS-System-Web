@@ -34,6 +34,9 @@ namespace Inventario.Maui.ViewModels
         {
             _proveedorDeToken.LimpiarToken();
 
+            SecureStorage.Remove("Id_Usuario");
+            SecureStorage.Remove("Nombre_Usuario");
+
             await Task.Delay(1000);
             await Shell.Current.Navigation.PushAsync(new Views.LoginPage());
         }
