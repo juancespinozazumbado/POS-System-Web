@@ -2,9 +2,9 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Inventario.Maui.Modelos;
+using Inventario.Maui.Modelos.Ventas;
 using Inventario.Maui.Servicios.Iservicios;
-using Inventario.Models.Dominio.Productos;
-using Inventario.Models.Dominio.Ventas;
+
 using System.Collections.ObjectModel;
 
 namespace Inventario.Maui.ViewModels

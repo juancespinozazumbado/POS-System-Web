@@ -1,7 +1,6 @@
 ﻿using Inventario.Maui.Modelos;
 using Inventario.Maui.Modelos.Dtos;
 using Inventario.Maui.Servicios.Iservicios;
-using Inventario.Models.Dominio.Productos;
 using Newtonsoft.Json;
 using static Inventario.Maui.Modelos.ConfiguracionApi;
 
@@ -18,12 +17,12 @@ namespace Inventario.Maui.Servicios
         }
 
 
-        Task<Inventarios> IServicioDeInventario.InvenatrioPorId(int id)
+        Task<InventarioModelo> IServicioDeInventario.InvenatrioPorId(int id)
         {
             throw new NotImplementedException();
         }
 
-        Task<List<Inventarios>> IServicioDeInventario.InventariosPorNombre(string nombre)
+        Task<List<InventarioModelo>> IServicioDeInventario.InventariosPorNombre(string nombre)
         {
             throw new NotImplementedException();
         }

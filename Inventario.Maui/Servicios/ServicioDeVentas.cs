@@ -1,7 +1,7 @@
 ﻿using Inventario.Maui.Modelos;
 using Inventario.Maui.Modelos.Dtos;
+using Inventario.Maui.Modelos.Ventas;
 using Inventario.Maui.Servicios.Iservicios;
-using Inventario.Models.Dominio.Ventas;
 using Newtonsoft.Json;
 using static Inventario.Maui.Modelos.ConfiguracionApi;
 

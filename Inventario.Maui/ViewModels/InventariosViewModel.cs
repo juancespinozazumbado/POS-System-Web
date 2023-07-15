@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Inventario.Maui.Modelos;
 using Inventario.Maui.Servicios.Iservicios;
-using Inventario.Models.Dominio.Productos;
+
 using System.Collections.ObjectModel;
 
 namespace Inventario.Maui.ViewModels
