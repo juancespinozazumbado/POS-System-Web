@@ -1,7 +1,4 @@
 ﻿
-
-using Inventario.Models.Dominio.Productos;
-
 namespace Inventario.Maui.Modelos
 {
     public class InventarioModelo
@@ -13,5 +10,12 @@ namespace Inventario.Maui.Modelos
             public decimal Precio { get; set; }
 
         
+    }
+
+    public enum Categoria
+    {
+        A = 1,
+        B = 2,
+        C = 3
     }
 }

@@ -27,7 +27,7 @@ namespace Inventario.Maui
             servicios.AddSingleton<IServicioBase, ServicioBase>();
             servicios.AddSingleton<IProveedorDeToken, ProveedorDeToken>();
 
-            servicios.AddHttpContextAccessor();
+          
             servicios.AddHttpClient();
             servicios.AddHttpClient<IServicioDeAutenticacion, ServicioDeAutenticacion>();
 
