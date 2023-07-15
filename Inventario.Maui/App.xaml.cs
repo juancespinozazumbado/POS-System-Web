@@ -39,10 +39,16 @@ namespace Inventario.Maui
 
             //ViewModels
             servicios.AddTransient<LoginViewModel>();
-            servicios.AddTransient<InventarioViewModel>();
+            servicios.AddScoped<InventariosViewModel>();
+            servicios.AddScoped<VentasViewModel>();
+            servicios.AddScoped<MenuViewModel>();
 
             //Viwes
             servicios.AddSingleton<LoginPage>();
+            servicios.AddSingleton<InventarioPage>();
+            servicios.AddSingleton<ResumenDeVentas>();
+            servicios.AddSingleton<Menu>();
+
 
 
             return servicios.BuildServiceProvider();

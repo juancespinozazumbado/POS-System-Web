@@ -1,6 +1,7 @@
 ﻿
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Inventario.Maui.Modelos;
 using Inventario.Maui.Modelos.Dtos;
 using Inventario.Maui.Servicios.Iservicios;
 using Newtonsoft.Json;
@@ -37,11 +38,18 @@ namespace Inventario.Maui.ViewModels
 
         private readonly IServicioDeAutenticacion _servicioDeAutenticacion;
         private readonly IProveedorDeToken _proveedorDeToken;
+        private readonly IservicioDeVentas _ventas;
+        private readonly IServicioDeInventario _Inventarios;
 
         public LoginViewModel()
         {
             _proveedorDeToken = App.Current.Servicios.GetRequiredService<IProveedorDeToken>();
             _servicioDeAutenticacion = App.Current.Servicios.GetRequiredService<IServicioDeAutenticacion>();
+           _ventas = App.Current.Servicios.GetRequiredService<IservicioDeVentas>();
+            _Inventarios = App.Current.Servicios.GetRequiredService<IServicioDeInventario>();
+
+
+
         }
 
         [RelayCommand]
@@ -52,8 +60,8 @@ namespace Inventario.Maui.ViewModels
             GetErrors(nameof(Correo)).ToList().ForEach(e => Errores.Add($"Correo: {e}"));
             GetErrors(nameof(Contraseña)).ToList().ForEach(e => Errores.Add($"Contraseña: {e}"));
             
-            if (correo != "" && contraseña != "")
-            {
+            
+            
                 var request = new LoginRequestDto()
                 {
                     Correo = correo,
@@ -62,17 +70,32 @@ namespace Inventario.Maui.ViewModels
                 };
 
                 var respuesta = await _servicioDeAutenticacion.LoginAsync(request);
-                if(respuesta != null)
-                {
-                    _proveedorDeToken.EscribirToken(respuesta.Token);
+            if (respuesta != null)
+            {
+                await SecureStorage.SetAsync("Id_Usuario", respuesta.Usuario.Id);
+                await SecureStorage.SetAsync("Nombre_Usuario", respuesta.Usuario.UserName);
 
+                var usuario = await  SecureStorage.Default.GetAsync("Id_Usuario");
+              
 
-                }
+                _proveedorDeToken.EscribirToken(respuesta.Token);
+                //var token = await SecureStorage.GetAsync(ConfiguracionApi.CoqueToken);
+
+                await Task.Delay(1000);
+                await Shell.Current.Navigation.PushAsync(new Views.Menu());
                 
+           
+            }else
+            {
+                correo = "";
+                contraseña="";
             }
-
             
+
+                      
         }
+
+      
         
     }
 }

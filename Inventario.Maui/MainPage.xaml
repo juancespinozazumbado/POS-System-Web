@@ -5,23 +5,23 @@
              xmlns:vm ="clr-namespace:Inventario.Maui.ViewModels"
              x:DataType="vm:InventarioViewModel">
 
-    <!--<ScrollView>
-        <VerticalStackLayout
+    <ScrollView>
+        <!--<VerticalStackLayout
             Spacing="25"
             Padding="30,0"
             VerticalOptions="Center">
 
-            <Label Text="{Binding Cantidad}" FontSize="Body"  Background="Gray"/>
-            <Label Text="{Binding Titulo}" FontSize="Body"  Background="Gray"/>
+            --><!--<Label Text="{Binding Numero}" FontSize="Body"  Background="Gray"/>
+            <Label Text="{Binding Nombre}" FontSize="Body"  Background="Gray"/>--><!--
 
             <Button
                 x:Name="CounterBtn"
                 Text="Click me"
                 
-                Command="{Binding CambiarTextoCommand}"
+                --><!--Command="{Binding TestCommand}"--><!--
                 HorizontalOptions="Center" />
 
-        </VerticalStackLayout>
-    </ScrollView>-->
+        </VerticalStackLayout>-->
+    </ScrollView>
 
 </ContentPage>

@@ -34,7 +34,7 @@ namespace Inventario.Maui.Servicios
                 }
                 if (conBearer)
                 {
-                    var token = _proveedorDeToken.ObtenerToken();
+                    var token = await  _proveedorDeToken.ObtenerToken();
                     if (token != null)
                     {
                         mensaje.Headers.Add("Authorization", $"Bearer {token}");

@@ -7,7 +7,7 @@ namespace Inventario.Maui
        
         public MainPage()
         {
-            BindingContext = App.Current.Servicios.GetRequiredService<InventarioViewModel>();
+            
             InitializeComponent();
         }
 

@@ -20,7 +20,7 @@ namespace Inventario.Maui.Servicios
 
         public async Task<string> ObtenerToken()
         {
-            var token = await SecureStorage.GetAsync(ConfiguracionApi.CoqueToken);
+            var token = await SecureStorage.Default.GetAsync(ConfiguracionApi.CoqueToken);
             return token;
         }
     }

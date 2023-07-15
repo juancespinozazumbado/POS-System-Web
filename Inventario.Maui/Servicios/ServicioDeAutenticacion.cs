@@ -33,8 +33,8 @@ namespace Inventario.Maui.Servicios
             {
                 LoginRespuestaDto? respuestaLogin =
                 JsonConvert.DeserializeObject<LoginRespuestaDto>(Convert.ToString(resultado.Respuesta));
-                //await inicioDesesion(respuestaLogin);
-              
+
+                
                 return respuestaLogin;
             }
             return null;

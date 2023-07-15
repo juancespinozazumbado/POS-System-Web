@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Inventario.Maui.Views.ResumenDeVentas"
+             xmlns:vm="clr-namespace:Inventario.Maui.ViewModels"
+             x:DataType="vm:VentasViewModel"
+             xmlns:te="clr-namespace:Inventario.Maui.Views.Templates"
+             Title="ResumenDeVentas">
+
+
+    <VerticalStackLayout>
+
+        <Button Text="Ver Resumen de Ventas" Command="{Binding ListarVentasCommand}"></Button>
+
+
+        <CollectionView ItemsSource="{Binding Lista_Ventas}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <te:VentaItem />
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
+
+    </VerticalStackLayout>
+
+</ContentPage>
