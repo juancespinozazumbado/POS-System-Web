@@ -13,6 +13,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PosApp.PublicApi", "src\Pos
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PosApp.Web", "src\PosApp.web\PosApp.Web.csproj", "{51FF1939-FA26-471B-A3A4-44339F53383F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{F48457B5-7CA9-41D9-9400-243EA86C76E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostAppCore.test", "test\PostAppCore.Test\PostAppCore.Test.csproj", "{6C895D10-958F-463A-96D0-FE753E6B8FA7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +39,10 @@ Global
 		{51FF1939-FA26-471B-A3A4-44339F53383F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51FF1939-FA26-471B-A3A4-44339F53383F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51FF1939-FA26-471B-A3A4-44339F53383F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C895D10-958F-463A-96D0-FE753E6B8FA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C895D10-958F-463A-96D0-FE753E6B8FA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C895D10-958F-463A-96D0-FE753E6B8FA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C895D10-958F-463A-96D0-FE753E6B8FA7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,6 +52,7 @@ Global
 		{EC170343-0DAC-4B68-A51C-803FCB5A6F0E} = {DA7B0F04-BF4B-493C-9348-D8A634C8D07C}
 		{443A0F4D-F98E-46B2-90C7-0EF87075AD16} = {DA7B0F04-BF4B-493C-9348-D8A634C8D07C}
 		{51FF1939-FA26-471B-A3A4-44339F53383F} = {DA7B0F04-BF4B-493C-9348-D8A634C8D07C}
+		{6C895D10-958F-463A-96D0-FE753E6B8FA7} = {F48457B5-7CA9-41D9-9400-243EA86C76E4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {60B1BB50-15FB-4C87-B1D3-1AD4069FBAA8}
