@@ -2,8 +2,7 @@ using Microsoft.AspNetCore.Identity;
 namespace Identity;
 
 
-public class Usuario : IdentityUser
+public class AppUser : IdentityUser
 {
-
-
+    public string? ProfileImageUrl {get; set;}
 }
