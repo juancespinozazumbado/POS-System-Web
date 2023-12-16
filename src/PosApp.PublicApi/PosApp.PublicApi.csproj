@@ -16,10 +16,4 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Inventario.BL\Inventario.BL.csproj" />
-    <ProjectReference Include="..\Inventario.DA\Inventario.DA.csproj" />
-	  <ProjectReference Include="..\Inventario.Models\Inventario.Models.csproj" />
-  </ItemGroup>
-
 </Project>

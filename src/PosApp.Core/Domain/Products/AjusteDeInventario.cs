@@ -1,6 +1,4 @@
 
-using Microsoft.AspNetCore.Identity;
-
 namespace Inventario.Models.Dominio.Productos
 {
     public class AjusteDeInventario
