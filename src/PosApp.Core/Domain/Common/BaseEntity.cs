@@ -11,11 +11,11 @@ public abstract class BaseEntity
     public BaseEntity()
     {
         this.Id = Guid.NewGuid();
-        this.DateCreated = DateTime.Today;
+        this.DateCreated = DateTime.Today.Date;
 
     }
     public Guid Id {get; protected set;}
     public DateTime DateCreated {get; protected set;}
-    public DateTime DeateDeleted {get; protected set;}
-    public DateTime DateDelited {get; protected set;}
+    public DateTime DeateUpdated{get; protected set;}
+    public Guid UserId {get; protected set;}
 }
