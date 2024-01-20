@@ -1,7 +1,7 @@
 
 namespace Inventario.Models.Dominio.Productos
 {
-    public class AjusteDeInventario
+    public class InventoryAdjustment
     {
         public int Id { get; set; }
      
@@ -10,7 +10,6 @@ namespace Inventario.Models.Dominio.Productos
 
         public TipoAjuste Tipo { get; set; }
 
-  
         public DateTime Fecha { get; set; }
 
         public string? Observaciones { get; set; }
