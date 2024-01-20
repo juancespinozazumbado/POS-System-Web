@@ -1,6 +1,6 @@
 ﻿namespace Doamin.Products;
 
-    public class Product
+    public class Inventory
     {
         
         public string Name { get; set; }

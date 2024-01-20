@@ -1,4 +1,4 @@
-namespace Doamin.Common;
+namespace PosApp.Dommain.Common;
 
 public abstract class BaseEntity 
 {
