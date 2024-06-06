@@ -1,12 +1,12 @@
 namespace PosApp.Dommain.Extensions;
 
-public abstract class Result 
+public class Result<TResponse> where TResponse : class 
 {
+    public Result(TResponse response)
+    {
+        Response = response;    
+    }
 
-
-}
-
-public class Result<TResponse> 
-{
+    public TResponse? Response {get;}
 
 }

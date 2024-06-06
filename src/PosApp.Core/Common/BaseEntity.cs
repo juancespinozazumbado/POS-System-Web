@@ -14,8 +14,8 @@ public abstract class BaseEntity
         this.DateCreated = DateTime.Today.Date;
 
     }
-    public Guid Id {get; protected set;}
-    public DateTime DateCreated {get; protected set;}
-    public DateTime DeateUpdated{get; protected set;}
-    public Guid UserId {get; protected set;}
+    public Guid Id {get;}
+    public DateTime DateCreated {get;}
+    public DateTime DeateUpdated{get; set;}
+    public Guid UserId {get; set;}
 }

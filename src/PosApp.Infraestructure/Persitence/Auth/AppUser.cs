@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
-namespace Identity;
 
+namespace PosApp.Infraestructure.Persitence.Auth;
 
 public class AppUser : IdentityUser
 {
