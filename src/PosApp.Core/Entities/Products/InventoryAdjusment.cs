@@ -14,10 +14,10 @@ namespace Inventario.Models.Dominio.Productos
 
         public string? Observaciones { get; set; }
 
-        public string UserId { get; set; } 
+        public Guid UserId { get; set; } 
       
-        public int Id_Inventario { get; set; }  
-        public Inventarios? Inventarios { get; set; } 
+        public Guid Id_Inventario { get; set; }  
+       // public Inventarios? Inventarios { get; set; } 
 
     
     }

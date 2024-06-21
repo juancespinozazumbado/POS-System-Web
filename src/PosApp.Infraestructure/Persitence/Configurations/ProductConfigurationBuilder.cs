@@ -9,6 +9,9 @@ public class ProductConfigurationBuilder : IEntityTypeConfiguration<Product>
 {
     public void Configure(EntityTypeBuilder<Product> builder)
     {
+        builder.Property(prop => prop.Name)
+            .HasColumnName("ProductName")
+            .IsRequired();  
 
         //configure product entiti type
     }

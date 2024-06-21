@@ -2,9 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
-
 namespace PosApp.Infraestructure.Persitence.Auth;
 
+
+/// <summary>
+/// DbContext for store users information
+/// </summary>
 internal class AuthDbContext : IdentityDbContext<AppUser>
 {
     //Requiered for EF core

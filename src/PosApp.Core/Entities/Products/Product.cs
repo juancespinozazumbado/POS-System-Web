@@ -4,7 +4,6 @@ namespace Doamin.Products;
 
 public class Product : BaseEntity
 {
-
     public string Name { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public string? PictureURI { get; set; }
@@ -16,4 +15,4 @@ public class Product : BaseEntity
     public decimal Price { get; set; } 
 
 
-    }
+ }

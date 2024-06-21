@@ -1,3 +1,4 @@
+using PosApp.Domain.Interface;
 using System.Linq.Expressions;
 
 namespace PosApp.Dommain.Interface;
@@ -12,9 +13,16 @@ public interface IRepository<T> where T : class
      /// /// 
     public Task<bool> AddAsync(T entity);
 
-    public Task<bool> AddRangeAsync(IEnumerable<T> entities);    
-    public Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>>? filter = null, 
-    Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, string inclideProperties = "");
+    public Task<bool> AddRangeAsync(IEnumerable<T> entities);  
+    
+    public Task<IEnumerable<T>> GetAllAsync(ISpecification<T> specification, CancellationToken cancellationToken);
+
+    //public Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>>? filter = null, 
+    //Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, string inclideProperties = "");
+
+    public Task<T> Get(ISpecification<T> specification, CancellationToken cancellation);
+
+    public IQueryable<T> GetAsQuerable();
     public Task<T?> GetByIdAsync(Guid id);
 
     public Task<bool> UpdateAsync( T entity);
